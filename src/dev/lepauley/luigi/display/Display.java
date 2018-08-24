@@ -1,5 +1,8 @@
 package dev.lepauley.luigi.display;
 
+import java.awt.Canvas;
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
 
 /*
@@ -10,6 +13,9 @@ public class Display {
 	
 	//How we display window
 	private JFrame frame;
+	
+	//How we draw graphics on the frame
+	private Canvas canvas;
 	
 	//Window title
 	private String title;
@@ -42,6 +48,23 @@ public class Display {
 		
 		//By default not visible, so making it visible
 		frame.setVisible(true);
+		
+		//Initialize
+		canvas = new Canvas();
+		
+		//Set preferred size of canvas	
+		canvas.setPreferredSize(new Dimension(width, height));
+
+		//Set Max and Min size of canvas
+		canvas.setMaximumSize(new Dimension(width, height));
+		canvas.setMinimumSize(new Dimension(width, height));
+		
+		//Adds frame to canvas
+		frame.add(canvas);
+		
+		//Resize window so we can fully see canvas
+		frame.pack();
+		
 	}
 	
 }
