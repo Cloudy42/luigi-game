@@ -66,5 +66,12 @@ public class Display {
 		frame.pack();
 		
 	}
+
+	/***************** GETTERS AND SETTERS *****************/
+	public Canvas getCanvas() {
+		return canvas;
+	}
+	
+	
 	
 }
