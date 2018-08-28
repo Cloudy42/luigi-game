@@ -3,8 +3,11 @@ package dev.lepauley.luigi;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 import dev.lepauley.luigi.display.Display;
+import dev.lepauley.luigi.gfx.ImageLoader;
+import dev.lepauley.luigi.gfx.SpriteSheet;
 
 /*
  * Main class for game - holds all base code: 
@@ -34,9 +37,11 @@ public class Game implements Runnable {
 	 *    - Draw to first buffer, then push this to 2nd buffer, THEN push to actual screen
 	 *    - Prevents flickering in game, of drawing to screen in real time
 	 */
-	//Haha.. bs
 	private BufferStrategy bs;
 	private Graphics g;
+	
+	private BufferedImage testImage;
+	private SpriteSheet sheet;
 	
 	public Game(String title, int width, int height) {
 		this.title = title;
@@ -48,6 +53,8 @@ public class Game implements Runnable {
 	private void init() {
 		//Sets display for Game instance
 		display = new Display(title, width, height);
+		testImage = ImageLoader.loadImage("/textures/sheet.gif");
+		sheet = new SpriteSheet(testImage);
 	}
 	
 	//Update everything for game
@@ -79,6 +86,10 @@ public class Game implements Runnable {
 		
 		g.setColor(Color.blue);
 		g.fillRect(100, 100, 75, 90);
+		
+		//Utilizes Cropping method via SpriteSheet class to only pull part of image
+		// - Image Observer = null. We won't use in tutorial
+		g.drawImage(sheet.crop(42, 35, 25, 25), 85, 85, 50, 50, null);
 		//End Drawing!
 		
 		//Work buffer magic (presumably to transfer between buffers, ending at screen
