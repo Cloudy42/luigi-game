@@ -41,7 +41,6 @@ public class Game implements Runnable {
 		this.title = title;
 		this.width = width;
 		this.height = height;
-		
 	}
 	
 	//Called only once to initialize all of the graphics and get everything ready for game
