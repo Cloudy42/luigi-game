@@ -55,7 +55,7 @@ public class Display {
 		//Set preferred size of canvas	
 		canvas.setPreferredSize(new Dimension(width, height));
 
-		//Set Max and Min size of canvas
+		//Set Max and Min size of canvas - somehow this ensures static size that won't change
 		canvas.setMaximumSize(new Dimension(width, height));
 		canvas.setMinimumSize(new Dimension(width, height));
 		

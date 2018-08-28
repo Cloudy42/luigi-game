@@ -1,5 +1,6 @@
 package dev.lepauley.luigi;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
@@ -69,10 +70,15 @@ public class Game implements Runnable {
 		//Graphics object is like our (magical) paint brush, way of drawing
 		g = bs.getDrawGraphics();
 		
+		//Clear screen
+		g.clearRect(0, 0, width, height);
+		
 		//Draw Here!
+		g.setColor(Color.red);
+		g.fillRect(-20, -20, 75, 90);
 		
-		g.fillRect(0, 0, width, height);
-		
+		g.setColor(Color.blue);
+		g.fillRect(100, 100, 75, 90);
 		//End Drawing!
 		
 		//Work buffer magic (presumably to transfer between buffers, ending at screen
