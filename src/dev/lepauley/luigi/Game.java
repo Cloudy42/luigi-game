@@ -6,6 +6,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import dev.lepauley.luigi.display.Display;
+import dev.lepauley.luigi.gfx.Assets;
 import dev.lepauley.luigi.gfx.ImageLoader;
 import dev.lepauley.luigi.gfx.SpriteSheet;
 
@@ -53,8 +54,8 @@ public class Game implements Runnable {
 	private void init() {
 		//Sets display for Game instance
 		display = new Display(title, width, height);
-		testImage = ImageLoader.loadImage("/textures/sheet.gif");
-		sheet = new SpriteSheet(testImage);
+		//Loads all SpriteSheets to objects
+		Assets.init();
 	}
 	
 	//Update everything for game
@@ -85,11 +86,13 @@ public class Game implements Runnable {
 		g.fillRect(-20, -20, 75, 90);
 		
 		g.setColor(Color.blue);
-		g.fillRect(100, 100, 75, 90);
+		g.fillRect(100, 80, 75, 90);
 		
 		//Utilizes Cropping method via SpriteSheet class to only pull part of image
 		// - Image Observer = null. We won't use in tutorial
-		g.drawImage(sheet.crop(42, 35, 25, 25), 85, 85, 50, 50, null);
+		g.drawImage(Assets.player1,   25, 180,  150, 250, null);
+		g.drawImage(Assets.player2,  250, 180,  150, 250, null);
+		g.drawImage(Assets.rPlayer2, 625, 180, -150, 250, null);
 		//End Drawing!
 		
 		//Work buffer magic (presumably to transfer between buffers, ending at screen
