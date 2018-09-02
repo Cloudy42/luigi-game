@@ -93,16 +93,16 @@ public class Game implements Runnable {
 		//Draw Here!
 		g.setFont (myFont);
 		g.setColor(Color.red);
-		g.fillRect(320, 20, 75, 90);
+		g.fillRect(320 + x, 20 + x, 75, 90);
 		
 		g.setColor(Color.blue);
-		g.fillRect(100, 80, 75, 90);
+		g.fillRect(100 + x, 80 - x, 75, 90);
 		
 		//Utilizes Cropping method via SpriteSheet class to only pull part of image
 		// - Image Observer = null. We won't use in tutorial
 		g.drawImage(Assets.player1,   25 + x, 180,  150, 250, null);
-		g.drawImage(Assets.player2,  250, 180,  150, 250, null);
-		g.drawImage(Assets.rPlayer2, 625, 180, -150, 250, null);
+		g.drawImage(Assets.player2,  250, 180 + x,  150, 250, null);
+		g.drawImage(Assets.rPlayer2, 625 - x, 180 - x, -150, 250, null);
 
 		//I put this code here because I wanted to start out debugging off from onset,
 		//but if you think it's too soon for that we can move timer and ticks back to being
