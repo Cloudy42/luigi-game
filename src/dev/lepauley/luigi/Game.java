@@ -1,13 +1,13 @@
 package dev.lepauley.luigi;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import dev.lepauley.luigi.display.Display;
 import dev.lepauley.luigi.gfx.Assets;
-import dev.lepauley.luigi.gfx.ImageLoader;
 import dev.lepauley.luigi.gfx.SpriteSheet;
 
 /*
@@ -31,6 +31,13 @@ public class Game implements Runnable {
 	//Thread via Runnable
 	private Thread thread;
 	
+	//Used to display FPS.
+	long timer = 0;
+	int ticks = 0;
+	int lastTicks = 60;
+	
+	//Defaut font
+	Font myFont = new Font ("Lucida Sans Unicode", 1, 20);
 	
 	/*
 	 * A way for computer to draw things to screen, using buffers
@@ -58,9 +65,11 @@ public class Game implements Runnable {
 		Assets.init();
 	}
 	
+	int x = 0;
+	
 	//Update everything for game
 	private void tick() {
-		
+		x += 1;
 	}
 	
 	//Render everything for game
@@ -82,17 +91,30 @@ public class Game implements Runnable {
 		g.clearRect(0, 0, width, height);
 		
 		//Draw Here!
+		g.setFont (myFont);
 		g.setColor(Color.red);
-		g.fillRect(-20, -20, 75, 90);
+		g.fillRect(320, 20, 75, 90);
 		
 		g.setColor(Color.blue);
 		g.fillRect(100, 80, 75, 90);
 		
 		//Utilizes Cropping method via SpriteSheet class to only pull part of image
 		// - Image Observer = null. We won't use in tutorial
-		g.drawImage(Assets.player1,   25, 180,  150, 250, null);
+		g.drawImage(Assets.player1,   25 + x, 180,  150, 250, null);
 		g.drawImage(Assets.player2,  250, 180,  150, 250, null);
 		g.drawImage(Assets.rPlayer2, 625, 180, -150, 250, null);
+
+		//I put this code here because I wanted to start out debugging off from onset,
+		//but if you think it's too soon for that we can move timer and ticks back to being
+		//a local variable within run() and we can stick to just console log.
+		if(timer > 1000000000) {
+			System.out.println("Ticks and Frames: " + ticks);
+			lastTicks = ticks;
+			ticks = 0;
+			timer = 0;
+		}
+		g.setColor(Color.black);
+		g.drawString("FPS:" + lastTicks, 3, 23);
 		//End Drawing!
 		
 		//Work buffer magic (presumably to transfer between buffers, ending at screen
@@ -109,13 +131,37 @@ public class Game implements Runnable {
 	public void run() {
 		init();
 		
+		//How many times per second we ant the tick() and render() methods to run.
+		int fps = 60;
+
+		//1 billion nanoseconds within a second. So below translates to 1 per second,
+		//but nanoseconds is more exact so allows for more flexibility.
+		double timePerTick = 1000000000 / fps;
+		
+		double delta = 0;
+		long now;
+
+		//Returns current time of computer in nanoseconds.
+		long lastTime = System.nanoTime();
+				
 		//Game Loop:
 		// 1.) Update all variables, positions of objects, etc.
 		// 2.) Render (draw) everything to the screen
 		// 3.) Repeat
 		while(running){
-			tick();
-			render();
+			//Below will do how much time we have before we can call tick() and render() again.
+			now = System.nanoTime();
+			delta += (now - lastTime) / timePerTick;
+			timer += now - lastTime;
+			lastTime = now;
+
+			//If enough time has elapsed, can run tick() and render().
+			if(delta >= 1) {
+				tick();
+				render();
+				ticks++;
+				delta--;
+			}
 		}
 		
 		//Just an extra check in case the above doesn't stop it from running.
