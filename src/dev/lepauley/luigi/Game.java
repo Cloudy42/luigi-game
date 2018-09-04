@@ -8,6 +8,7 @@ import java.awt.image.BufferStrategy;
 import dev.lepauley.luigi.display.Display;
 import dev.lepauley.luigi.gfx.Assets;
 import dev.lepauley.luigi.states.GameState;
+import dev.lepauley.luigi.states.PauseState;
 import dev.lepauley.luigi.states.State;
 import dev.lepauley.luigi.states.StateManager;
 
@@ -51,6 +52,7 @@ public class Game implements Runnable {
 	
 	//State objects
 	private State gameState;
+	private State pauseState;
 	
 	public Game(String title, int width, int height) {
 		this.title = title;
@@ -66,7 +68,9 @@ public class Game implements Runnable {
 		Assets.init();
 		
 		gameState = new GameState();
+		pauseState = new PauseState();
 		StateManager.setCurrentState(gameState);
+		//StateManager.setCurrentState(pauseState);
 	}
 	
 	//Update everything for game
