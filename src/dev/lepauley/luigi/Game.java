@@ -4,11 +4,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
 
 import dev.lepauley.luigi.display.Display;
 import dev.lepauley.luigi.gfx.Assets;
-import dev.lepauley.luigi.gfx.SpriteSheet;
+import dev.lepauley.luigi.states.GameState;
+import dev.lepauley.luigi.states.State;
+import dev.lepauley.luigi.states.StateManager;
 
 /*
  * Main class for game - holds all base code: 
@@ -48,6 +49,9 @@ public class Game implements Runnable {
 	private BufferStrategy bs;
 	private Graphics g;
 	
+	//State objects
+	private State gameState;
+	
 	public Game(String title, int width, int height) {
 		this.title = title;
 		this.width = width;
@@ -60,17 +64,22 @@ public class Game implements Runnable {
 		display = new Display(title, width, height);
 		//Loads all SpriteSheets to objects
 		Assets.init();
+		
+		gameState = new GameState();
+		StateManager.setCurrentState(gameState);
 	}
-	
-	int x = 0;
 	
 	//Update everything for game
 	private void tick() {
-		x += 1;
+		//If a state exists (not null), then tick it
+		if(StateManager.getCurrentState() != null) {
+			StateManager.getCurrentState().tick();
+		}
 	}
 	
 	//Render everything for game
 	private void render() {
+		/*************** INITIAL SETUP (e.g. clear screen) ***************/
 		//Get current buffer strategy of display
 		bs = display.getCanvas().getBufferStrategy();
 		
@@ -87,21 +96,18 @@ public class Game implements Runnable {
 		//Clear screen
 		g.clearRect(0, 0, width, height);
 		
-		//Draw Here!
+		/*************** DRAW HERE ***************/
+		//If a state exists (not null), then render it
+		if(StateManager.getCurrentState() != null) {
+			StateManager.getCurrentState().render(g);
+		}
+		
+		//Moved AP test render code to game state
+		
+		/*************** END DRAWING ***************/
+		/*************** BEGIN DEBUG ***************/
+		//FPS on screen
 		g.setFont (myFont);
-		g.setColor(Color.red);
-		g.fillRect(320 + x, 20 + x, 75, 90);
-		
-		g.setColor(Color.blue);
-		g.fillRect(100 + x, 80 - x, 75, 90);
-		
-		//Utilizes Cropping method via SpriteSheet class to only pull part of image
-		// - Image Observer = null. We won't use in tutorial
-		g.drawImage(Assets.player1,   25 + x, 180,  150, 250, null);
-		g.drawImage(Assets.player2,  250, 180 + x,  150, 250, null);
-		g.drawImage(Assets.rPlayer2, 625 - x, 180 - x, -150, 250, null);
-
-		//Code for debugging, and displaying FPS on screen
 		if(timer > 1000000000) {
 			System.out.println("Ticks and Frames: " + ticks);
 			lastTicks = ticks;
@@ -110,8 +116,7 @@ public class Game implements Runnable {
 		}
 		g.setColor(Color.black);
 		g.drawString("FPS:" + lastTicks, 3, 23);
-		//End Drawing!
-		
+		/*************** END DEBUG ***************/
 		//Work buffer magic (presumably to transfer between buffers, ending at screen
 		bs.show();
 		
