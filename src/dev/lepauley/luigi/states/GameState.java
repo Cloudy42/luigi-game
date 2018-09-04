@@ -33,8 +33,8 @@ public class GameState extends State {
 		//Utilizes Cropping method via SpriteSheet class to only pull part of image
 		// - Image Observer = null. We won't use in tutorial
 		g.drawImage(Assets.player1,   25 + x, 180,  150, 250, null);
-		g.drawImage(Assets.player2,  250, 180 + x,  150, 250, null);
-		g.drawImage(Assets.rPlayer2, 625 - x, 180 - x, -150, 250, null);
+		g.drawImage(Assets.player2,  250 + x, 180 - x,  150, 250, null);
+		g.drawImage(Assets.rPlayer2, 625 - x, 180 - x, -150, 125, null);
 	}
 
 }
