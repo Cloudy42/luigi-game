@@ -48,9 +48,6 @@ public class Game implements Runnable {
 	private BufferStrategy bs;
 	private Graphics g;
 	
-	private BufferedImage testImage;
-	private SpriteSheet sheet;
-	
 	public Game(String title, int width, int height) {
 		this.title = title;
 		this.width = width;
@@ -104,9 +101,7 @@ public class Game implements Runnable {
 		g.drawImage(Assets.player2,  250, 180 + x,  150, 250, null);
 		g.drawImage(Assets.rPlayer2, 625 - x, 180 - x, -150, 250, null);
 
-		//I put this code here because I wanted to start out debugging off from onset,
-		//but if you think it's too soon for that we can move timer and ticks back to being
-		//a local variable within run() and we can stick to just console log.
+		//Code for debugging, and displaying FPS on screen
 		if(timer > 1000000000) {
 			System.out.println("Ticks and Frames: " + ticks);
 			lastTicks = ticks;
@@ -131,7 +126,7 @@ public class Game implements Runnable {
 	public void run() {
 		init();
 		
-		//How many times per second we ant the tick() and render() methods to run.
+		//How many times per second we want the tick() and render() methods to run.
 		int fps = 60;
 
 		//1 billion nanoseconds within a second. So below translates to 1 per second,
@@ -150,6 +145,14 @@ public class Game implements Runnable {
 		// 3.) Repeat
 		while(running){
 			//Below will do how much time we have before we can call tick() and render() again.
+			/*
+			 * Delta is difference of now/last in nano seconds, divided by time per tick
+			 * This is essentially the percentage of time per tick that has passed
+			 * So delta reaching 1 or more is 100% of time per tick, thus time to tick
+			 * 
+			 * Not sure why doing it this way instead of just doing (now - last),
+			 * and then checking if delta is >= timePerTick?
+			 */
 			now = System.nanoTime();
 			delta += (now - lastTime) / timePerTick;
 			timer += now - lastTime;
@@ -161,6 +164,7 @@ public class Game implements Runnable {
 				render();
 				ticks++;
 				delta--;
+
 			}
 		}
 		
