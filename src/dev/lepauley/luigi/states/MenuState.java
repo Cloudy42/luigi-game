@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
+import dev.lepauley.luigi.Game;
+
 /*
  * Menu/starting screen (before game begins)
  */
@@ -12,7 +14,9 @@ public class MenuState extends State {
 	//Defaut font
 	Font myFont = new Font ("Lucida Sans Unicode", 1, 70);
 	
-	public MenuState() {
+	public MenuState(Game game) {
+		super(game);
+		this.game = game;
 		
 	}
 	

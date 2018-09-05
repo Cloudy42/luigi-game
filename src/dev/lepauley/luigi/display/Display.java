@@ -59,6 +59,9 @@ public class Display {
 		canvas.setMaximumSize(new Dimension(width, height));
 		canvas.setMinimumSize(new Dimension(width, height));
 		
+		//Makes it so Application is only thing with focus? Lets us register key presses
+		canvas.setFocusable(false);
+		
 		//Adds frame to canvas
 		frame.add(canvas);
 		
@@ -72,6 +75,8 @@ public class Display {
 		return canvas;
 	}
 	
-	
+	public JFrame getFrame() {
+		return frame;
+	}
 	
 }

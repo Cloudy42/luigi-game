@@ -3,38 +3,39 @@ package dev.lepauley.luigi.states;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import dev.lepauley.luigi.gfx.Assets;
+import dev.lepauley.luigi.Game;
+import dev.lepauley.luigi.entities.creatures.Player;
 
 /*
  * Where actual game play is at
  */
 public class GameState extends State {
 
-	int x = 0;  //Temp test code for moving test images
+	private Player player;
 	
-	public GameState() {
-		
+	public GameState(Game game) {
+		super(game);
+		player = new Player(game,100,100);
 	}
 	
 	@Override
 	public void tick() {
-		x += 1; //Temp test code for moving test images
+		player.tick();
 	}
 
 	@Override
 	public void render(Graphics g) {
-		//Test images
-		g.setColor(Color.red);
-		g.fillRect(320 + x, 20 + x, 75, 90);
+		//Test images (Fake pipe):
+		g.setColor(Color.GREEN);
+		g.fillRect(80, 200, 140, 30);
+		g.fillRect(90, 220, 120, 150);
+		g.setColor(Color.BLACK);
+		g.fillRect(90, 230, 120, 2);
+		g.fillRect(110, 230, 15, 140);
+		g.fillRect(150, 230, 20, 140);
+		g.fillRect(190, 230, 10, 140);
 		
-		g.setColor(Color.blue);
-		g.fillRect(100 + x, 80 - x, 75, 90);
-		
-		//Utilizes Cropping method via SpriteSheet class to only pull part of image
-		// - Image Observer = null. We won't use in tutorial
-		g.drawImage(Assets.player1,   25 + x, 180,  150, 250, null);
-		g.drawImage(Assets.player2,  250 + x, 180 - x,  150, 250, null);
-		g.drawImage(Assets.rPlayer2, 625 - x, 180 - x, -150, 125, null);
+		player.render(g);
 	}
 
 }
