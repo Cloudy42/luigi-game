@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
+import dev.lepauley.luigi.Game;
+
 /*
  * Pause screen
  */
@@ -12,7 +14,9 @@ public class PauseState extends State {
 	//Defaut font
 	Font myFont = new Font ("Lucida Sans Unicode", 1, 70);
 	
-	public PauseState() {
+	public PauseState(Game game) {
+		super(game);
+		this.game = game;
 		
 	}
 	

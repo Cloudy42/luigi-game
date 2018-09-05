@@ -3,8 +3,8 @@ package dev.lepauley.luigi.states;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import dev.lepauley.luigi.Game;
 import dev.lepauley.luigi.entities.creatures.Player;
-import dev.lepauley.luigi.gfx.Assets;
 
 /*
  * Where actual game play is at
@@ -13,8 +13,9 @@ public class GameState extends State {
 
 	private Player player;
 	
-	public GameState() {
-		player = new Player(100,100);
+	public GameState(Game game) {
+		super(game);
+		player = new Player(game,100,100);
 	}
 	
 	@Override

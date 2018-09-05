@@ -7,6 +7,7 @@ import java.awt.image.BufferStrategy;
 
 import dev.lepauley.luigi.display.Display;
 import dev.lepauley.luigi.gfx.Assets;
+import dev.lepauley.luigi.input.KeyManager;
 import dev.lepauley.luigi.states.GameState;
 import dev.lepauley.luigi.states.PauseState;
 import dev.lepauley.luigi.states.State;
@@ -54,27 +55,36 @@ public class Game implements Runnable {
 	private State gameState;
 	private State pauseState;
 	
+	//Input
+	private KeyManager keyManager;
+	
 	public Game(String title, int width, int height) {
 		this.title = title;
 		this.width = width;
 		this.height = height;
+		keyManager = new KeyManager();
 	}
 	
 	//Called only once to initialize all of the graphics and get everything ready for game
 	private void init() {
 		//Sets display for Game instance
 		display = new Display(title, width, height);
+		//Needed just so we can manage keys
+		display.getFrame().addKeyListener(keyManager);
 		//Loads all SpriteSheets to objects
 		Assets.init();
 		
-		gameState = new GameState();
-		pauseState = new PauseState();
+		gameState = new GameState(this);
+		pauseState = new PauseState(this);
 		StateManager.setCurrentState(gameState);
 		//StateManager.setCurrentState(pauseState);
 	}
 	
 	//Update everything for game
 	private void tick() {
+		//Update keys
+		keyManager.tick();
+		
 		//If a state exists (not null), then tick it
 		if(StateManager.getCurrentState() != null) {
 			StateManager.getCurrentState().tick();
@@ -218,6 +228,8 @@ public class Game implements Runnable {
 	}
 	
 	
-	
-	
+	/*************** GETTERS and SETTERS ***************/
+	public KeyManager getKeyManager() {
+		return keyManager;
+	}
 }
