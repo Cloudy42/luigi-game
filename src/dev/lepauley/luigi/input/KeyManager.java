@@ -16,7 +16,7 @@ public class KeyManager implements KeyListener {
 	private boolean[] keys;
 	
 	//Specific keys we're using
-	public boolean up, down, left, right;
+	public boolean up, down, left, right, scaleUp, scaleDown, changePlayer;
 	
 	public KeyManager() {
 		keys = new boolean[256];
@@ -27,6 +27,13 @@ public class KeyManager implements KeyListener {
 		down = keys[KeyEvent.VK_S];
 		left = keys[KeyEvent.VK_A];
 		right = keys[KeyEvent.VK_D];
+		
+		//Increases and Decreased game Scales (Entities, Tiles, etc.)
+		scaleDown = keys[KeyEvent.VK_COMMA];
+		scaleUp = keys[KeyEvent.VK_PERIOD];		
+		
+		//Swap Between available players
+		changePlayer = keys[KeyEvent.VK_C];
 		
 	}
 	
