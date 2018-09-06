@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import dev.lepauley.luigi.Game;
+import dev.lepauley.luigi.entities.creatures.Creature;
 import dev.lepauley.luigi.entities.creatures.Player;
 
 /*
@@ -15,7 +16,7 @@ public class GameState extends State {
 	
 	public GameState(Game game) {
 		super(game);
-		player = new Player(game,16,32);
+		player = new Player(game,Creature.DEFAULT_CREATURE_WIDTH,Creature.DEFAULT_CREATURE_HEIGHT);
 	}
 	
 	@Override
