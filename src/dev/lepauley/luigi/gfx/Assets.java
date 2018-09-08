@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 public class Assets {
 
 	//Width and Height of grid space of sprite sheet
-	private static final int width = 16, heightBig = 32, heightSmall = 16, newPlayer = 52;
+	private static final int width = 16, heightBig = 32, heightSmall = 16, newPlayer = 51;
 	public static BufferedImage player1, player2, player3, player4, player5, player6, player7, player8, player9, player10; 
 	public static BufferedImage rPlayer2;	
 	
