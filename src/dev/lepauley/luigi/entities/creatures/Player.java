@@ -88,14 +88,6 @@ public class Player extends Creature{
 			this.currentPlayer = Assets.player5;
 		else if(currentPlayer == Assets.player5)
 			this.currentPlayer = Assets.player6;
-		else if(currentPlayer == Assets.player6)
-			this.currentPlayer = Assets.player7;
-		else if(currentPlayer == Assets.player7)
-			this.currentPlayer = Assets.player8;
-		else if(currentPlayer == Assets.player8)
-			this.currentPlayer = Assets.player9;
-		else if(currentPlayer == Assets.player9)
-			this.currentPlayer = Assets.player10;
 		else
 			this.currentPlayer = Assets.player1;
 	}
