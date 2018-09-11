@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import dev.lepauley.luigi.Game;
 import dev.lepauley.luigi.entities.creatures.Creature;
 import dev.lepauley.luigi.entities.creatures.Player;
+import dev.lepauley.luigi.levels.Level;
 
 /*
  * Where actual game play is at
@@ -13,17 +14,22 @@ import dev.lepauley.luigi.entities.creatures.Player;
 public class GameState extends State {
 
 	private Player player;
+	private Level level;
 	
 	public GameState(Game game) {
 		super(game);
 		player = new Player(game,Creature.DEFAULT_CREATURE_WIDTH,Creature.DEFAULT_CREATURE_HEIGHT);
+		level = new Level("");
 	}
 	
+	//Must tick level before player do to proper layer positioning
 	@Override
 	public void tick() {
+		level.tick();
 		player.tick();
 	}
 
+	//Must render level before player do to proper layer positioning
 	@Override
 	public void render(Graphics g) {
 		//Test images (Fake pipe):
@@ -36,6 +42,7 @@ public class GameState extends State {
 		g.fillRect(150, 230, 20, 140);
 		g.fillRect(190, 230, 10, 140);
 		
+		level.render(g);
 		player.render(g);
 	}
 

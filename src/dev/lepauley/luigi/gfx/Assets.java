@@ -12,7 +12,7 @@ public class Assets {
 	private static final int width = 16, heightBig = 32, heightSmall = 16, newPlayer = 51;
 	public static BufferedImage player1, player2, player3, player4, player5, player6, player7, player8, player9, player10; 
 	public static BufferedImage rPlayer2;
-	public static BufferedImage sky, block1, block2, block3;
+	public static BufferedImage sky, block1, block2, block3, missing;
 	
 	public static void init() {
 		//All Playersets:
@@ -38,7 +38,12 @@ public class Assets {
 		block1 = tileSheet.crop(width *  0, heightSmall * 0 + newPlayer * 0, width, heightSmall);
 		block2 = tileSheet.crop(width *  1, heightSmall * 0 + newPlayer * 0, width, heightSmall);
 		block3 = tileSheet.crop(width *  2, heightSmall * 0 + newPlayer * 0, width, heightSmall);
-		
+
+		//Debug Tileset:
+		SpriteSheet missingSheet = new SpriteSheet(ImageLoader.loadImage("/textures/tilesets.png"));
+
+		missing = missingSheet.crop(width *  5, heightSmall * 10 + newPlayer * 0, width, heightSmall);
+
 	}
 	
 }

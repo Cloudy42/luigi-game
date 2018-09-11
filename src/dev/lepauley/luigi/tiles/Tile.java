@@ -16,6 +16,7 @@ public class Tile {
 	public static Tile block1Tile = new Block1Tile(1);
 	public static Tile block2Tile = new Block2Tile(2);
 	public static Tile block3Tile = new Block3Tile(3);
+	public static Tile missingTile = new MissingTile(255);
 	
 	//CLASS
 	

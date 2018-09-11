@@ -5,7 +5,7 @@ import dev.lepauley.luigi.gfx.Assets;
 public class Block3Tile extends Tile {
 
 	public Block3Tile(int id) {
-		super(Assets.block2, id);
+		super(Assets.block3, id);
 	}
 	
 	@Override
