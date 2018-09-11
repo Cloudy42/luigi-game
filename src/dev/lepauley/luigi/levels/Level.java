@@ -2,6 +2,7 @@ package dev.lepauley.luigi.levels;
 
 import java.awt.Graphics;
 
+import dev.lepauley.luigi.GVar;
 import dev.lepauley.luigi.tiles.Tile;
 import dev.lepauley.luigi.utilities.Utilities;
 
@@ -33,7 +34,7 @@ public class Level {
 		//Start with y for loop first because it can prevent issues (he didn't explain why)
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
-				getTile(x,y).render(g, x * Tile.TILEWIDTH, y * Tile.TILEHEIGHT);
+				getTile(x,y).render(g, x * Tile.TILEWIDTH * GVar.getMultiplier(), y * Tile.TILEHEIGHT * GVar.getMultiplier());
 			}
 		}
 	}

@@ -3,6 +3,8 @@ package dev.lepauley.luigi.tiles;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import dev.lepauley.luigi.GVar;
+
 /*
  * Contains Everything that every tile must have
  */
@@ -60,7 +62,7 @@ public class Tile {
 	}
 	
 	public void render(Graphics g, int x, int y) {
-		g.drawImage(texture,  x,  y, TILEWIDTH, TILEHEIGHT, null);
+		g.drawImage(texture,  x,  y, TILEWIDTH * GVar.getMultiplier(), TILEHEIGHT * GVar.getMultiplier(), null);
 	}
 	
 	//Checks whether player can go through tile or not
