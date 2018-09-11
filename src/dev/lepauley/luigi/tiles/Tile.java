@@ -11,12 +11,33 @@ public class Tile {
 
 	//STATIC VARIABLES
 	
-	public static Tile[] tiles = new Tile[256];
-	public static Tile skyTile = new SkyTile(0);
-	public static Tile block1Tile = new Block1Tile(1);
-	public static Tile block2Tile = new Block2Tile(2);
-	public static Tile block3Tile = new Block3Tile(3);
-	public static Tile missingTile = new MissingTile(255);
+	public static Tile[] tiles = new Tile[1000];
+	public static Tile sky001 = new Sky001(564);
+
+	public static Tile brick001 = new Brick001(1);
+	public static Tile cloud001Bottom = new Cloud001Bottom(562);
+	
+	public static Tile cloud001BottomLeft = new Cloud001BottomLeft(561);
+	public static Tile cloud001BottomRight = new Cloud001BottomRight(563);
+	public static Tile cloud001Top = new Cloud001Top(551);
+	public static Tile cloud001TopLeft = new Cloud001TopLeft(550);
+	public static Tile cloud001TopRight = new Cloud001TopRight(552);
+	public static Tile greenMountain001Base = new GreenMountain001Base(279);
+	public static Tile greenMountain001DotsLeft = new GreenMountain001DotsLeft(278);
+	public static Tile greenMountain001DotsRight = new GreenMountain001DotsRight(280);
+	public static Tile greenMountain001LeftIncline = new GreenMountain001LeftIncline(252);
+	public static Tile greenMountain001RightIncline = new GreenMountain001RightIncline(254);
+	public static Tile greenMountain001Top = new GreenMountain001Top(253);
+	public static Tile greenYellowBush001Left = new GreenYellowBush001Left(281);
+	public static Tile greenYellowBush001Middle = new GreenYellowBush001Middle(282);
+	public static Tile greenYellowBush001Right = new GreenYellowBush001Right(283);
+	public static Tile pipeGreen001BottomLeft = new PipeGreen001BottomLeft(270);
+	public static Tile pipeGreen001BottomRight = new PipeGreen001BottomRight(271);
+	public static Tile pipeGreen001TopLeft = new PipeGreen001TopLeft(244);
+	public static Tile pipeGreen001TopRight = new PipeGreen001TopRight(245);
+	public static Tile puzzleBlock001 = new PuzzleBlock001(24);
+	public static Tile rock001 = new Rock001(0);
+	public static Tile missingTile = new MissingTile(999);
 	
 	//CLASS
 	

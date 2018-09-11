@@ -2,10 +2,10 @@ package dev.lepauley.luigi.tiles;
 
 import dev.lepauley.luigi.gfx.Assets;
 
-public class Block3Tile extends Tile {
+public class GreenYellowBush001Left extends Tile {
 
-	public Block3Tile(int id) {
-		super(Assets.block3, id);
+	public GreenYellowBush001Left(int id) {
+		super(Assets.greenYellowBush001Left, id);
 	}
 	
 	@Override
