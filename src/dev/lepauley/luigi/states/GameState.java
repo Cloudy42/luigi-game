@@ -32,16 +32,6 @@ public class GameState extends State {
 	//Must render level before player do to proper layer positioning
 	@Override
 	public void render(Graphics g) {
-		//Test images (Fake pipe):
-		g.setColor(Color.GREEN);
-		g.fillRect(80, 200, 140, 30);
-		g.fillRect(90, 220, 120, 150);
-		g.setColor(Color.BLACK);
-		g.fillRect(90, 230, 120, 2);
-		g.fillRect(110, 230, 15, 140);
-		g.fillRect(150, 230, 20, 140);
-		g.fillRect(190, 230, 10, 140);
-		
 		level.render(g);
 		player.render(g);
 	}

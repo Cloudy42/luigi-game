@@ -32,6 +32,18 @@ public class Level {
 	
 	public void render(Graphics g) {
 		//Start with y for loop first because it can prevent issues (he didn't explain why)
+
+	/*************** Temporary Fix: START ***************/
+		//Temporary Fix for transparency: VERY inefficient! Likely we'd want 
+		//to target which are transparent and add background for those only. Should be
+		//easy enough...
+		for(int y = 0; y < height; y++) {
+			for(int x = 0; x < width; x++) {
+				Tile.sky001.render(g, x * Tile.TILEWIDTH * GVar.getMultiplier(), y * Tile.TILEHEIGHT * GVar.getMultiplier());
+			}
+		}
+	/*************** Temporary Fix: END ***************/
+
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
 				getTile(x,y).render(g, x * Tile.TILEWIDTH * GVar.getMultiplier(), y * Tile.TILEHEIGHT * GVar.getMultiplier());
