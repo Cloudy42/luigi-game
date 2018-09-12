@@ -86,4 +86,14 @@ public class Level {
 			}
 		}
 	}
+
+	/*************** GETTERS and SETTERS ***************/
+	
+	public int getSpawnX() {
+		return spawnX;
+	}
+
+	public int getSpawnY() {
+		return spawnY;
+	}
 }

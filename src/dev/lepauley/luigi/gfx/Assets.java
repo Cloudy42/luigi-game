@@ -42,7 +42,7 @@ public class Assets {
 		//All Tilesets:
 		SpriteSheet tileSheet = new SpriteSheet(ImageLoader.loadImage("/textures/miscellaneous.png"));
 
-		sky001 = tileSheet.crop(width *  3, heightSmall * 21 + newPlayer * 0, width, heightSmall);
+		sky001 = tileSheet.crop(width *  8, heightSmall * 21 + newPlayer * 0, width, heightSmall);
 		rock001 = tileSheet.crop(width *  0, heightSmall * 0 + newPlayer * 0, width, heightSmall);
 		brick001 = tileSheet.crop(width *  1, heightSmall * 0 + newPlayer * 0, width, heightSmall);
 		cloud001TopLeft = tileSheet.crop(width *  0, heightSmall * 20 + newPlayer * 0, width, heightSmall);

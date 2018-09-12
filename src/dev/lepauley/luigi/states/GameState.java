@@ -18,8 +18,8 @@ public class GameState extends State {
 	
 	public GameState(Game game) {
 		super(game);
-		player = new Player(game,Creature.DEFAULT_CREATURE_WIDTH,Creature.DEFAULT_CREATURE_HEIGHT);
 		level = new Level("res/levels/1-1.txt");
+		player = new Player(game, level.getSpawnX(), level.getSpawnY());
 	}
 	
 	//Must tick level before player do to proper layer positioning
