@@ -17,8 +17,22 @@ public class Tile {
 	public static Tile sky001 = new Sky001(564);
 
 	public static Tile brick001 = new Brick001(1);
-	public static Tile cloud001Bottom = new Cloud001Bottom(562);
+
+	public static Tile brick001CastleWall = new Brick001CastleWall(2);
+	public static Tile brick001CastleRampartTransparent = new Brick001CastleRampartTransparent(11);
+	public static Tile brick001CastleRampartBrick = new Brick001CastleRampartBrick(38);
+	public static Tile brick001CastleShadowLeft = new Brick001CastleShadowLeft(12);
+	public static Tile brick001CastleShadowRight = new Brick001CastleShadowRight(14);
+	public static Tile brick001CastleShadowDoorTop = new Brick001CastleShadowDoorTop(39);
+	public static Tile brick001CastleShadowDoorBottom = new Brick001CastleShadowDoorBottom(40);
+
+	public static Tile stone001 = new Stone001(28);
 	
+	public static Tile flag001Pole = new Flag001Pole(286);	
+	public static Tile flag001Top = new Flag001Top(225);	
+	public static Tile flag001Flag = new Flag001Flag(288);	
+	
+	public static Tile cloud001Bottom = new Cloud001Bottom(562);	
 	public static Tile cloud001BottomLeft = new Cloud001BottomLeft(561);
 	public static Tile cloud001BottomRight = new Cloud001BottomRight(563);
 	public static Tile cloud001Top = new Cloud001Top(551);

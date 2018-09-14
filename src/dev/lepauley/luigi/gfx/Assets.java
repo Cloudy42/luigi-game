@@ -14,7 +14,10 @@ public class Assets {
 	public static BufferedImage rPlayer2;
 	public static BufferedImage sky001
 	                          , rock001
-	                          , brick001
+	                          , brick001, brick001CastleWall, brick001CastleRampartTransparent, brick001CastleRampartBrick
+	                          , brick001CastleShadowLeft, brick001CastleShadowRight, brick001CastleShadowDoorBottom, brick001CastleShadowDoorTop
+	                          , stone001
+	                          , flag001Pole, flag001Top, flag001Flag
 	                          , cloud001TopLeft, cloud001Top, cloud001TopRight, cloud001BottomLeft, cloud001Bottom, cloud001BottomRight
 	                          , puzzleBlock001
 	                          , greenMountain001LeftIncline, greenMountain001Top, greenMountain001RightIncline, greenMountain001Base, greenMountain001DotsLeft, greenMountain001DotsRight
@@ -45,6 +48,18 @@ public class Assets {
 		sky001 = tileSheet.crop(width *  8, heightSmall * 21 + newPlayer * 0, width, heightSmall);
 		rock001 = tileSheet.crop(width *  0, heightSmall * 0 + newPlayer * 0, width, heightSmall);
 		brick001 = tileSheet.crop(width *  1, heightSmall * 0 + newPlayer * 0, width, heightSmall);
+		brick001CastleWall = tileSheet.crop(width *  2, heightSmall * 0 + newPlayer * 0, width, heightSmall); //0002
+		brick001CastleRampartTransparent = tileSheet.crop(width * 11, heightSmall * 0 + newPlayer * 0, width, heightSmall); //0011
+		brick001CastleRampartBrick = tileSheet.crop(width * 11, heightSmall * 1 + newPlayer * 0, width, heightSmall); //0038
+		brick001CastleShadowRight = tileSheet.crop(width * 14, heightSmall * 0 + newPlayer * 0, width, heightSmall); //0012
+		brick001CastleShadowLeft = tileSheet.crop(width * 12, heightSmall * 0 + newPlayer * 0, width, heightSmall); //0014
+		brick001CastleShadowDoorTop = tileSheet.crop(width * 12, heightSmall * 1 + newPlayer * 0, width, heightSmall); //0039
+		brick001CastleShadowDoorBottom = tileSheet.crop(width * 13, heightSmall * 1 + newPlayer * 0, width, heightSmall); //0040
+
+		stone001 = tileSheet.crop(width *  0, heightSmall * 1 + newPlayer * 0, width, heightSmall);
+		flag001Pole = tileSheet.crop(width *  16, heightSmall * 9 + newPlayer * 0, width, heightSmall); //0286
+		flag001Top = tileSheet.crop(width *  14, heightSmall * 7 + newPlayer * 0, width, heightSmall); //0225
+		flag001Flag = tileSheet.crop(width *  18, heightSmall * 9 + newPlayer * 0, width, heightSmall); //0288
 		cloud001TopLeft = tileSheet.crop(width *  0, heightSmall * 20 + newPlayer * 0, width, heightSmall);
 		cloud001Top = tileSheet.crop(width *  1, heightSmall * 20 + newPlayer * 0, width, heightSmall);
 		cloud001TopRight = tileSheet.crop(width *  2, heightSmall * 20 + newPlayer * 0, width, heightSmall);

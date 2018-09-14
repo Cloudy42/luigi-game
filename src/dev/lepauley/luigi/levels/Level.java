@@ -21,13 +21,20 @@ public class Level {
 	//will store tile id's in a x by y multidimensional array
 	private int[][] tiles;
 	
+	//Used to test all tiles are there (Scrolling)
+	public int testingCount = 0;
+	
 	
 	public Level(String path) {
 		loadLevel(path);
 	}
 	
 	public void tick() {
-		
+		//Used to test scrolling level
+		//testingCount = 6000;
+		testingCount+=4;
+		if(testingCount>6000) 
+			testingCount = 0;
 	}
 	
 	public void render(Graphics g) {
@@ -46,7 +53,8 @@ public class Level {
 
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
-				getTile(x,y).render(g, x * Tile.TILEWIDTH * GVar.getMultiplier(), y * Tile.TILEHEIGHT * GVar.getMultiplier());
+				//testingCount used to test scrolling level:
+				getTile(x,y).render(g, x * Tile.TILEWIDTH * GVar.getMultiplier() - testingCount, y * Tile.TILEHEIGHT * GVar.getMultiplier());
 			}
 		}
 	}
