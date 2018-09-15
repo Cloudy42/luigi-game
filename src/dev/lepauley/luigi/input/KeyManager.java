@@ -16,7 +16,9 @@ public class KeyManager implements KeyListener {
 	private boolean[] keys;
 	
 	//Specific keys we're using
-	public boolean up, down, left, right, scaleUp, scaleDown, changePlayer;
+	public boolean up, down, left, right
+	             , scaleUp, scaleDown
+	             , changePlayer, debugToggle;
 	
 	public KeyManager() {
 		keys = new boolean[256];
@@ -34,6 +36,7 @@ public class KeyManager implements KeyListener {
 		
 		//Swap Between available players
 		changePlayer = keys[KeyEvent.VK_C];
+		debugToggle = keys[KeyEvent.VK_Z];
 		
 	}
 	

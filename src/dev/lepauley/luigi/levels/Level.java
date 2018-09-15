@@ -21,8 +21,9 @@ public class Level {
 	//will store tile id's in a x by y multidimensional array
 	private int[][] tiles;
 	
-	//Used to test all tiles are there (Scrolling)
-	public int testingCount = 0;
+	//Used to test all tiles are there (Allows Scrolling through level)
+	private int debugScrollLevel = 0;
+	private int DebugConst = 4;
 	
 	
 	public Level(String path) {
@@ -31,10 +32,11 @@ public class Level {
 	
 	public void tick() {
 		//Used to test scrolling level
-		//testingCount = 6000;
-		testingCount+=4;
-		if(testingCount>6000) 
-			testingCount = 0;
+		debugScrollLevel+=DebugConst;
+		if(debugScrollLevel <= 0 || debugScrollLevel >= 5700) 
+			DebugConst *= -1;
+		//Or Can set value here and look at specific areas of map 
+		//debugScrollLevel = 5700;
 	}
 	
 	public void render(Graphics g) {
@@ -53,8 +55,8 @@ public class Level {
 
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
-				//testingCount used to test scrolling level:
-				getTile(x,y).render(g, x * Tile.TILEWIDTH * GVar.getMultiplier() - testingCount, y * Tile.TILEHEIGHT * GVar.getMultiplier());
+				//debugScrollLevel used to test scrolling level:
+				getTile(x,y).render(g, x * Tile.TILEWIDTH * GVar.getMultiplier() - debugScrollLevel, y * Tile.TILEHEIGHT * GVar.getMultiplier());
 			}
 		}
 	}

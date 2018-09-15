@@ -91,6 +91,9 @@ public class Game implements Runnable {
 		if(StateManager.getCurrentState() != null) {
 			StateManager.getCurrentState().tick();
 		}
+		//If Debug button is pressed, toggle Debug Mode on/off
+		if(keyManager.debugToggle)
+			GVar.toggleDebug();
 	}
 	
 	//Render everything for game
@@ -127,9 +130,12 @@ public class Game implements Runnable {
 			lastTicks = ticks;
 			ticks = 0;
 			timer = 0;
+		}		
+		//If Debug Mode = Active, print FPS
+		if(GVar.getDebug()) {
+			g.setColor(Color.black);
+			g.drawString("FPS:" + lastTicks, 3, 23);
 		}
-		g.setColor(Color.black);
-		g.drawString("FPS:" + lastTicks, 3, 23);
 		/*************** END DEBUG ***************/
 		//Work buffer magic (presumably to transfer between buffers, ending at screen
 		bs.show();
@@ -226,7 +232,6 @@ public class Game implements Runnable {
 			}
 		}
 	}
-	
 	
 	/*************** GETTERS and SETTERS ***************/
 	public KeyManager getKeyManager() {
