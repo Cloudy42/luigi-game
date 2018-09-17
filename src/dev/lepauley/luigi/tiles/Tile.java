@@ -14,7 +14,7 @@ public class Tile {
 	//STATIC VARIABLES
 	
 	public static Tile[] tiles = new Tile[1000];
-	public static Tile sky001 = new Sky001(564);
+	public static Tile sky001 = new Sky001(569);
 
 	public static Tile brick001 = new Brick001(1);
 
