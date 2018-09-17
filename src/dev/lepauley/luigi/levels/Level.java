@@ -48,17 +48,28 @@ public class Level {
 		//easy enough...
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
-				Tile.sky001.render(g, x * Tile.TILEWIDTH * GVar.getMultiplier(), y * Tile.TILEHEIGHT * GVar.getMultiplier());
+				Tile.bg001Sky.render(g, x * Tile.TILEWIDTH * GVar.getMultiplier(), y * Tile.TILEHEIGHT * GVar.getMultiplier());
 			}
 		}
 	/*************** Temporary Fix: END ***************/
 
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
-				//debugScrollLevel used to test scrolling level:
-				getTile(x,y).render(g, x * Tile.TILEWIDTH * GVar.getMultiplier() - debugScrollLevel, y * Tile.TILEHEIGHT * GVar.getMultiplier());
+				//If NOT a BG tile, will get tile and print to screen
+				if(checkTile(x,y)) {
+					//debugScrollLevel used to test scrolling level:
+					getTile(x,y).render(g, x * Tile.TILEWIDTH * GVar.getMultiplier() - debugScrollLevel, y * Tile.TILEHEIGHT * GVar.getMultiplier());
+				}
 			}
 		}
+	}
+	
+	//Borrows same logic from getTile, BUT returns false if a BG tile, thus stopping it from being drawn and saving memory.
+	public boolean checkTile(int x, int y) {
+		//If a BG tile, return false to stop from drawing to screen
+		if(getTile(x,y) == Tile.bg001Sky)
+			return false;
+		return true;
 	}
 	
 	//Takes tile array and indexes at whatever tile is in the tile array at each x and y position

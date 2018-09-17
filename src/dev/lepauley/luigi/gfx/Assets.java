@@ -12,7 +12,7 @@ public class Assets {
 	private static final int width = 16, heightBig = 32, heightSmall = 16, newPlayer = 51;
 	public static BufferedImage player1, player2, player3, player4, player5, player6, player7, player8, player9, player10; 
 	public static BufferedImage rPlayer2;
-	public static BufferedImage sky001
+	public static BufferedImage bg001Sky
 	                          , rock001
 	                          , brick001, brick001CastleWall, brick001CastleRampartTransparent, brick001CastleRampartBrick
 	                          , brick001CastleShadowLeft, brick001CastleShadowRight, brick001CastleShadowDoorBottom, brick001CastleShadowDoorTop
@@ -45,7 +45,7 @@ public class Assets {
 		//All Tilesets:
 		SpriteSheet tileSheet = new SpriteSheet(ImageLoader.loadImage("/textures/miscellaneous.png"));
 
-		sky001 = tileSheet.crop(width *  8, heightSmall * 21 + newPlayer * 0, width, heightSmall);
+		bg001Sky = tileSheet.crop(width *  8, heightSmall * 21 + newPlayer * 0, width, heightSmall);
 		rock001 = tileSheet.crop(width *  0, heightSmall * 0 + newPlayer * 0, width, heightSmall);
 		brick001 = tileSheet.crop(width *  1, heightSmall * 0 + newPlayer * 0, width, heightSmall);
 		brick001CastleWall = tileSheet.crop(width *  2, heightSmall * 0 + newPlayer * 0, width, heightSmall); //0002
