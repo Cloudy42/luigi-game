@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 public class Assets {
 
 	//Width and Height of grid space of sprite sheet
-	private static final int width = 16, heightBig = 32, heightSmall = 16, newPlayer = 51;
+	private static final int width = 16, heightBig = 32, heightSmall = 16, newPlayer = 51, scale = 10;
 	public static BufferedImage player1, player2, player3, player4, player5, player6, player7, player8, player9, player10; 
 	public static BufferedImage rPlayer2;
 	public static BufferedImage bg001Sky
@@ -27,14 +27,14 @@ public class Assets {
 	
 	public static void init() {
 		//All Playersets:
-		SpriteSheet playerSheet = new SpriteSheet(ImageLoader.loadImage("/textures/Umario_and_Galugi.png"));
+		SpriteSheet playerSheet = new SpriteSheet(ImageLoader.loadImage("/textures/Umario_and_Galugi_10x.png"));
 		
-		player1  = playerSheet.crop(width *  0, heightBig * 0 + newPlayer * 0, width, heightBig);
-		player2  = playerSheet.crop(width *  0, heightBig * 0 + newPlayer * 1, width, heightBig);
-		player3  = playerSheet.crop(width *  0, heightBig * 0 + newPlayer * 2, width, heightBig);
-		player4  = playerSheet.crop(width *  0, heightBig * 0 + newPlayer * 3, width, heightBig);
-		player5  = playerSheet.crop(width *  0, heightBig * 0 + newPlayer * 4, width, heightBig);
-		player6  = playerSheet.crop(width *  0, heightBig * 0 + newPlayer * 5, width, heightBig);
+		player1  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
+		player2  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 1 * scale, width * scale, heightBig * scale);
+		player3  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 2 * scale, width * scale, heightBig * scale);
+		player4  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 3 * scale, width * scale, heightBig * scale);
+		player5  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 4 * scale, width * scale, heightBig * scale);
+		player6  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 5 * scale, width * scale, heightBig * scale);
 		//I made this just to test "flipped". I also wonder how we'll want to handle these. We can:
 		//A.) Write logic to account for it within the code
 		//B.) Make duplicates of all assets with them flipped then call that in the code
