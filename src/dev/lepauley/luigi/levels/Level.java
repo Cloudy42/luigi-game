@@ -23,7 +23,7 @@ public class Level {
 	
 	//Used to test all tiles are there (Allows Scrolling through level)
 	private int debugScrollLevel = 0;
-	private int DebugConst = 4;
+	private int debugConst = 4;
 	
 	
 	public Level(String path) {
@@ -31,10 +31,10 @@ public class Level {
 	}
 	
 	public void tick() {
-		//Used to test scrolling level
-		debugScrollLevel+=DebugConst;
+		//Used to test scrolling level, IF scrolling is toggled
+		debugScrollLevel+=debugConst;
 		if(debugScrollLevel <= 0 || debugScrollLevel >= 5700) 
-			DebugConst *= -1;
+			debugConst *= -1;
 		//Or Can set value here and look at specific areas of map 
 		//debugScrollLevel = 5700;
 	}

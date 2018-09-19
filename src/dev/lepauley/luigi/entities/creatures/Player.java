@@ -91,6 +91,5 @@ public class Player extends Creature{
 		else
 			this.currentPlayer = Assets.player1;
 	}
-
 	
 }

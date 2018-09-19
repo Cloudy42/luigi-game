@@ -10,6 +10,7 @@ public class Assets {
 
 	//Width and Height of grid space of sprite sheet
 	private static final int width = 16, heightBig = 32, heightSmall = 16, newPlayer = 51, scale = 10;
+	public static BufferedImage menu, coin, toad;
 	public static BufferedImage player1, player2, player3, player4, player5, player6, player7, player8, player9, player10; 
 	public static BufferedImage rPlayer2;
 	public static BufferedImage bg001Sky
@@ -26,6 +27,16 @@ public class Assets {
 	                          , missing;
 	
 	public static void init() {
+		//Menusets
+		SpriteSheet menuSheet = new SpriteSheet(ImageLoader.loadImage("/textures/title_screen.png"));
+		menu = menuSheet.crop(1, 60,176,88);
+
+		//160/5/20
+		SpriteSheet itemSheet = new SpriteSheet(ImageLoader.loadImage("/textures/items_and_objects.png"));
+		toad	= itemSheet.crop(width * 0, heightSmall * 0, 16, 16);
+		coin 	= itemSheet.crop(width * 0, heightSmall * 6, 16, 16);
+		
+		
 		//All Playersets:
 		SpriteSheet playerSheet = new SpriteSheet(ImageLoader.loadImage("/textures/Umario_and_Galugi_10x.png"));
 		

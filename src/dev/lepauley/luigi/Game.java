@@ -1,7 +1,6 @@
 package dev.lepauley.luigi;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
@@ -10,9 +9,9 @@ import dev.lepauley.luigi.gfx.Assets;
 import dev.lepauley.luigi.input.KeyManager;
 import dev.lepauley.luigi.states.GameState;
 import dev.lepauley.luigi.states.MenuState;
-import dev.lepauley.luigi.states.PauseState;
 import dev.lepauley.luigi.states.State;
 import dev.lepauley.luigi.states.StateManager;
+import dev.lepauley.luigi.utilities.Utilities;
 
 /*
  * Main class for game - holds all base code: 
@@ -40,9 +39,6 @@ public class Game implements Runnable {
 	int ticks = 0;
 	int lastTicks = 60;
 	
-	//Defaut font
-	Font myFont = new Font ("Lucida Sans Unicode", 1, 20);
-	
 	/*
 	 * A way for computer to draw things to screen, using buffers
 	 *    - Buffer is like a hidden computer screen, drawing behind the scenes
@@ -53,7 +49,7 @@ public class Game implements Runnable {
 	private Graphics g;
 	
 	//State objects
-	private State gameState, menuState, pauseState;
+	private State gameState, menuState;
 	
 	//Input
 	private KeyManager keyManager;
@@ -76,10 +72,8 @@ public class Game implements Runnable {
 		
 		gameState = new GameState(this);
 		menuState = new MenuState(this);
-		pauseState = new PauseState(this);
-		StateManager.setCurrentState(gameState);
-		//StateManager.setCurrentState(menuState);
-		//StateManager.setCurrentState(pauseState);
+		StateManager.setCurrentState(menuState);
+		//StateManager.setCurrentState(gameState);
 	}
 	
 	//Update everything for game
@@ -91,9 +85,24 @@ public class Game implements Runnable {
 		if(StateManager.getCurrentState() != null) {
 			StateManager.getCurrentState().tick();
 		}
+		
+		//If MenuState and enter is pressed, change to GameState
+		if(keyManager.start && StateManager.getCurrentState() == menuState)
+			StateManager.setCurrentState(gameState);
+
+		//If GameState and esc is pressed, change to MenuState
+		if(keyManager.exit && StateManager.getCurrentState() == gameState) {
+			GVar.setPlayerSelectCount(1);
+			StateManager.setCurrentState(menuState);
+		}
+		
 		//If Debug button is pressed, toggle Debug Mode on/off
 		if(keyManager.debugToggle)
 			GVar.toggleDebug();
+
+		//If Key Manual button is pressed, toggle Key Manual Mode on/off
+		if(keyManager.keyManualToggle)
+			GVar.toggleKeyManual();
 	}
 	
 	//Render everything for game
@@ -124,7 +133,7 @@ public class Game implements Runnable {
 		/*************** END DRAWING ***************/
 		/*************** BEGIN DEBUG ***************/
 		//FPS on screen
-		g.setFont (myFont);
+		g.setFont (GVar.FONT_20);
 		if(timer > 1000000000) {
 			System.out.println("Ticks and Frames: " + ticks);
 			lastTicks = ticks;
@@ -133,9 +142,17 @@ public class Game implements Runnable {
 		}		
 		//If Debug Mode = Active, print FPS
 		if(GVar.getDebug()) {
-			g.setColor(Color.black);
-			g.drawString("FPS:" + lastTicks, 3, 23);
+			Utilities.drawShadowString(g, "FPS:" + lastTicks, 3, 23, GVar.FONT_20_SHADOW);
 		}
+		
+		//If Key Manual Mode = Active, print Controls
+		if(GVar.getKeyManual()) {
+			g.setColor(Color.black);
+			for(int i = 0; i < keyManager.getKeyManual().length; i++) {
+				Utilities.drawShadowString(g, keyManager.getKeyManual()[i], GVar.GAME_WIDTH - GVar.KEY_MANUAL_POSITION_X, 23 + GVar.KEY_MANUAL_OFFSET_Y * i, GVar.FONT_20_SHADOW);
+			}
+		}
+		
 		/*************** END DEBUG ***************/
 		//Work buffer magic (presumably to transfer between buffers, ending at screen
 		bs.show();

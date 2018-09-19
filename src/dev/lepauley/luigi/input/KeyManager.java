@@ -17,9 +17,26 @@ public class KeyManager implements KeyListener {
 	
 	//Specific keys we're using
 	public boolean up, down, left, right
+				 , start, exit
 	             , scaleUp, scaleDown
-	             , changePlayer, debugToggle;
-	
+	             , changePlayer
+	             , debugToggle, scrollingToggle, pauseToggle, keyManualToggle;
+
+	//Used for displaying controls in game
+	private String[] keyManual = {"[A] Left"
+			                    ,"[D] Right"
+			                    ,"[W] Up"
+			                    ,"[S] Down"
+			                    ,"[Enter] Start"
+			                    ,"[Esc] Exit"
+			                    ,"[P] Pause"
+			                    ,"[D] Debug"
+			                    ,"[K] Controls"
+			                    ,"[<] Scale Down"
+			                    ,"[>] Scale Up"
+			                    ,"[C] Change Player"
+			                    };
+		
 	public KeyManager() {
 		keys = new boolean[256];
 	}
@@ -29,6 +46,10 @@ public class KeyManager implements KeyListener {
 		down = keys[KeyEvent.VK_S];
 		left = keys[KeyEvent.VK_A];
 		right = keys[KeyEvent.VK_D];
+
+		//Helps Enter/Exit States (Variable depennding on what state you're in)
+		start = keys[KeyEvent.VK_ENTER];
+		exit = keys[KeyEvent.VK_ESCAPE];
 		
 		//Increases and Decreased game Scales (Entities, Tiles, etc.)
 		scaleDown = keys[KeyEvent.VK_COMMA];
@@ -36,7 +57,15 @@ public class KeyManager implements KeyListener {
 		
 		//Swap Between available players
 		changePlayer = keys[KeyEvent.VK_C];
+		
+		//Toggles Debug Display
 		debugToggle = keys[KeyEvent.VK_Z];
+		
+		//Toggles Pause (which should stop all ticking)
+		pauseToggle = keys[KeyEvent.VK_P];
+		
+		//Toggles Key Manual Display
+		keyManualToggle = keys[KeyEvent.VK_K];
 		
 	}
 	
@@ -60,5 +89,11 @@ public class KeyManager implements KeyListener {
 		// Used in far future, not right now
 		
 	}
+	
+	/*************** GETTERS and SETTERS ***************/
+	public String[] getKeyManual() {
+		return keyManual;
+	}
+	
 
 }

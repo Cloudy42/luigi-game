@@ -1,5 +1,7 @@
 package dev.lepauley.luigi.utilities;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -41,6 +43,15 @@ public class Utilities {
 			e.printStackTrace();
 			return 0;
 		}
+	}
+	
+	//Takes a String and creates a shadow string following by a top layer String
+	public static void drawShadowString(Graphics g, String s, int x, int y, int shadowOffset) {
+		g.setColor(Color.black);
+		g.drawString(s, x + shadowOffset, y + shadowOffset);
+		g.setColor(Color.white);
+		g.drawString(s, x, y);
+
 	}
 	
 }
