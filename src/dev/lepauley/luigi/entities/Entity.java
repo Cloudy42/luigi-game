@@ -2,8 +2,6 @@ package dev.lepauley.luigi.entities;
 
 import java.awt.Graphics;
 
-import dev.lepauley.luigi.GVar;
-
 /*
  * The base shell for all Entities in game
  */

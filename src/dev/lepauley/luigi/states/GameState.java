@@ -1,8 +1,6 @@
 package dev.lepauley.luigi.states;
 
-import java.awt.Color;
 import java.awt.Graphics;
-
 import dev.lepauley.luigi.GVar;
 import dev.lepauley.luigi.Game;
 import dev.lepauley.luigi.entities.creatures.Player;
