@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
+import dev.lepauley.luigi.audio.Audio;
 import dev.lepauley.luigi.display.Display;
 import dev.lepauley.luigi.gfx.Assets;
 import dev.lepauley.luigi.input.KeyManager;
@@ -27,7 +28,10 @@ public class Game implements Runnable {
 	private Display display;
 	public String title;
 	public int width, height;
-
+	
+	//Used to access all game audio
+	public static Audio gameAudio = new Audio();
+	
 	//While Running = true, game will loop
 	private boolean running = false;
 	

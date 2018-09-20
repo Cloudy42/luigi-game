@@ -59,6 +59,7 @@ public class GameState extends State {
 			//    then you are at 3 * 30 = 90 = 525 (The 50% width mark)
 			//    and when you do 50% of font subtracted from center = 235 - 15 = 220. 
 			//So why is it not drawing dead center? Brian? MATH! I need help! (/ToT)/
+			//I think Left and right it's fine, but vertically I think it's too high... :'( 
 			if(tempDebugPausedPosition) {
 				tempDebugPausedPosition = false;
 				System.out.println("//////////////////////////////////////");

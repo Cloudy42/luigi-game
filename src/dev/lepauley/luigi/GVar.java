@@ -75,6 +75,8 @@ public class GVar {
 	}
 	public static void setPlayerSelectCount(int no) {
 		playerSelectCount = no;
+		Game.gameAudio.pauseAudio("sfx");
+		Game.gameAudio.playAudio("sfx", 5);
 	}
 	
 	public static boolean getDebug() {
@@ -105,6 +107,8 @@ public class GVar {
 			pauseToggle = false;
 		else
 			pauseToggle = true;
+		Game.gameAudio.pauseAudio("all");
+		Game.gameAudio.playAudio("sfx", 14);
 	}	
 	
 	public static boolean getKeyManual() {
