@@ -12,6 +12,11 @@ public class StateManager {
 
 	//Holds whatever current state of game is
 	private static State currentState = null;
+	
+	//In case we ever need or want to know current state name
+	public static String getCurrentStateName() {
+		return currentState.currentStateName;
+	}
 
 	//In case we ever need or want to know current state
 	public static State getCurrentState() {

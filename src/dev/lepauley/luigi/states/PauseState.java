@@ -15,7 +15,7 @@ public class PauseState extends State {
 	Font myFont = new Font ("Lucida Sans Unicode", 1, 70);
 	
 	public PauseState(Game game) {
-		super(game);
+		super(game,"PauseState");
 		this.game = game;
 		
 	}

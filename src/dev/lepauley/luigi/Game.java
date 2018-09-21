@@ -7,6 +7,7 @@ import java.awt.image.BufferStrategy;
 import dev.lepauley.luigi.audio.Audio;
 import dev.lepauley.luigi.display.Display;
 import dev.lepauley.luigi.gfx.Assets;
+import dev.lepauley.luigi.gfx.Header;
 import dev.lepauley.luigi.input.KeyManager;
 import dev.lepauley.luigi.states.GameState;
 import dev.lepauley.luigi.states.MenuState;
@@ -31,6 +32,9 @@ public class Game implements Runnable {
 	
 	//Used to access all game audio
 	public static Audio gameAudio = new Audio();
+	
+	//Used to house all header info
+	public static Header gameHeader = new Header();
 	
 	//While Running = true, game will loop
 	private boolean running = false;
@@ -91,13 +95,35 @@ public class Game implements Runnable {
 		}
 		
 		//If MenuState and enter is pressed, change to GameState
-		if(keyManager.start && StateManager.getCurrentState() == menuState)
+		if(keyManager.start && StateManager.getCurrentState() == menuState) {
 			StateManager.setCurrentState(gameState);
-
+			Game.gameAudio.pauseAudio("all");
+			Game.gameAudio.playAudio("music", "Running Around");
+		}
 		//If GameState and esc is pressed, change to MenuState
 		if(keyManager.exit && StateManager.getCurrentState() == gameState) {
+			//Reset game to base
 			GVar.setPlayerSelectCount(1);
+			
+			GVar.setMultiplier(1);
+			//Displays Debug (if hidden):
+			//Likely will want to alternate this one eventually where hidden by default
+			if(!GVar.getDebug())
+				GVar.toggleDebug();
+			//Hides Controls (if displayed):
+			if(GVar.getKeyManual())
+				GVar.toggleKeyManual();
+			//Unpauses Game (if paused):
+			if(GVar.getPause())
+				GVar.togglePause();
+			//Resets Players Position & selection:
+			((GameState) gameState).getPlayer().setX((float)((GameState) gameState).getLevel().getSpawnX());
+			((GameState) gameState).getPlayer().setY((float)((GameState) gameState).getLevel().getSpawnY());
+			((GameState) gameState).getPlayer().setCurrentPlayer(0);
+			//Resets Level Tile Position:
+			((GameState) gameState).getLevel().setDebugScrollLevel(0);
 			StateManager.setCurrentState(menuState);
+			Game.gameAudio.pauseAudio("all");
 		}
 		
 		//If Debug button is pressed, toggle Debug Mode on/off
@@ -139,7 +165,7 @@ public class Game implements Runnable {
 		//FPS on screen
 		g.setFont (GVar.FONT_20);
 		if(timer > 1000000000) {
-			System.out.println("Ticks and Frames: " + ticks);
+			//System.out.println("Ticks and Frames: " + ticks);
 			lastTicks = ticks;
 			ticks = 0;
 			timer = 0;

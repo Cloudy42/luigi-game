@@ -117,4 +117,8 @@ public class Level {
 	public int getSpawnY() {
 		return spawnY;
 	}
+	
+	public void setDebugScrollLevel(int i) {
+		debugScrollLevel = i;
+	}
 }

@@ -23,7 +23,7 @@ public class GameState extends State {
 	private boolean tempDebugPausedPosition = true;
 	
 	public GameState(Game game) {
-		super(game);
+		super(game,"GameState");
 		level = new Level("res/levels/1-1.txt");
 		player = new Player(game, level.getSpawnX(), level.getSpawnY());
 	}
@@ -46,6 +46,7 @@ public class GameState extends State {
 	@Override
 	public void render(Graphics g) {
 		level.render(g);
+		Game.gameHeader.render(g);
 		player.render(g);
 		//If Game = Paused, display to game
 		if(GVar.getPause()) {
@@ -74,7 +75,17 @@ public class GameState extends State {
 				System.out.println("GVar.GAME_HEIGHT/2 - FONT_LEN/2: " + (GVar.GAME_HEIGHT/2 - FONT_LEN/2));
 				System.out.println("//////////////////////////////////////");
 			}
-}
+		}
+	}
+
+	/*************** GETTERS and SETTERS ***************/
+
+	public Level getLevel() {
+		return level;
+	}
+
+	public Player getPlayer() {
+		return player;
 	}
 
 }

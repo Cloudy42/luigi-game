@@ -17,12 +17,14 @@ public class Player extends Creature{
 	private Game game;
 	
 	//Keeps Track of Current Player
-	private BufferedImage currentPlayer;
+	private int currentPlayer;
+	private BufferedImage[] playerImage = {Assets.player1, Assets.player2, Assets.player3
+										 , Assets.player4, Assets.player5, Assets.player6};
 	
 	public Player(Game game, float x, float y) {
 		super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
 		this.game = game;
-		this.currentPlayer = Assets.player1;
+		this.currentPlayer = 0;
 	}
 
 	@Override
@@ -42,12 +44,12 @@ public class Player extends Creature{
 		if(game.getKeyManager().up) {
 			yMove = -speed;
 			Random rand = new Random();
-			Game.gameAudio.playAudio("sfx", rand.nextInt(21));
+			//Game.gameAudio.playAudio("sfx", rand.nextInt(21));
 		}
 		if(game.getKeyManager().down) {
 			yMove = speed;
 			Random rand = new Random();
-			Game.gameAudio.playAudio("music", rand.nextInt(21));
+			//Game.gameAudio.playAudio("music", rand.nextInt(21));
 		}
 		if(game.getKeyManager().left)
 			xMove = -speed;
@@ -57,16 +59,16 @@ public class Player extends Creature{
 		//Scale player Down/Up AND adjust speed
 		if(game.getKeyManager().scaleDown)
 			if(GVar.getMultiplier() > GVar.MIN_SCALE)
-				GVar.changeMultiplier(-1);
+				GVar.incrementMultiplier(-1);
 				setSpeed(DEFAULT_SPEED * GVar.getMultiplier());
 		if(game.getKeyManager().scaleUp)
 			if(GVar.getMultiplier() < GVar.MAX_SCALE)
-				GVar.changeMultiplier(1);
+				GVar.incrementMultiplier(1);
 				setSpeed(DEFAULT_SPEED * GVar.getMultiplier());
 
 		//Swap Current Player
 		if(game.getKeyManager().changePlayer)
-			setCurrentPlayer();
+			incrementCurrentPlayer();
 	}
 
 	@Override
@@ -74,29 +76,25 @@ public class Player extends Creature{
 		//Draws player. Utilizes Cropping method via SpriteSheet class to only pull part of image
 		// - Takes in integers, not floats, so need to cast x and y position:
 		// - Image Observer = null. We won't use in tutorial
-		g.drawImage(currentPlayer, (int) x, (int) y, (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
+		g.drawImage(playerImage[currentPlayer], (int) x, (int) y, (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
 	}
 
 	/*************** GETTERS and SETTERS ***************/
 	
-	public BufferedImage getCurrentPlayer() {
+	public int getCurrentPlayer() {
 		return currentPlayer;
 	}
 
-	//Def should be cleaned up, likely using an array or something and looping through. Just wanted to test:
-	public void setCurrentPlayer() {
-		if(currentPlayer == Assets.player1)
-			this.currentPlayer = Assets.player2;
-		else if(currentPlayer == Assets.player2)
-			this.currentPlayer = Assets.player3;
-		else if(currentPlayer == Assets.player3)
-			this.currentPlayer = Assets.player4;
-		else if(currentPlayer == Assets.player4)
-			this.currentPlayer = Assets.player5;
-		else if(currentPlayer == Assets.player5)
-			this.currentPlayer = Assets.player6;
-		else
-			this.currentPlayer = Assets.player1;
+	//Selects Specific character from lineup
+	public void setCurrentPlayer(int i) {
+		currentPlayer = i;
+	}
+
+	//Selects next Player in lineup
+	public void incrementCurrentPlayer() {
+		currentPlayer++;
+		if(currentPlayer > playerImage.length-1)
+			currentPlayer = 0;
 	}
 	
 }

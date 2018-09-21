@@ -45,9 +45,6 @@ public class GVar {
 	//Denotes whether debug mode is active or not
 	private static boolean debugToggle = true;
 	
-	//Denotes whether scrolling is active or not
-	private static boolean scrollToggle = false;
-
 	//Denotes whether game is paused or not
 	private static boolean pauseToggle = false;
 
@@ -66,7 +63,7 @@ public class GVar {
 		GVar.multiplier = multiplier;
 	}
 	
-	public static void changeMultiplier(int x) {
+	public static void incrementMultiplier(int x) {
 		multiplier += x;
 	}
 
@@ -76,7 +73,7 @@ public class GVar {
 	public static void setPlayerSelectCount(int no) {
 		playerSelectCount = no;
 		Game.gameAudio.pauseAudio("sfx");
-		Game.gameAudio.playAudio("sfx", 5);
+		Game.gameAudio.playAudio("sfx", "Bump");
 	}
 	
 	public static boolean getDebug() {
@@ -89,26 +86,21 @@ public class GVar {
 			debugToggle = true;
 	}
 
-	public static boolean getScroll() {
-		return scrollToggle;
-	}
-	public static void toggleScroll() {
-		if(scrollToggle) 
-			scrollToggle = false;
-		else
-			scrollToggle = true;
-	}
-
 	public static boolean getPause() {
 		return pauseToggle;
 	}
 	public static void togglePause() {
-		if(pauseToggle) 
+		if(pauseToggle) { 
 			pauseToggle = false;
-		else
+			Game.gameAudio.pauseAudio("all");
+			Game.gameAudio.playAudio("sfx", "Pause");
+			Game.gameAudio.resumeAudio("music");
+		}
+		else {
 			pauseToggle = true;
-		Game.gameAudio.pauseAudio("all");
-		Game.gameAudio.playAudio("sfx", 14);
+			Game.gameAudio.pauseAudio("all");
+			Game.gameAudio.playAudio("sfx", "Pause");
+		}
 	}	
 	
 	public static boolean getKeyManual() {
