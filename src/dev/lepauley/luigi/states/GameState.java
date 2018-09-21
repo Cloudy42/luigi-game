@@ -31,7 +31,7 @@ public class GameState extends State {
 	//Must tick level before player do to proper layer positioning
 	@Override
 	public void tick() {
-		//Toggles Pause On/Off
+		//Toggles Pause On/Off (only if not dead)
 		if(game.getKeyManager().pauseToggle)
 			GVar.togglePause();
 
@@ -39,6 +39,7 @@ public class GameState extends State {
 		if(!GVar.getPause()) {
 			level.tick();
 			player.tick();
+			Game.gameHeader.tick();
 		}
 	}
 

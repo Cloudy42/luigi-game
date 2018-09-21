@@ -3,6 +3,7 @@ package dev.lepauley.luigi.levels;
 import java.awt.Graphics;
 
 import dev.lepauley.luigi.GVar;
+import dev.lepauley.luigi.Game;
 import dev.lepauley.luigi.tiles.Tile;
 import dev.lepauley.luigi.utilities.Utilities;
 
@@ -31,12 +32,14 @@ public class Level {
 	}
 	
 	public void tick() {
-		//Used to test scrolling level, IF scrolling is toggled
-		debugScrollLevel+=debugConst;
-		if(debugScrollLevel <= 0 || debugScrollLevel >= 5700) 
-			debugConst *= -1;
-		//Or Can set value here and look at specific areas of map 
-		//debugScrollLevel = 5700;
+		if(!Game.gameHeader.getDead()) {
+			//Used to test scrolling level, IF scrolling is toggled
+			debugScrollLevel+=debugConst;
+			if(debugScrollLevel <= 0 || debugScrollLevel >= 5700) 
+				debugConst *= -1;
+			//Or Can set value here and look at specific areas of map 
+			//debugScrollLevel = 5700;
+		}
 	}
 	
 	public void render(Graphics g) {

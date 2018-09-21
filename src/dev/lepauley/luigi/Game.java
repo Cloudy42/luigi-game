@@ -99,11 +99,14 @@ public class Game implements Runnable {
 		if(keyManager.start && StateManager.getCurrentState() == menuState) {
 			StateManager.setCurrentState(gameState);
 			Game.gameAudio.pauseAudio("all");
-			System.out.println(EnumMusic.RunningAround.toString());
 			Game.gameAudio.playAudio("music", EnumMusic.RunningAround.toString());
 		}
 		//If GameState and esc is pressed, change to MenuState
 		if(keyManager.exit && StateManager.getCurrentState() == gameState) {
+
+			//Reset Defaults:
+			gameHeader.resetDefaults();
+			
 			//Reset game to base
 			GVar.setPlayerSelectCount(1);
 			

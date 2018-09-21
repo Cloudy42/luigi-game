@@ -92,7 +92,7 @@ public class GVar {
 		return pauseToggle;
 	}
 	public static void togglePause() {
-		if(pauseToggle) { 
+		if(pauseToggle && !Game.gameHeader.getDead()) { 
 			pauseToggle = false;
 			Game.gameAudio.pauseAudio("all");
 			Game.gameAudio.playAudio("sfx", EnumSFX.Pause.toString());

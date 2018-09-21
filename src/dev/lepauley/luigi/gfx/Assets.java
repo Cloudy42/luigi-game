@@ -11,7 +11,8 @@ public class Assets {
 	//Width and Height of grid space of sprite sheet
 	private static final int width = 16, heightBig = 32, heightSmall = 16, newPlayer = 51, scale = 10;
 	public static BufferedImage menu, coin, toad;
-	public static BufferedImage player1, player2, player3, player4, player5, player6, player7, player8, player9, player10; 
+	public static BufferedImage player1, player2, player3, player4, player5, player6; 
+	public static BufferedImage player1Dead, player2Dead, player3Dead, player4Dead, player5Dead, player6Dead; 
 	public static BufferedImage rPlayer2;
 	public static BufferedImage bg001Sky
 	                          , rock001
@@ -46,6 +47,15 @@ public class Assets {
 		player4  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 3 * scale, width * scale, heightBig * scale);
 		player5  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 4 * scale, width * scale, heightBig * scale);
 		player6  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 5 * scale, width * scale, heightBig * scale);
+
+		//Made just for funsies:
+		player1Dead  = playerSheet.crop(width *  6 * scale, (heightBig * 1 + newPlayer * 0) * scale, width * scale, heightBig * scale);
+		player2Dead  = playerSheet.crop(width *  6 * scale, (heightBig * 1 + newPlayer * 1) * scale, width * scale, heightBig * scale);
+		player3Dead  = playerSheet.crop(width *  6 * scale, (heightBig * 1 + newPlayer * 2) * scale, width * scale, heightBig * scale);
+		player4Dead  = playerSheet.crop(width *  6 * scale, (heightBig * 1 + newPlayer * 3) * scale, width * scale, heightBig * scale);
+		player5Dead  = playerSheet.crop(width *  6 * scale, (heightBig * 1 + newPlayer * 4) * scale, width * scale, heightBig * scale);
+		//player6Dead  = playerSheet.crop(width *  6 * scale, (heightBig * 1 + newPlayer * 5) * scale, width * scale, heightBig * scale);
+
 		//I made this just to test "flipped". I also wonder how we'll want to handle these. We can:
 		//A.) Write logic to account for it within the code
 		//B.) Make duplicates of all assets with them flipped then call that in the code

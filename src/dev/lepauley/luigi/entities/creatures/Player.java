@@ -19,6 +19,8 @@ public class Player extends Creature{
 	private int currentPlayer;
 	private BufferedImage[] playerImage = {Assets.player1, Assets.player2, Assets.player3
 										 , Assets.player4, Assets.player5, Assets.player6};
+	private BufferedImage[] playerImageDead = {Assets.player1Dead, Assets.player2Dead, Assets.player3Dead
+			 								 , Assets.player4Dead, Assets.player5Dead, Assets.player6};
 	
 	public Player(Game game, float x, float y) {
 		super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
@@ -68,10 +70,15 @@ public class Player extends Creature{
 
 	@Override
 	public void render(Graphics g) {
-		//Draws player. Utilizes Cropping method via SpriteSheet class to only pull part of image
-		// - Takes in integers, not floats, so need to cast x and y position:
-		// - Image Observer = null. We won't use in tutorial
-		g.drawImage(playerImage[currentPlayer], (int) x, (int) y, (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
+		//For funsies draw different player if dead:
+		if(Game.gameHeader.getDead()) {
+			g.drawImage(playerImageDead[currentPlayer], (int) x, (int) y, (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
+		} else {
+			//Draws player. Utilizes Cropping method via SpriteSheet class to only pull part of image
+			// - Takes in integers, not floats, so need to cast x and y position:
+			// - Image Observer = null. We won't use in tutorial
+			g.drawImage(playerImage[currentPlayer], (int) x, (int) y, (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
+		}
 	}
 
 	/*************** GETTERS and SETTERS ***************/
