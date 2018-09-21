@@ -13,6 +13,7 @@ import dev.lepauley.luigi.states.GameState;
 import dev.lepauley.luigi.states.MenuState;
 import dev.lepauley.luigi.states.State;
 import dev.lepauley.luigi.states.StateManager;
+import dev.lepauley.luigi.utilities.EnumMusic;
 import dev.lepauley.luigi.utilities.Utilities;
 
 /*
@@ -98,7 +99,8 @@ public class Game implements Runnable {
 		if(keyManager.start && StateManager.getCurrentState() == menuState) {
 			StateManager.setCurrentState(gameState);
 			Game.gameAudio.pauseAudio("all");
-			Game.gameAudio.playAudio("music", "Running Around");
+			System.out.println(EnumMusic.RunningAround.toString());
+			Game.gameAudio.playAudio("music", EnumMusic.RunningAround.toString());
 		}
 		//If GameState and esc is pressed, change to MenuState
 		if(keyManager.exit && StateManager.getCurrentState() == gameState) {

@@ -154,4 +154,8 @@ public class Audio {
 		mapMusic.put("Saved The Princess", new File("res/audio/music/18 - Saved The Princess.wav"));
 	}
 	
+	public Map<String, File> getMapSFX() {
+		return mapSFX;
+	}
+	
 }

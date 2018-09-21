@@ -2,6 +2,8 @@ package dev.lepauley.luigi;
 
 import java.awt.Font;
 
+import dev.lepauley.luigi.utilities.EnumSFX;
+
 /*
  * Class of global variables to use throughout code:
  * 	- multiplier
@@ -73,7 +75,7 @@ public class GVar {
 	public static void setPlayerSelectCount(int no) {
 		playerSelectCount = no;
 		Game.gameAudio.pauseAudio("sfx");
-		Game.gameAudio.playAudio("sfx", "Bump");
+		Game.gameAudio.playAudio("sfx", EnumSFX.Bump.toString());
 	}
 	
 	public static boolean getDebug() {
@@ -93,13 +95,13 @@ public class GVar {
 		if(pauseToggle) { 
 			pauseToggle = false;
 			Game.gameAudio.pauseAudio("all");
-			Game.gameAudio.playAudio("sfx", "Pause");
+			Game.gameAudio.playAudio("sfx", EnumSFX.Pause.toString());
 			Game.gameAudio.resumeAudio("music");
 		}
 		else {
 			pauseToggle = true;
 			Game.gameAudio.pauseAudio("all");
-			Game.gameAudio.playAudio("sfx", "Pause");
+			Game.gameAudio.playAudio("sfx", EnumSFX.Pause.toString());
 		}
 	}	
 	
