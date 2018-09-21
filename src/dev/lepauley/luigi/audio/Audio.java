@@ -101,12 +101,10 @@ public class Audio {
 		}
 		if(audioType.toLowerCase().equals("music")) {
 			clipMusic.stop();
-	        //clipMusic.start();
 		}
 		if(audioType.toLowerCase().equals("all")) {
 			clipSFX.stop();
 			clipMusic.stop();
-	        //clipMusic.start();
 		}
 	}
 	

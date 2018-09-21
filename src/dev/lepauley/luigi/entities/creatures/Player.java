@@ -2,7 +2,6 @@ package dev.lepauley.luigi.entities.creatures;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
 import dev.lepauley.luigi.GVar;
 import dev.lepauley.luigi.Game;
@@ -43,13 +42,9 @@ public class Player extends Creature{
 		//Setting x/y move to a certain speed, THEN moving player that much
 		if(game.getKeyManager().up) {
 			yMove = -speed;
-			Random rand = new Random();
-			//Game.gameAudio.playAudio("sfx", rand.nextInt(21));
 		}
 		if(game.getKeyManager().down) {
 			yMove = speed;
-			Random rand = new Random();
-			//Game.gameAudio.playAudio("music", rand.nextInt(21));
 		}
 		if(game.getKeyManager().left)
 			xMove = -speed;

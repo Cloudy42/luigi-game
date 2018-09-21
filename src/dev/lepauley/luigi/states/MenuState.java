@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import dev.lepauley.luigi.GVar;
 import dev.lepauley.luigi.Game;
 import dev.lepauley.luigi.entities.creatures.Player;
-import dev.lepauley.luigi.gfx.Header;
 import dev.lepauley.luigi.levels.Level;
 
 /*
