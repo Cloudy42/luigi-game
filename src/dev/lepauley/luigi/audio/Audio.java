@@ -108,6 +108,25 @@ public class Audio {
 		}
 	}
 	
+	//Close audio (I ran into the following error when overdoing,
+	//So trying the following to see if this cleans things up. So
+	//far it's working and I haven't hit the error nor the sound
+	//dropping since. *fingers crossed*:
+	/*
+	 * Exception in thread "Thread-3" java.lang.OutOfMemoryError: Java heap space
+	 * at com.sun.media.sound.DirectAudioDevice$DirectClip.open(DirectAudioDevice.java:1135)
+	 * at dev.lepauley.luigi.audio.Audio.playAudio(Audio.java:69)
+	 * at dev.lepauley.luigi.Game.tick(Game.java:102)
+	 * at dev.lepauley.luigi.Game.run(Game.java:240)
+	 * at java.lang.Thread.run(Thread.java:745)
+	 */
+	public void closeAudio(String audioType){
+			if(audioType.toLowerCase().equals("sfx") || audioType.toLowerCase().equals("all"))
+		        clipSFX.close();
+			if(audioType.toLowerCase().equals("music") || audioType.toLowerCase().equals("all"))
+		        clipMusic.close();			
+    }
+	
 	//Populate Hashmaps
 	public void populateHashMaps() {
 		mapSFX.put("1-Up", new File("res/audio/sfx/smb_1-up.wav"));

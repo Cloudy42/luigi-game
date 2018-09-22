@@ -6,6 +6,7 @@ import java.awt.image.BufferStrategy;
 
 import dev.lepauley.luigi.audio.Audio;
 import dev.lepauley.luigi.display.Display;
+import dev.lepauley.luigi.entities.creatures.Creature;
 import dev.lepauley.luigi.gfx.Assets;
 import dev.lepauley.luigi.gfx.Header;
 import dev.lepauley.luigi.input.KeyManager;
@@ -98,7 +99,7 @@ public class Game implements Runnable {
 		//If MenuState and enter is pressed, change to GameState
 		if(keyManager.start && StateManager.getCurrentState() == menuState) {
 			StateManager.setCurrentState(gameState);
-			Game.gameAudio.pauseAudio("all");
+			Game.gameAudio.pauseAudio("sfx");
 			Game.gameAudio.playAudio("music", EnumMusic.RunningAround.toString());
 		}
 		//If GameState and esc is pressed, change to MenuState
@@ -125,10 +126,12 @@ public class Game implements Runnable {
 			((GameState) gameState).getPlayer().setX((float)((GameState) gameState).getLevel().getSpawnX());
 			((GameState) gameState).getPlayer().setY((float)((GameState) gameState).getLevel().getSpawnY());
 			((GameState) gameState).getPlayer().setCurrentPlayer(0);
+			((GameState) gameState).getPlayer().setHeight(Creature.DEFAULT_CREATURE_HEIGHT_BIG);
 			//Resets Level Tile Position:
 			((GameState) gameState).getLevel().setDebugScrollLevel(0);
 			StateManager.setCurrentState(menuState);
 			Game.gameAudio.pauseAudio("all");
+			Game.gameAudio.closeAudio("all");
 		}
 		
 		//If Debug button is pressed, toggle Debug Mode on/off

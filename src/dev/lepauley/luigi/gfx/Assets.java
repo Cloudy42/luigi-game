@@ -49,12 +49,12 @@ public class Assets {
 		player6  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 5 * scale, width * scale, heightBig * scale);
 
 		//Made just for funsies:
-		player1Dead  = playerSheet.crop(width *  6 * scale, (heightBig * 1 + newPlayer * 0) * scale, width * scale, heightBig * scale);
-		player2Dead  = playerSheet.crop(width *  6 * scale, (heightBig * 1 + newPlayer * 1) * scale, width * scale, heightBig * scale);
-		player3Dead  = playerSheet.crop(width *  6 * scale, (heightBig * 1 + newPlayer * 2) * scale, width * scale, heightBig * scale);
-		player4Dead  = playerSheet.crop(width *  6 * scale, (heightBig * 1 + newPlayer * 3) * scale, width * scale, heightBig * scale);
-		player5Dead  = playerSheet.crop(width *  6 * scale, (heightBig * 1 + newPlayer * 4) * scale, width * scale, heightBig * scale);
-		//player6Dead  = playerSheet.crop(width *  6 * scale, (heightBig * 1 + newPlayer * 5) * scale, width * scale, heightBig * scale);
+		player1Dead  = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 0) * scale, width * scale, heightSmall * scale);
+		player2Dead  = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 1) * scale, width * scale, heightSmall * scale);
+		player3Dead  = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 2) * scale, width * scale, heightSmall * scale);
+		player4Dead  = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 3) * scale, width * scale, heightSmall * scale);
+		player5Dead  = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 4) * scale, width * scale, heightSmall * scale);
+		player6Dead  = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 5) * scale, width * scale, heightSmall * scale);
 
 		//I made this just to test "flipped". I also wonder how we'll want to handle these. We can:
 		//A.) Write logic to account for it within the code

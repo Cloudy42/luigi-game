@@ -23,7 +23,7 @@ public class Player extends Creature{
 			 								 , Assets.player4Dead, Assets.player5Dead, Assets.player6};
 	
 	public Player(Game game, float x, float y) {
-		super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
+		super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT_BIG);
 		this.game = game;
 		this.currentPlayer = 0;
 	}
@@ -72,6 +72,7 @@ public class Player extends Creature{
 	public void render(Graphics g) {
 		//For funsies draw different player if dead:
 		if(Game.gameHeader.getDead()) {
+			this.setHeight(Creature.DEFAULT_CREATURE_HEIGHT_SMALL);
 			g.drawImage(playerImageDead[currentPlayer], (int) x, (int) y, (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
 		} else {
 			//Draws player. Utilizes Cropping method via SpriteSheet class to only pull part of image
