@@ -17,12 +17,23 @@ public class Header {
 	//Font Info
 	private int currentFontSize;
 	
-	//current Score
+	//"current" Variables
 	private int currentScore;
 	private int currentCoins;
 	private int currentWorld;
 	private int currentLevel;
 	private int currentTime ;
+
+	//Holds High Score
+	//(we'll need to figure out a way to save this between play throughs
+	//  currently setting to 0)
+	private int highScore = 0;
+	
+	//Divider for "time" Variables to extend with ticks.
+	//Alternate system would be just do a tickLoop in the tick so that it only ever increments
+	//once every 10 ticks then we don't need all of this individual variable adjustments all
+	//over the place. I think that'll be better, but I gotta go now so I'll test next time I can.
+	private final int TIME_DIVIDER = 10;
 	
 	//boolean checks (likely a smarter way to do this)
 	private boolean hurry;
@@ -37,11 +48,12 @@ public class Header {
 			currentScore++;
 			currentTime--;
 			currentCoins++;
-			if(currentCoins > 99) {
+			if(currentCoins >= 100 * TIME_DIVIDER) {
 				currentCoins = 0;
 				Game.gameAudio.playAudio("SFX", EnumSFX.OneUp.toString());
 			}
-			if(currentTime < 100 && !hurry) {
+			//If Time is almost out (100 seconds left), change song to indicate "hurry" state.
+			if(currentTime <= 100 * TIME_DIVIDER && !hurry) {
 				hurry = true;
 				Game.gameAudio.pauseAudio("Music");
 				Game.gameAudio.playAudio("Music", EnumMusic.RunningAround_Hurry.toString());
@@ -50,6 +62,9 @@ public class Header {
 				dead = true;
 				Game.gameAudio.pauseAudio("all");
 				Game.gameAudio.playAudio("sfx", EnumSFX.LuigiDie.toString());
+				//Sets HighScore if a new one was reached
+				if(currentScore > highScore)
+					highScore = currentScore;
 			}
 		}
 	}
@@ -70,7 +85,7 @@ public class Header {
 			Utilities.drawShadowString(g, "2 PLAYER GAME",	400, (int)(275 + currentFontSize * 1.5), GVar.FONT_20_SHADOW);
 	
 			//High Score
-			Utilities.drawShadowString(g, "TOP- 000000",	400 + currentFontSize * 1, (int)(275 + currentFontSize * 3), GVar.FONT_20_SHADOW);
+			Utilities.drawShadowString(g, "TOP - " + zeroPrefixToString(4, highScore),	400 + currentFontSize * 1, (int)(275 + currentFontSize * 3), GVar.FONT_20_SHADOW);
 		}
 	
 		//Header Info
@@ -78,7 +93,7 @@ public class Header {
 		Utilities.drawShadowString(g, zeroPrefixToString(4, currentScore),	215, 20 + currentFontSize, GVar.FONT_20_SHADOW);
 	
 		g.drawImage(Assets.coin,410,25,null);
-		Utilities.drawShadowString(g, "x" + zeroPrefixToString(1, currentCoins),	425, 20 + currentFontSize, GVar.FONT_20_SHADOW);
+		Utilities.drawShadowString(g, "x" + zeroPrefixToString(1, currentCoins/TIME_DIVIDER),	425, 20 + currentFontSize, GVar.FONT_20_SHADOW);
 	
 		Utilities.drawShadowString(g, "WORLD", 	585, 20, GVar.FONT_20_SHADOW);
 		Utilities.drawShadowString(g, currentWorld + "-" + currentLevel,   	585  + currentFontSize * 1, 20 + currentFontSize, GVar.FONT_20_SHADOW);
@@ -86,7 +101,7 @@ public class Header {
 		Utilities.drawShadowString(g, "TIME", 	785, 20, GVar.FONT_20_SHADOW);
 
 		if(StateManager.getCurrentStateName() == "GameState") {
-			Utilities.drawShadowString(g, "" + currentTime, 	785, 20 + currentFontSize * 1, GVar.FONT_20_SHADOW);
+			Utilities.drawShadowString(g, "" + currentTime/TIME_DIVIDER, 	785, 20 + currentFontSize * 1, GVar.FONT_20_SHADOW);
 		}
 	}
 	
@@ -114,7 +129,7 @@ public class Header {
 		currentCoins = 0;
 		currentWorld = 1;
 		currentLevel = 1;
-		currentTime = 400;
+		currentTime = 400 * TIME_DIVIDER;
 		
 		hurry = false;
 		dead = false;
