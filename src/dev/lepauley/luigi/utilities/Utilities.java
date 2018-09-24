@@ -48,10 +48,19 @@ public class Utilities {
 	//Takes a String and creates a shadow string following by a top layer String
 	public static void drawShadowString(Graphics g, String s, int x, int y, int shadowOffset) {
 		g.setColor(Color.black);
-		g.drawString(s, x + shadowOffset, y + shadowOffset);
+		//Loop to extend shadow
+		for(int i = 1; i <= shadowOffset; i++)
+			g.drawString(s, x + i, y + i);
 		g.setColor(Color.white);
 		g.drawString(s, x, y);
-
 	}
-	
+	//Allows user to specify the foreground color
+	public static void drawShadowString(Graphics g, Color color, String s, int x, int y, int shadowOffset) {
+		g.setColor(Color.black);
+		//Loop to extend shadow
+		for(int i = 1; i <= shadowOffset; i++)
+			g.drawString(s, x + i, y + i);
+		g.setColor(color);
+		g.drawString(s, x, y);
+	}
 }

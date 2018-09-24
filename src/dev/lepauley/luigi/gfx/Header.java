@@ -3,6 +3,7 @@ package dev.lepauley.luigi.gfx;
  * Will house all of the header information
  */
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import dev.lepauley.luigi.GVar;
@@ -29,11 +30,16 @@ public class Header {
 	//  currently setting to 0)
 	private int highScore = 0;
 	
-	//Divider for "time" Variables to extend with ticks.
-	//Alternate system would be just do a tickLoop in the tick so that it only ever increments
-	//once every 10 ticks then we don't need all of this individual variable adjustments all
-	//over the place. I think that'll be better, but I gotta go now so I'll test next time I can.
-	private final int TIME_DIVIDER = 10;
+	//TIME_CAP and timeLoop for "timed" Variables to extend their duration with ticks.
+	//Note: 32 seems to be lining up with 1 tick/second IRL.
+	private final int TIME_CAP = 32;
+	private int timeLoop;
+	
+	//Default Hurry time
+	private final int HURRY_TIME = 60;
+
+	//Adjusts spacing if minutes = 0
+	private int timeSpacing = 0; 
 	
 	//boolean checks (likely a smarter way to do this)
 	private boolean hurry;
@@ -44,35 +50,42 @@ public class Header {
 	}
 	
 	public void tick() {
-		if(!dead) {
-			currentScore++;
-			currentTime--;
-			currentCoins++;
-			if(currentCoins >= 100 * TIME_DIVIDER) {
-				currentCoins = 0;
-				Game.gameAudio.playAudio("SFX", EnumSFX.OneUp.toString());
-			}
-			//If Time is almost out (100 seconds left), change song to indicate "hurry" state.
-			if(currentTime <= 100 * TIME_DIVIDER && !hurry) {
-				hurry = true;
-				Game.gameAudio.pauseAudio("Music");
-				Game.gameAudio.playAudio("Music", EnumMusic.RunningAround_Hurry.toString());
-			}
-			if(currentTime <= 0) {
-				dead = true;
-				Game.gameAudio.pauseAudio("all");
-				Game.gameAudio.playAudio("sfx", EnumSFX.LuigiDie.toString());
-				//Sets HighScore if a new one was reached
-				if(currentScore > highScore)
-					highScore = currentScore;
+		timeLoop++;
+		if(timeLoop >= TIME_CAP) {
+			timeLoop = 0;
+			if(!dead) {
+				currentScore++;
+				currentTime--;
+				currentCoins++;
+				if(currentCoins >= 100) {
+					currentCoins = 0;
+					Game.gameAudio.playAudio("SFX", EnumSFX.OneUp.toString());
+				}
+				//If Time is almost out (100 seconds left), change song to indicate "hurry" state.
+				if(currentTime <= HURRY_TIME && !hurry) {
+					hurry = true;
+					Game.gameAudio.pauseAudio("Music");
+					Game.gameAudio.playAudio("Music", EnumMusic.RunningAround_Hurry.toString());
+				}
+				if(currentTime <= 0) {
+					//I'm setting this first since I swear the first time I tested this it said "PAUSED"
+					//for a hot second before switching to TIME UP! Just seems safer to do this first.
+					GVar.setPauseMsg("TIME UP!");
+					dead = true;
+					GVar.togglePause();
+					Game.gameAudio.pauseAudio("all");
+					Game.gameAudio.playAudio("sfx", EnumSFX.LuigiDie.toString());
+					//Sets HighScore if a new one was reached
+					if(currentScore > highScore)
+						highScore = currentScore;
+				}
 			}
 		}
 	}
 	
 	public void render(Graphics g) {
-
-		g.setFont (GVar.FONT_20);
-		currentFontSize = GVar.FONT_20.getSize();
+		currentFontSize = 20;
+		g.setFont (GVar.setFont(GVar.fontA, currentFontSize));
 
 		//Only Display the title screen, player select, and high score in the MenuState
 		if(StateManager.getCurrentStateName() == "MenuState") {
@@ -81,27 +94,32 @@ public class Header {
 	
 			//Player Select
 			g.drawImage(Assets.toad,380,(int)(260 + (GVar.getPlayerSelectCount() - 1) * currentFontSize * 1.5),null);
-			Utilities.drawShadowString(g, "1 PLAYER GAME",	400, 275, GVar.FONT_20_SHADOW);
-			Utilities.drawShadowString(g, "2 PLAYER GAME",	400, (int)(275 + currentFontSize * 1.5), GVar.FONT_20_SHADOW);
+			Utilities.drawShadowString(g, "1 PLAYER GAME",	400, 275, GVar.getShadowFont(currentFontSize));
+			Utilities.drawShadowString(g, "2 PLAYER GAME",	400, (int)(275 + currentFontSize * 1.5), GVar.getShadowFont(currentFontSize));
 	
 			//High Score
-			Utilities.drawShadowString(g, "TOP - " + zeroPrefixToString(4, highScore),	400 + currentFontSize * 1, (int)(275 + currentFontSize * 3), GVar.FONT_20_SHADOW);
+			Utilities.drawShadowString(g, "TOP - " + zeroPrefixToString(4, highScore),	400 + currentFontSize * 1, (int)(275 + currentFontSize * 3), GVar.getShadowFont(currentFontSize));
 		}
 	
 		//Header Info
-		Utilities.drawShadowString(g, "MARIO",	215, 20, GVar.FONT_20_SHADOW);
-		Utilities.drawShadowString(g, zeroPrefixToString(4, currentScore),	215, 20 + currentFontSize, GVar.FONT_20_SHADOW);
+		Utilities.drawShadowString(g, "MARIO",	215, 20, GVar.getShadowFont(currentFontSize));
+		Utilities.drawShadowString(g, zeroPrefixToString(4, currentScore),	215, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
 	
 		g.drawImage(Assets.coin,410,25,null);
-		Utilities.drawShadowString(g, "x" + zeroPrefixToString(1, currentCoins/TIME_DIVIDER),	425, 20 + currentFontSize, GVar.FONT_20_SHADOW);
+		Utilities.drawShadowString(g, "x" + zeroPrefixToString(1, currentCoins),	425, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
 	
-		Utilities.drawShadowString(g, "WORLD", 	585, 20, GVar.FONT_20_SHADOW);
-		Utilities.drawShadowString(g, currentWorld + "-" + currentLevel,   	585  + currentFontSize * 1, 20 + currentFontSize, GVar.FONT_20_SHADOW);
+		Utilities.drawShadowString(g, "WORLD", 	585, 20, GVar.getShadowFont(currentFontSize));
+		Utilities.drawShadowString(g, currentWorld + "-" + currentLevel,   	585  + currentFontSize * 1, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
 	
-		Utilities.drawShadowString(g, "TIME", 	785, 20, GVar.FONT_20_SHADOW);
+		Utilities.drawShadowString(g, "TIME", 	785, 20, GVar.getShadowFont(currentFontSize));
 
 		if(StateManager.getCurrentStateName() == "GameState") {
-			Utilities.drawShadowString(g, "" + currentTime/TIME_DIVIDER, 	785, 20 + currentFontSize * 1, GVar.FONT_20_SHADOW);
+			//Sets Color to red if in hurry mode, else default:
+			if(hurry) {
+				Utilities.drawShadowString(g, Color.red, convertTime(), 785 + currentFontSize/2 * timeSpacing, 20 + currentFontSize * 1, GVar.getShadowFont(currentFontSize));
+			} else {
+				Utilities.drawShadowString(g, convertTime(), 	785 + currentFontSize/2 * timeSpacing, 20 + currentFontSize * 1, GVar.getShadowFont(currentFontSize));
+			}
 		}
 	}
 	
@@ -124,12 +142,39 @@ public class Header {
 		return s.substring(0, target);
 	}
 	
+	//Convert time into minutes and seconds:
+	public String convertTime() {
+		String time = "";
+		int minutes = currentTime / 60;
+
+		//Only display minutes if > 0
+		if(minutes > 0)
+			time += String.valueOf(minutes) + ":";
+		int seconds = currentTime % 60;
+
+		//Only prefix seconds with 0 IF minutes still exist 
+		if(minutes != 0 || seconds >= 10) {
+		    time += zeroPrefixToString(1, seconds);
+		} else {
+		    time += zeroPrefixToString(0, seconds);
+		}
+
+		//Used to adjust spacing when losing digits
+		if(minutes == 0)
+			timeSpacing = 1;
+		if(minutes == 0 && seconds < 10)
+			timeSpacing = 2;
+
+		return time;
+	}
+	
 	public void resetDefaults() {
 		currentScore = 0;
 		currentCoins = 0;
 		currentWorld = 1;
 		currentLevel = 1;
-		currentTime = 400 * TIME_DIVIDER;
+		currentTime = 240;
+		timeLoop = 0;
 		
 		hurry = false;
 		dead = false;

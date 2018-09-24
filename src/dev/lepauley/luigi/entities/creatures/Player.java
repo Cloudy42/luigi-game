@@ -7,7 +7,6 @@ import dev.lepauley.luigi.GVar;
 import dev.lepauley.luigi.Game;
 import dev.lepauley.luigi.gfx.Assets;
 
-
 /*
  * The player that our users will control.
  */
@@ -20,7 +19,7 @@ public class Player extends Creature{
 	private BufferedImage[] playerImage = {Assets.player1, Assets.player2, Assets.player3
 										 , Assets.player4, Assets.player5, Assets.player6};
 	private BufferedImage[] playerImageDead = {Assets.player1Dead, Assets.player2Dead, Assets.player3Dead
-			 								 , Assets.player4Dead, Assets.player5Dead, Assets.player6};
+			 								 , Assets.player4Dead, Assets.player5Dead, Assets.player6Dead};
 	
 	public Player(Game game, float x, float y) {
 		super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT_BIG);
@@ -81,7 +80,7 @@ public class Player extends Creature{
 			g.drawImage(playerImage[currentPlayer], (int) x, (int) y, (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
 		}
 	}
-
+	
 	/*************** GETTERS and SETTERS ***************/
 	
 	public int getCurrentPlayer() {

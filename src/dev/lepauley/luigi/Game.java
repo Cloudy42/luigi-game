@@ -1,12 +1,10 @@
 package dev.lepauley.luigi;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
 import dev.lepauley.luigi.audio.Audio;
 import dev.lepauley.luigi.display.Display;
-import dev.lepauley.luigi.entities.creatures.Creature;
 import dev.lepauley.luigi.gfx.Assets;
 import dev.lepauley.luigi.gfx.Header;
 import dev.lepauley.luigi.input.KeyManager;
@@ -31,6 +29,9 @@ public class Game implements Runnable {
 	private Display display;
 	public String title;
 	public int width, height;
+
+	//Font Info
+	public int currentFontSize;
 	
 	//Used to access all game audio
 	public static Audio gameAudio = new Audio();
@@ -69,6 +70,7 @@ public class Game implements Runnable {
 		this.width = width;
 		this.height = height;
 		keyManager = new KeyManager();
+		GVar.resetGVarDefaults();
 	}
 	
 	//Called only once to initialize all of the graphics and get everything ready for game
@@ -107,31 +109,19 @@ public class Game implements Runnable {
 
 			//Reset Defaults:
 			gameHeader.resetDefaults();
+			GVar.resetGVarDefaults();
 			
-			//Reset game to base
-			GVar.setPlayerSelectCount(1);
-			
-			GVar.setMultiplier(1);
-			//Displays Debug (if hidden):
-			//Likely will want to alternate this one eventually where hidden by default
-			if(!GVar.getDebug())
-				GVar.toggleDebug();
-			//Hides Controls (if displayed):
-			if(GVar.getKeyManual())
-				GVar.toggleKeyManual();
-			//Unpauses Game (if paused):
-			if(GVar.getPause())
-				GVar.togglePause();
 			//Resets Players Position & selection:
-			((GameState) gameState).getPlayer().setX((float)((GameState) gameState).getLevel().getSpawnX());
-			((GameState) gameState).getPlayer().setY((float)((GameState) gameState).getLevel().getSpawnY());
-			((GameState) gameState).getPlayer().setCurrentPlayer(0);
-			((GameState) gameState).getPlayer().setHeight(Creature.DEFAULT_CREATURE_HEIGHT_BIG);
+			((GameState)gameState).resetPlayerDefaults();
+
 			//Resets Level Tile Position:
-			((GameState) gameState).getLevel().setDebugScrollLevel(0);
-			StateManager.setCurrentState(menuState);
+			((GameState)gameState).resetLevelDefaults();
+			
+			//pauseAudio MAY be optional here since closing anyways. Just felt safer.
 			Game.gameAudio.pauseAudio("all");
 			Game.gameAudio.closeAudio("all");
+
+			StateManager.setCurrentState(menuState);
 		}
 		
 		//If Debug button is pressed, toggle Debug Mode on/off
@@ -171,7 +161,8 @@ public class Game implements Runnable {
 		/*************** END DRAWING ***************/
 		/*************** BEGIN DEBUG ***************/
 		//FPS on screen
-		g.setFont (GVar.FONT_20);
+		currentFontSize = 20;
+		g.setFont (GVar.setFont(GVar.fontA, currentFontSize));
 		if(timer > 1000000000) {
 			//System.out.println("Ticks and Frames: " + ticks);
 			lastTicks = ticks;
@@ -180,14 +171,13 @@ public class Game implements Runnable {
 		}		
 		//If Debug Mode = Active, print FPS
 		if(GVar.getDebug()) {
-			Utilities.drawShadowString(g, "FPS:" + lastTicks, 3, 23, GVar.FONT_20_SHADOW);
+			Utilities.drawShadowString(g, "FPS:" + lastTicks, 3, 23, GVar.getShadowFont(currentFontSize));
 		}
 		
 		//If Key Manual Mode = Active, print Controls
 		if(GVar.getKeyManual()) {
-			g.setColor(Color.black);
 			for(int i = 0; i < keyManager.getKeyManual().length; i++) {
-				Utilities.drawShadowString(g, keyManager.getKeyManual()[i], GVar.GAME_WIDTH - GVar.KEY_MANUAL_POSITION_X, 23 + GVar.KEY_MANUAL_OFFSET_Y * i, GVar.FONT_20_SHADOW);
+				Utilities.drawShadowString(g, keyManager.getKeyManual()[i], GVar.GAME_WIDTH - GVar.KEY_MANUAL_POSITION_X, 23 + GVar.KEY_MANUAL_OFFSET_Y * i, GVar.getShadowFont(currentFontSize));
 			}
 		}
 		

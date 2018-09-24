@@ -27,35 +27,51 @@ public class GVar {
 	public static final int GAME_WIDTH = 1050; //525
 	public static final int GAME_HEIGHT = 470; //235
 	
-	//Font size shadow (we may want to move this later or redefine if we have more fonts, but currently this is where I'm putting it)
-	//Defaut font
-	public static final Font FONT_20 = new Font ("Lucida Sans Unicode", 1, 20);
-	public static final Font FONT_30 = new Font ("Lucida Sans Unicode", 1, 30);
-	public static final Font FONT_45 = new Font ("Lucida Sans Unicode", 1, 45);
-	public static final Font FONT_70 = new Font ("Lucida Sans Unicode", 1, 70);
-	public static final int FONT_20_SHADOW = 2;
-	public static final int FONT_30_SHADOW = 3;
-	public static final int FONT_45_SHADOW = 4;
-	public static final int FONT_70_SHADOW = 7;
-	
-	//# of Players Selected
-	private static int playerSelectCount = 1;
-	
-	//Multiplier for speed/scale/etc.
-	private static int multiplier = 1;
-
-	//Denotes whether debug mode is active or not
-	private static boolean debugToggle = true;
-	
-	//Denotes whether game is paused or not
-	private static boolean pauseToggle = false;
-
-	//Denotes whether key manual is active or not
-	private static boolean keyManualToggle = false;
+	//Manages keyManual positioning:
 	public static final int KEY_MANUAL_POSITION_X = 200;
 	public static final int KEY_MANUAL_OFFSET_Y = 30;
 
+	//Default font
+	public static final String fontA = "Lucida Sans Unicode";
+	
+	//Message To Player (Pause, Game Over, etc.)
+	private static String playerMsg; 
+	private static int playerMsgLen;	
+
+	//# of Players Selected
+	private static int playerSelectCount;
+	
+	//Multiplier for speed/scale/etc.
+	private static int multiplier;
+
+	//Denotes whether debug mode is active or not
+	private static boolean debugToggle;
+	
+	//Denotes whether game is paused or not
+	private static boolean pauseToggle;
+
+	//Denotes whether key manual is active or not
+	private static boolean keyManualToggle;
+
+	public static void resetGVarDefaults() {
+		playerSelectCount = 1;
+		multiplier = 1;
+		debugToggle = true;
+		pauseToggle = false;		
+		keyManualToggle = false;
+		playerMsg = "PAUSED";
+		playerMsgLen = playerMsg.length();
+	}
+	
+	public static int getShadowFont(int currentFontSize) {
+		return currentFontSize / 10;
+	}
+	
 	/*************** GETTERS and SETTERS ***************/
+	
+	public static Font setFont(String font, int size) {
+		return new Font(font, 1, size);
+	}
 	
 	public static int getMultiplier() {
 		return multiplier;
@@ -67,6 +83,17 @@ public class GVar {
 	
 	public static void incrementMultiplier(int x) {
 		multiplier += x;
+	}
+
+	public static String getPauseMsg() {
+		return playerMsg;
+	}
+	public static void setPauseMsg(String newMsg) {
+		playerMsg = newMsg;
+		playerMsgLen = playerMsg.length();
+	}
+	public static int getPauseMsgLen() {
+		return playerMsgLen;
 	}
 
 	public static int getPlayerSelectCount() {

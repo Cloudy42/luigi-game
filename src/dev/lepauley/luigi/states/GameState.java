@@ -3,6 +3,7 @@ package dev.lepauley.luigi.states;
 import java.awt.Graphics;
 import dev.lepauley.luigi.GVar;
 import dev.lepauley.luigi.Game;
+import dev.lepauley.luigi.entities.creatures.Creature;
 import dev.lepauley.luigi.entities.creatures.Player;
 import dev.lepauley.luigi.levels.Level;
 import dev.lepauley.luigi.utilities.Utilities;
@@ -15,10 +16,8 @@ public class GameState extends State {
 	private Player player;
 	private Level level;
 
-	//Handles Pause Message
-	private final String PAUSED = "PAUSED"; 
-	private final int PAUSED_LEN = PAUSED.length();
-	private final int FONT_LEN = GVar.FONT_20.getSize();
+	//Font Info
+	public int currentFontSize;
 	
 	private boolean tempDebugPausedPosition = true;
 	
@@ -32,7 +31,7 @@ public class GameState extends State {
 	@Override
 	public void tick() {
 		//Toggles Pause On/Off (only if not dead)
-		if(game.getKeyManager().pauseToggle)
+		if(game.getKeyManager().pauseToggle && !Game.gameHeader.getDead())
 			GVar.togglePause();
 
 		//If Game = UnPaused, tick
@@ -51,8 +50,9 @@ public class GameState extends State {
 		player.render(g);
 		//If Game = Paused, display to game
 		if(GVar.getPause()) {
-			g.setFont (GVar.FONT_30);
-			Utilities.drawShadowString(g, PAUSED, GVar.GAME_WIDTH/2 - PAUSED_LEN/2 * FONT_LEN, GVar.GAME_HEIGHT/2 - FONT_LEN/2, GVar.FONT_30_SHADOW);
+			currentFontSize = 30;
+			g.setFont (GVar.setFont(GVar.fontA, currentFontSize));
+			Utilities.drawShadowString(g, GVar.getPauseMsg(), GVar.GAME_WIDTH/2 - GVar.getPauseMsgLen()/2 * currentFontSize, GVar.GAME_HEIGHT/2 - currentFontSize/2, GVar.getShadowFont(currentFontSize));
 			//This seems like it SHOULD be writing it perfectly centered, but for some reason it's not. whyyyyyyy </3 
 			//50% of GVar.GAME_WIDTH = 1050; //525
 			//50% of GVar.GAME_HEIGHT = 470; //235
@@ -66,17 +66,32 @@ public class GameState extends State {
 				tempDebugPausedPosition = false;
 				System.out.println("//////////////////////////////////////");
 				System.out.println("GVar.GAME_WIDTH/2: " + GVar.GAME_WIDTH/2);
-				System.out.println("PAUSED_LEN/2: " + PAUSED_LEN/2);
-				System.out.println("FONT_LEN: " + FONT_LEN);
-				System.out.println("PAUSED_LEN/2 * FONT_LEN: " + PAUSED_LEN/2 * FONT_LEN);
-				System.out.println("GVar.GAME_WIDTH/2 - PAUSED_LEN/2 * FONT_LEN: " + (GVar.GAME_WIDTH/2 - PAUSED_LEN/2 * FONT_LEN));
+				System.out.println("pauseMsgLen/2: " + GVar.getPauseMsgLen()/2);
+				System.out.println("currentFontSize: " + currentFontSize);
+				System.out.println("pauseMsgLen/2 * currentFontSize: " + GVar.getPauseMsgLen()/2 * currentFontSize);
+				System.out.println("GVar.GAME_WIDTH/2 - pauseMsgLen/2 * currentFontSize: " + (GVar.GAME_WIDTH/2 - GVar.getPauseMsgLen()/2 * currentFontSize));
 				System.out.println("------------------------------------");
 				System.out.println("GVar.GAME_HEIGHT/2: " + GVar.GAME_HEIGHT/2);
-				System.out.println("FONT_LEN/2: " + FONT_LEN/2);
-				System.out.println("GVar.GAME_HEIGHT/2 - FONT_LEN/2: " + (GVar.GAME_HEIGHT/2 - FONT_LEN/2));
+				System.out.println("currentFontSize/2: " + currentFontSize/2);
+				System.out.println("GVar.GAME_HEIGHT/2 - currentFontSize/2: " + (GVar.GAME_HEIGHT/2 - currentFontSize/2));
 				System.out.println("//////////////////////////////////////");
 			}
 		}
+	}
+
+	//Self-explanatory, resets Player defaults
+	public void resetPlayerDefaults() {
+		//Resets Players Position & selection:
+		player.setX((float)level.getSpawnX());
+		player.setY((float)level.getSpawnY());
+		player.setCurrentPlayer(0);
+		player.setHeight(Creature.DEFAULT_CREATURE_HEIGHT_BIG);
+	}
+	
+	//Self-explanatory, resets Level defaults
+	public void resetLevelDefaults() {
+		//Resets Level Tile Position:
+		level.setDebugScrollLevel(0);
 	}
 
 	/*************** GETTERS and SETTERS ***************/
@@ -88,5 +103,5 @@ public class GameState extends State {
 	public Player getPlayer() {
 		return player;
 	}
-
+	
 }

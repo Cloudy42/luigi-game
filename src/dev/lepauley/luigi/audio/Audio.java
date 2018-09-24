@@ -13,7 +13,9 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 /*
  * Handles all audio in game
- * Followed this stupid tutorial: https://www.youtube.com/watch?v=VMSTTg5EEnY
+ * Originally followed this stupid tutorial: https://www.youtube.com/watch?v=VMSTTg5EEnY
+ * but I thought it was dumb and not clear. Heck the guy sounded confused at times. So ultimately
+ * went with this: https://coderanch.com/t/572997/java/Stopping-looping-javax-sound-sampled
  */
 public class Audio {
 	
@@ -68,6 +70,8 @@ public class Audio {
 		        audioMusic = AudioSystem.getAudioInputStream(mapMusic.get(s));
 		        clipMusic.open(audioMusic);
 		        clipMusic.start();
+		        //Loop BGM continuously
+		        clipMusic.loop(Clip.LOOP_CONTINUOUSLY);
 			}
         }        
         catch (IOException ex){
@@ -91,6 +95,8 @@ public class Audio {
 			}
 			else if(audioType.toLowerCase().equals("music")) {
 		        clipMusic.start();
+		        //Loop BGM continuously
+		        clipMusic.loop(Clip.LOOP_CONTINUOUSLY);
 			}
     }
 	
@@ -171,10 +177,6 @@ public class Audio {
 		mapMusic.put("Into The Pipe", new File("res/audio/music/16 - Into The Pipe.wav"));
 		mapMusic.put("Into The Pipe (Hurry!)", new File("res/audio/music/17 - Into The Pipe (Hurry!).wav"));
 		mapMusic.put("Saved The Princess", new File("res/audio/music/18 - Saved The Princess.wav"));
-	}
-	
-	public Map<String, File> getMapSFX() {
-		return mapSFX;
 	}
 	
 }
