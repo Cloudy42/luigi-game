@@ -36,10 +36,10 @@ public class Level {
 		if(!Game.gameHeader.getDead()) {
 			//Used to test scrolling level, IF scrolling is toggled
 			debugScrollLevel+=debugConst;
-			if(debugScrollLevel <= 0 || debugScrollLevel >= 5700) 
+			if(debugScrollLevel <= 0 || debugScrollLevel >= 6210)
 				debugConst *= -1;
 			//Or Can set value here and look at specific areas of map 
-			//debugScrollLevel = 5700;
+			//debugScrollLevel = 6210;
 		}
 	}
 	
