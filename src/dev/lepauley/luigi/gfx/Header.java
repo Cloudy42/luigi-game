@@ -29,12 +29,7 @@ public class Header {
 	//(we'll need to figure out a way to save this between play throughs
 	//  currently setting to 0)
 	private int highScore = 0;
-	
-	//TIME_CAP and timeLoop for "timed" Variables to extend their duration with ticks.
-	//Note: 32 seems to be lining up with 1 tick/second IRL.
-	private final int TIME_CAP = 32;
-	private int timeLoop;
-	
+		
 	//Default Hurry time
 	private final int HURRY_TIME = 60;
 
@@ -50,35 +45,31 @@ public class Header {
 	}
 	
 	public void tick() {
-		timeLoop++;
-		if(timeLoop >= TIME_CAP) {
-			timeLoop = 0;
-			if(!dead) {
-				currentScore++;
-				currentTime--;
-				currentCoins++;
-				if(currentCoins >= 100) {
-					currentCoins = 0;
-					Game.gameAudio.playAudio("SFX", EnumSFX.OneUp.toString());
-				}
-				//If Time is almost out (100 seconds left), change song to indicate "hurry" state.
-				if(currentTime <= HURRY_TIME && !hurry) {
-					hurry = true;
-					Game.gameAudio.pauseAudio("Music");
-					Game.gameAudio.playAudio("Music", EnumMusic.RunningAround_Hurry.toString());
-				}
-				if(currentTime <= 0) {
-					//I'm setting this first since I swear the first time I tested this it said "PAUSED"
-					//for a hot second before switching to TIME UP! Just seems safer to do this first.
-					GVar.setPauseMsg("TIME UP!");
-					dead = true;
-					GVar.togglePause();
-					Game.gameAudio.pauseAudio("all");
-					Game.gameAudio.playAudio("sfx", EnumSFX.LuigiDie.toString());
-					//Sets HighScore if a new one was reached
-					if(currentScore > highScore)
-						highScore = currentScore;
-				}
+		if(!dead) {
+			currentScore++;
+			currentTime--;
+			currentCoins++;
+			if(currentCoins >= 100) {
+				currentCoins = 0;
+				Game.gameAudio.playAudio("SFX", EnumSFX.OneUp.toString());
+			}
+			//If Time is almost out (100 seconds left), change song to indicate "hurry" state.
+			if(currentTime <= HURRY_TIME && !hurry) {
+				hurry = true;
+				Game.gameAudio.pauseAudio("Music");
+				Game.gameAudio.playAudio("Music", EnumMusic.RunningAround_Hurry.toString());
+			}
+			if(currentTime <= 0) {
+				//I'm setting this first since I swear the first time I tested this it said "PAUSED"
+				//for a hot second before switching to TIME UP! Just seems safer to do this first.
+				GVar.setPauseMsg("TIME UP!");
+				dead = true;
+				GVar.togglePause();
+				Game.gameAudio.pauseAudio("all");
+				Game.gameAudio.playAudio("sfx", EnumSFX.LuigiDie.toString());
+				//Sets HighScore if a new one was reached
+				if(currentScore > highScore)
+					highScore = currentScore;
 			}
 		}
 	}
@@ -174,7 +165,7 @@ public class Header {
 		currentWorld = 1;
 		currentLevel = 1;
 		currentTime = 240;
-		timeLoop = 0;
+		timeSpacing = 0;
 		
 		hurry = false;
 		dead = false;

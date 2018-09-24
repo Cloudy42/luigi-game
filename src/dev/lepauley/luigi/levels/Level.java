@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import dev.lepauley.luigi.GVar;
 import dev.lepauley.luigi.Game;
+import dev.lepauley.luigi.gfx.Assets;
 import dev.lepauley.luigi.tiles.Tile;
 import dev.lepauley.luigi.utilities.Utilities;
 
@@ -45,16 +46,21 @@ public class Level {
 	public void render(Graphics g) {
 		//Start with y for loop first because it can prevent issues (he didn't explain why)
 
-	/*************** Temporary Fix: START ***************/
-		//Temporary Fix for transparency: VERY inefficient! Likely we'd want 
-		//to target which are transparent and add background for those only. Should be
-		//easy enough...
-		for(int y = 0; y < height; y++) {
-			for(int x = 0; x < width; x++) {
-				Tile.bg001Sky.render(g, x * Tile.TILEWIDTH * GVar.getMultiplier(), y * Tile.TILEHEIGHT * GVar.getMultiplier());
-			}
-		}
-	/*************** Temporary Fix: END ***************/
+		//Honestly not sure why I was doing this and not just drawing a big rectangle in the background.
+		//The only thing I can think of is because you mentioned wanting to do stars and such eventually
+		//so if/when that time comes, we can revisit, but for now I'm gonna just stretch since only sky atm
+		//and leaving old code so easy enough to swap:
+		g.drawImage(Assets.bg001Sky, 0, 0, GVar.GAME_WIDTH, GVar.GAME_HEIGHT, null);
+			/*************** Temporary Fix: START ***************/
+			//Temporary Fix for transparency: VERY inefficient! Likely we'd want 
+			//to target which are transparent and add background for those only. Should be
+			//easy enough...
+			//for(int y = 0; y < height; y++) {
+			//	for(int x = 0; x < width; x++) {
+			//		Tile.bg001Sky.render(g, x * Tile.TILEWIDTH * GVar.getMultiplier(), y * Tile.TILEHEIGHT * GVar.getMultiplier());
+			//	}
+			//} 
+			/*************** Temporary Fix: END ***************/
 
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {

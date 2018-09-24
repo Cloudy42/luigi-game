@@ -48,7 +48,7 @@ public class Game implements Runnable {
 	//Used to display FPS.
 	long timer = 0;
 	int ticks = 0;
-	int lastTicks = 60;
+	int lastTicks = GVar.FPS;
 	
 	/*
 	 * A way for computer to draw things to screen, using buffers
@@ -131,6 +131,20 @@ public class Game implements Runnable {
 		//If Key Manual button is pressed, toggle Key Manual Mode on/off
 		if(keyManager.keyManualToggle)
 			GVar.toggleKeyManual();
+
+		//I am moving it from the render() method 
+		//to the tick() method sicne we're not drawing to console any longer, and even then, it's not really a 
+		//render so makes sense to not be in render().
+		if(timer > 1000000000) {
+			//System.out.println("Ticks and Frames: " + ticks);
+			lastTicks = ticks;
+			ticks = 0;
+			timer = 0;
+			//Moved here to be in line with once per second. Doing elsewhere means there will be fluctuations
+			//as FPS move around, so this feels like the smarter place to put it. 
+			if(StateManager.getCurrentStateName() == "GameState")
+				gameHeader.tick();
+		}		
 	}
 	
 	//Render everything for game
@@ -163,12 +177,7 @@ public class Game implements Runnable {
 		//FPS on screen
 		currentFontSize = 20;
 		g.setFont (GVar.setFont(GVar.fontA, currentFontSize));
-		if(timer > 1000000000) {
-			//System.out.println("Ticks and Frames: " + ticks);
-			lastTicks = ticks;
-			ticks = 0;
-			timer = 0;
-		}		
+
 		//If Debug Mode = Active, print FPS
 		if(GVar.getDebug()) {
 			Utilities.drawShadowString(g, "FPS:" + lastTicks, 3, 23, GVar.getShadowFont(currentFontSize));
@@ -197,7 +206,7 @@ public class Game implements Runnable {
 		init();
 		
 		//How many times per second we want the tick() and render() methods to run.
-		int fps = 60;
+		int fps = GVar.FPS;
 
 		//1 billion nanoseconds within a second. So below translates to 1 per second,
 		//but nanoseconds is more exact so allows for more flexibility.
@@ -234,7 +243,6 @@ public class Game implements Runnable {
 				render();
 				ticks++;
 				delta--;
-
 			}
 		}
 		

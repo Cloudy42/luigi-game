@@ -38,7 +38,6 @@ public class GameState extends State {
 		if(!GVar.getPause()) {
 			level.tick();
 			player.tick();
-			Game.gameHeader.tick();
 		}
 	}
 

@@ -31,6 +31,9 @@ public class GVar {
 	public static final int KEY_MANUAL_POSITION_X = 200;
 	public static final int KEY_MANUAL_OFFSET_Y = 30;
 
+	//Target FPS
+	public static final int FPS = 60;
+	
 	//Default font
 	public static final String fontA = "Lucida Sans Unicode";
 	
