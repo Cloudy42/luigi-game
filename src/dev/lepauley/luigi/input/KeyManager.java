@@ -19,6 +19,7 @@ public class KeyManager implements KeyListener {
 	public boolean up, down, left, right
 				 , start, exit
 	             , scaleUp, scaleDown
+	             , fpsUp, fpsDown
 	             , changePlayer, nextSong
 	             , debugToggle, scrollingToggle, pauseToggle, keyManualToggle;
 
@@ -32,6 +33,9 @@ public class KeyManager implements KeyListener {
 			                    ,"[P] Pause"
 			                    ,"[D] Debug"
 			                    ,"[K] Controls"
+			                    ,"[N] Next Song"
+			                    ,"[{] FPS Down"
+			                    ,"[}] FPS Up"
 			                    ,"[<] Scale Down"
 			                    ,"[>] Scale Up"
 			                    ,"[C] Change Player"
@@ -50,6 +54,10 @@ public class KeyManager implements KeyListener {
 		//Helps Enter/Exit States (Variable depennding on what state you're in)
 		start = keys[KeyEvent.VK_ENTER];
 		exit = keys[KeyEvent.VK_ESCAPE];
+		
+		//Increases and Decreased game FPS
+		fpsDown = keys[KeyEvent.VK_1];
+		fpsUp = keys[KeyEvent.VK_2];		
 		
 		//Increases and Decreased game Scales (Entities, Tiles, etc.)
 		scaleDown = keys[KeyEvent.VK_COMMA];

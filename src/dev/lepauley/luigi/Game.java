@@ -93,6 +93,18 @@ public class Game implements Runnable {
 		//Update keys
 		keyManager.tick();
 		
+		//decrease FPS
+		if(keyManager.fpsDown) {
+			GVar.setFPS(GVar.FPS - 10);
+			System.out.println("FPS: " + GVar.FPS);
+		}
+		
+		//increase FPS
+		if(keyManager.fpsUp) {
+			GVar.setFPS(GVar.FPS + 10);
+			System.out.println("FPS: " + GVar.FPS);
+		}
+		
 		//Change Song if in GameState (just to shake up debugging)
 		if(keyManager.nextSong && StateManager.getCurrentState() == gameState) {
 			gameAudio.nextSong();
@@ -210,12 +222,9 @@ public class Game implements Runnable {
 	public void run() {
 		init();
 		
-		//How many times per second we want the tick() and render() methods to run.
-		int fps = GVar.FPS;
-
 		//1 billion nanoseconds within a second. So below translates to 1 per second,
 		//but nanoseconds is more exact so allows for more flexibility.
-		double timePerTick = 1000000000 / fps;
+		double timePerTick;
 		
 		double delta = 0;
 		long now;
@@ -237,6 +246,7 @@ public class Game implements Runnable {
 			 * Not sure why doing it this way instead of just doing (now - last),
 			 * and then checking if delta is >= timePerTick?
 			 */
+			timePerTick = 1000000000 / GVar.FPS;
 			now = System.nanoTime();
 			delta += (now - lastTime) / timePerTick;
 			timer += now - lastTime;

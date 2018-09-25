@@ -32,7 +32,7 @@ public class GVar {
 	public static final int KEY_MANUAL_OFFSET_Y = 30;
 
 	//Target FPS
-	public static final int FPS = 60;
+	public static int FPS = 60;
 	
 	//Default font
 	public static final String fontA = "Lucida Sans Unicode";
@@ -74,6 +74,12 @@ public class GVar {
 	
 	public static Font setFont(String font, int size) {
 		return new Font(font, 1, size);
+	}
+
+	public static void setFPS(int i) {
+		FPS = i;
+		if(FPS <= 0)
+			FPS = 1;
 	}
 	
 	public static int getMultiplier() {
