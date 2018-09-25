@@ -19,7 +19,7 @@ public class KeyManager implements KeyListener {
 	public boolean up, down, left, right
 				 , start, exit
 	             , scaleUp, scaleDown
-	             , changePlayer
+	             , changePlayer, nextSong
 	             , debugToggle, scrollingToggle, pauseToggle, keyManualToggle;
 
 	//Used for displaying controls in game
@@ -57,6 +57,9 @@ public class KeyManager implements KeyListener {
 		
 		//Swap Between available players
 		changePlayer = keys[KeyEvent.VK_C];
+		
+		//Plays Next song
+		nextSong = keys[KeyEvent.VK_N];
 		
 		//Toggles Debug Display
 		debugToggle = keys[KeyEvent.VK_Z];

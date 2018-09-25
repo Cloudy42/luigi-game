@@ -93,6 +93,11 @@ public class Game implements Runnable {
 		//Update keys
 		keyManager.tick();
 		
+		//Change Song if in GameState (just to shake up debugging)
+		if(keyManager.nextSong && StateManager.getCurrentState() == gameState) {
+			gameAudio.nextSong();
+		}
+		
 		//If a state exists (not null), then tick it
 		if(StateManager.getCurrentState() != null) {
 			StateManager.getCurrentState().tick();
@@ -135,7 +140,7 @@ public class Game implements Runnable {
 		//I am moving it from the render() method 
 		//to the tick() method sicne we're not drawing to console any longer, and even then, it's not really a 
 		//render so makes sense to not be in render().
-		if(timer > 1000000000) {
+		if(timer >= 1000000000) {
 			//System.out.println("Ticks and Frames: " + ticks);
 			lastTicks = ticks;
 			ticks = 0;

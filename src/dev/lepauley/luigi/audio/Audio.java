@@ -11,6 +11,8 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import dev.lepauley.luigi.utilities.EnumMusic;
+
 /*
  * Handles all audio in game
  * Originally followed this stupid tutorial: https://www.youtube.com/watch?v=VMSTTg5EEnY
@@ -21,7 +23,10 @@ public class Audio {
 	
 	//Holds all sfx	& Music respectively
 	Map<String, File> mapSFX = new HashMap<String, File>();
-	Map<String, File> mapMusic = new HashMap<String, File>();	
+	Map<String, File> mapMusic = new HashMap<String, File>();
+	
+	//Tracks current Song
+	private String currentSong;
 
 	//Step 1 and 2 of setting audio (pull out CD then put CD in player, so to speak)
 	private AudioInputStream audioSFX, audioMusic;
@@ -72,6 +77,7 @@ public class Audio {
 		        clipMusic.start();
 		        //Loop BGM continuously
 		        clipMusic.loop(Clip.LOOP_CONTINUOUSLY);
+		        currentSong = s;
 			}
         }        
         catch (IOException ex){
@@ -177,6 +183,23 @@ public class Audio {
 		mapMusic.put("Into The Pipe", new File("res/audio/music/16 - Into The Pipe.wav"));
 		mapMusic.put("Into The Pipe (Hurry!)", new File("res/audio/music/17 - Into The Pipe (Hurry!).wav"));
 		mapMusic.put("Saved The Princess", new File("res/audio/music/18 - Saved The Princess.wav"));
+	}
+	
+	//Cycles through songs, just to shake it up when debugging
+	public void nextSong() {
+		closeAudio("music");
+		if(currentSong.equals(EnumMusic.RunningAround.toString())) playAudio("music", EnumMusic.Underground.toString());
+		else if(currentSong.equals(EnumMusic.RunningAround_Hurry.toString())) playAudio("music", EnumMusic.Underground_Hurry.toString());
+		else if(currentSong.equals(EnumMusic.Underground.toString())) playAudio("music", EnumMusic.SwimmingAround.toString());
+		else if(currentSong.equals(EnumMusic.Underground_Hurry.toString())) playAudio("music", EnumMusic.SwimmingAround_Hurry.toString());
+		else if(currentSong.equals(EnumMusic.SwimmingAround.toString())) playAudio("music", EnumMusic.BowserCastle.toString());
+		else if(currentSong.equals(EnumMusic.SwimmingAround_Hurry.toString())) playAudio("music", EnumMusic.BowserCastle_Hurry.toString());
+		else if(currentSong.equals(EnumMusic.BowserCastle.toString())) playAudio("music", EnumMusic.Invincible.toString());
+		else if(currentSong.equals(EnumMusic.BowserCastle_Hurry.toString())) playAudio("music", EnumMusic.Invincible_Hurry.toString());
+		else if(currentSong.equals(EnumMusic.Invincible.toString())) playAudio("music", EnumMusic.IntoThePipe.toString());
+		else if(currentSong.equals(EnumMusic.Invincible_Hurry.toString())) playAudio("music", EnumMusic.IntoThePipe_Hurry.toString());
+		else if(currentSong.equals(EnumMusic.IntoThePipe.toString())) playAudio("music", EnumMusic.RunningAround.toString());
+		else if(currentSong.equals(EnumMusic.IntoThePipe_Hurry.toString())) playAudio("music", EnumMusic.RunningAround_Hurry.toString());
 	}
 	
 }
