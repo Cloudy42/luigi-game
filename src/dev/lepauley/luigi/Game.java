@@ -93,6 +93,21 @@ public class Game implements Runnable {
 		//Update keys
 		keyManager.tick();
 		
+		//Decreases Time
+		if(keyManager.timeDown && StateManager.getCurrentState() == gameState) {
+			gameHeader.adjustTime(-1);
+		}
+		
+		//Increases Time
+		if(keyManager.timeUp && StateManager.getCurrentState() == gameState) {
+			gameHeader.adjustTime(1);
+		}
+		
+		//Change Song if in GameState (just to shake up debugging)
+		if(keyManager.nextSong && StateManager.getCurrentState() == gameState) {
+			gameAudio.nextSong();
+		}
+		
 		//decrease FPS
 		if(keyManager.fpsDown) {
 			GVar.setFPS(GVar.FPS - 10);
@@ -103,11 +118,6 @@ public class Game implements Runnable {
 		if(keyManager.fpsUp) {
 			GVar.setFPS(GVar.FPS + 10);
 			System.out.println("FPS: " + GVar.FPS);
-		}
-		
-		//Change Song if in GameState (just to shake up debugging)
-		if(keyManager.nextSong && StateManager.getCurrentState() == gameState) {
-			gameAudio.nextSong();
 		}
 		
 		//If a state exists (not null), then tick it
@@ -159,7 +169,7 @@ public class Game implements Runnable {
 			timer = 0;
 			//Moved here to be in line with once per second. Doing elsewhere means there will be fluctuations
 			//as FPS move around, so this feels like the smarter place to put it. 
-			if(StateManager.getCurrentStateName() == "GameState")
+			if(StateManager.getCurrentState() == gameState)
 				gameHeader.tick();
 		}		
 	}
@@ -246,12 +256,12 @@ public class Game implements Runnable {
 			 * Not sure why doing it this way instead of just doing (now - last),
 			 * and then checking if delta is >= timePerTick?
 			 */
+
 			timePerTick = 1000000000 / GVar.FPS;
 			now = System.nanoTime();
 			delta += (now - lastTime) / timePerTick;
 			timer += now - lastTime;
 			lastTime = now;
-
 			//If enough time has elapsed, can run tick() and render().
 			if(delta >= 1) {
 				tick();

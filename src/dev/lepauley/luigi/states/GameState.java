@@ -6,6 +6,7 @@ import dev.lepauley.luigi.Game;
 import dev.lepauley.luigi.entities.creatures.Creature;
 import dev.lepauley.luigi.entities.creatures.Player;
 import dev.lepauley.luigi.levels.Level;
+import dev.lepauley.luigi.utilities.EnumPause;
 import dev.lepauley.luigi.utilities.Utilities;
 
 /*
@@ -32,7 +33,7 @@ public class GameState extends State {
 	public void tick() {
 		//Toggles Pause On/Off (only if not dead)
 		if(game.getKeyManager().pauseToggle && !Game.gameHeader.getDead())
-			GVar.togglePause();
+			GVar.togglePause(EnumPause.PAUSED.toString());
 
 		//If Game = UnPaused, tick
 		if(!GVar.getPause()) {

@@ -18,8 +18,9 @@ public class KeyManager implements KeyListener {
 	//Specific keys we're using
 	public boolean up, down, left, right
 				 , start, exit
-	             , scaleUp, scaleDown
-	             , fpsUp, fpsDown
+	             , fpsDown, fpsUp
+	             , timeDown, timeUp
+	             , scaleDown, scaleUp
 	             , changePlayer, nextSong
 	             , debugToggle, scrollingToggle, pauseToggle, keyManualToggle;
 
@@ -34,10 +35,9 @@ public class KeyManager implements KeyListener {
 			                    ,"[D] Debug"
 			                    ,"[K] Controls"
 			                    ,"[N] Next Song"
-			                    ,"[{] FPS Down"
-			                    ,"[}] FPS Up"
-			                    ,"[<] Scale Down"
-			                    ,"[>] Scale Up"
+			                    ,"[1/2] FPS--/++"
+			                    ,"[3/4] Time--/++"
+			                    ,"[</>] Scale--/++"
 			                    ,"[C] Change Player"
 			                    };
 		
@@ -58,6 +58,10 @@ public class KeyManager implements KeyListener {
 		//Increases and Decreased game FPS
 		fpsDown = keys[KeyEvent.VK_1];
 		fpsUp = keys[KeyEvent.VK_2];		
+		
+		//Increases and Decreased game Time
+		timeDown = keys[KeyEvent.VK_3];
+		timeUp = keys[KeyEvent.VK_4];		
 		
 		//Increases and Decreased game Scales (Entities, Tiles, etc.)
 		scaleDown = keys[KeyEvent.VK_COMMA];

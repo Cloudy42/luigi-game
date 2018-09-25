@@ -9,7 +9,7 @@ import java.awt.Graphics;
 import dev.lepauley.luigi.GVar;
 import dev.lepauley.luigi.Game;
 import dev.lepauley.luigi.states.StateManager;
-import dev.lepauley.luigi.utilities.EnumMusic;
+import dev.lepauley.luigi.utilities.EnumPause;
 import dev.lepauley.luigi.utilities.EnumSFX;
 import dev.lepauley.luigi.utilities.Utilities;
 
@@ -23,7 +23,7 @@ public class Header {
 	private int currentCoins;
 	private int currentWorld;
 	private int currentLevel;
-	private int currentTime ;
+	private int currentTime;
 
 	//Holds High Score
 	//(we'll need to figure out a way to save this between play throughs
@@ -45,7 +45,7 @@ public class Header {
 	}
 	
 	public void tick() {
-		if(!dead) {
+		if(!dead && !GVar.getPause()) {
 			currentScore++;
 			currentTime--;
 			currentCoins++;
@@ -57,14 +57,14 @@ public class Header {
 			if(currentTime <= HURRY_TIME && !hurry) {
 				hurry = true;
 				Game.gameAudio.pauseAudio("Music");
-				Game.gameAudio.playAudio("Music", EnumMusic.RunningAround_Hurry.toString());
+				Game.gameAudio.playAudio("Music", Game.gameAudio.getCurrentSong() + " (Hurry!)");
 			}
 			if(currentTime <= 0) {
 				//I'm setting this first since I swear the first time I tested this it said "PAUSED"
 				//for a hot second before switching to TIME UP! Just seems safer to do this first.
-				GVar.setPauseMsg("TIME UP!");
 				dead = true;
-				GVar.togglePause();
+				currentTime = 0;
+				GVar.togglePause(EnumPause.TIMESUP.toString());
 				Game.gameAudio.pauseAudio("all");
 				Game.gameAudio.playAudio("sfx", EnumSFX.LuigiDie.toString());
 				//Sets HighScore if a new one was reached
@@ -164,7 +164,7 @@ public class Header {
 		currentCoins = 0;
 		currentWorld = 1;
 		currentLevel = 1;
-		currentTime = 240;
+		currentTime = 40;
 		timeSpacing = 0;
 		
 		hurry = false;
@@ -175,6 +175,25 @@ public class Header {
 	
 	public boolean getDead() {
 		return dead;
+	}
+	
+	//Allows user to change time
+	public void adjustTime(int time) {
+		//Only allow changing time if NOT dead and NOT paused (and don't let values go negative)
+		if(!dead && currentTime >= 1 && !GVar.getPause()) {
+			currentTime += time;
+			String tempSong = Game.gameAudio.getCurrentSong();
+			String tempHurry = " (Hurry!)";
+			int tempSongLen = tempSong.length();
+			int tempHurryLen = tempHurry.length();
+			
+			//Resets hurry
+			if(hurry && currentTime > HURRY_TIME) {
+				hurry = false;
+				Game.gameAudio.pauseAudio("Music");
+				Game.gameAudio.playAudio("Music", tempSong.substring(0, tempSongLen - tempHurryLen));
+			}
+		}
 	}
 		
 }

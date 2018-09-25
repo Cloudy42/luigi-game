@@ -201,5 +201,10 @@ public class Audio {
 		else if(currentSong.equals(EnumMusic.IntoThePipe.toString())) playAudio("music", EnumMusic.RunningAround.toString());
 		else if(currentSong.equals(EnumMusic.IntoThePipe_Hurry.toString())) playAudio("music", EnumMusic.RunningAround_Hurry.toString());
 	}
+
+	/*************** GETTERS and SETTERS ***************/
 	
+	public String getCurrentSong() {
+		return currentSong;
+	}
 }

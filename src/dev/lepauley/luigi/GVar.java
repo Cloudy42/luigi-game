@@ -2,6 +2,8 @@ package dev.lepauley.luigi;
 
 import java.awt.Font;
 
+import dev.lepauley.luigi.states.StateManager;
+import dev.lepauley.luigi.utilities.EnumPause;
 import dev.lepauley.luigi.utilities.EnumSFX;
 
 /*
@@ -32,14 +34,17 @@ public class GVar {
 	public static final int KEY_MANUAL_OFFSET_Y = 30;
 
 	//Target FPS
+	public static final int FPS_MIN = 10;
+	public static final int FPS_MAX = 150;
+	public static boolean FPSStop = false; 
 	public static int FPS = 60;
 	
 	//Default font
 	public static final String fontA = "Lucida Sans Unicode";
 	
 	//Message To Player (Pause, Game Over, etc.)
-	private static String playerMsg; 
-	private static int playerMsgLen;	
+	private static String pauseMsg; 
+	private static int pauseMsgLen;	
 
 	//# of Players Selected
 	private static int playerSelectCount;
@@ -62,8 +67,8 @@ public class GVar {
 		debugToggle = true;
 		pauseToggle = false;		
 		keyManualToggle = false;
-		playerMsg = "PAUSED";
-		playerMsgLen = playerMsg.length();
+		pauseMsg = "PAUSED";
+		pauseMsgLen = pauseMsg.length();
 	}
 	
 	public static int getShadowFont(int currentFontSize) {
@@ -76,10 +81,22 @@ public class GVar {
 		return new Font(font, 1, size);
 	}
 
+	//Note, I didn't set 0 FPS since it will lock game, and I didn't do below 10 since that makes input very laggy and such.
+	//10 felt like a solid number to work with.
 	public static void setFPS(int i) {
 		FPS = i;
-		if(FPS <= 0)
-			FPS = 1;
+		//If Pause Message = "STOP" and THEN you increase speed, it will resume
+		if(pauseMsg.equals(EnumPause.STOP.toString()) && FPS > FPS_MIN){
+			togglePause(EnumPause.RESUME.toString());
+		} 
+		//If you decrease FPS BELOW the min, it will "STOP" the game
+		if(FPS < FPS_MIN) {
+			FPS = FPS_MIN;
+			togglePause(EnumPause.STOP.toString());
+		//If increase FPS ABOVE the max, it will lock at the max
+		} else if(FPS > FPS_MAX) {
+			FPS = FPS_MAX;	
+		}
 	}
 	
 	public static int getMultiplier() {
@@ -95,14 +112,14 @@ public class GVar {
 	}
 
 	public static String getPauseMsg() {
-		return playerMsg;
+		return pauseMsg;
 	}
 	public static void setPauseMsg(String newMsg) {
-		playerMsg = newMsg;
-		playerMsgLen = playerMsg.length();
+		pauseMsg = newMsg;
+		pauseMsgLen = pauseMsg.length();
 	}
 	public static int getPauseMsgLen() {
-		return playerMsgLen;
+		return pauseMsgLen;
 	}
 
 	public static int getPlayerSelectCount() {
@@ -127,17 +144,35 @@ public class GVar {
 	public static boolean getPause() {
 		return pauseToggle;
 	}
-	public static void togglePause() {
-		if(pauseToggle && !Game.gameHeader.getDead()) { 
-			pauseToggle = false;
-			Game.gameAudio.pauseAudio("all");
-			Game.gameAudio.playAudio("sfx", EnumSFX.Pause.toString());
-			Game.gameAudio.resumeAudio("music");
-		}
-		else {
-			pauseToggle = true;
-			Game.gameAudio.pauseAudio("all");
-			Game.gameAudio.playAudio("sfx", EnumSFX.Pause.toString());
+	public static void togglePause(String msg) {
+		setPauseMsg(msg);
+		//if Pause Message == STOP, stop time (if not currently paused)
+		if(msg.equals(EnumPause.STOP.toString())){
+			if(!pauseToggle && StateManager.getCurrentStateName() == "GameState") {
+				setPauseMsg("");
+				pauseToggle = true;
+			}
+		//If Pause Message == RESUME, then unpause game
+		} else if(msg.equals(EnumPause.RESUME.toString())){
+			if(pauseToggle && StateManager.getCurrentStateName() == "GameState") {
+				setPauseMsg("");
+				pauseToggle = false;
+			}
+		//Else do normal pause rules:
+		} else {
+			//if Game is paused and you're not dead, unpause and resume audio
+			if(pauseToggle && !Game.gameHeader.getDead()) { 
+				pauseToggle = false;
+				Game.gameAudio.pauseAudio("all");
+				Game.gameAudio.playAudio("sfx", EnumSFX.Pause.toString());
+				Game.gameAudio.resumeAudio("music");
+			}
+			//Else pause game (Note: Game should already be paused if dead, so that check doesn't matter)
+			else {
+				pauseToggle = true;
+				Game.gameAudio.pauseAudio("all");
+				Game.gameAudio.playAudio("sfx", EnumSFX.Pause.toString());
+			}
 		}
 	}	
 	
