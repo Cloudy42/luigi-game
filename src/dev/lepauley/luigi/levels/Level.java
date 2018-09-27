@@ -26,7 +26,7 @@ public class Level {
 	//Used to test all tiles are there (Allows Scrolling through level)
 	private int debugScrollLevel = 0;
 	private int debugConst = 4;
-	
+	private int defaultXSpawnOffset = -Tile.TILEWIDTH;
 	
 	public Level(String path) {
 		loadLevel(path);
@@ -36,7 +36,9 @@ public class Level {
 		if(!Game.gameHeader.getDead()) {
 			//Used to test scrolling level, IF scrolling is toggled
 			debugScrollLevel+=debugConst;
-			if(debugScrollLevel <= 0 || debugScrollLevel >= 6210)
+			//I added && debugConst < 0 and > 0 because if, for whatever reason, code ever gets behind those thresholds,
+			//it will constantly be flicking from positive to negative and start a looped jitter effect
+			if(debugScrollLevel <= 32 && debugConst < 0 || debugScrollLevel >= 6210 && debugConst > 0)
 				debugConst *= -1;
 			//Or Can set value here and look at specific areas of map 
 			//debugScrollLevel = 6210;
@@ -67,7 +69,7 @@ public class Level {
 				//If NOT a BG tile, will get tile and print to screen
 				if(checkTile(x,y)) {
 					//debugScrollLevel used to test scrolling level:
-					getTile(x,y).render(g, x * Tile.TILEWIDTH * GVar.getMultiplier() - debugScrollLevel, y * Tile.TILEHEIGHT * GVar.getMultiplier());
+					getTile(x,y).render(g, defaultXSpawnOffset + x * Tile.TILEWIDTH * GVar.getMultiplier() - debugScrollLevel, y * Tile.TILEHEIGHT * GVar.getMultiplier());
 				}
 			}
 		}
@@ -129,5 +131,6 @@ public class Level {
 	
 	public void setDebugScrollLevel(int i) {
 		debugScrollLevel = i;
+		debugConst = 4;
 	}
 }

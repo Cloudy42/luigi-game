@@ -36,8 +36,8 @@ public class GVar {
 	//Target FPS
 	public static final int FPS_MIN = 10;
 	public static final int FPS_MAX = 150;
-	public static boolean FPSStop = false; 
-	public static int FPS = 60;
+	public static final int FPS_DEFAULT = 60;
+	public static int FPS = FPS_DEFAULT;
 	
 	//Default font
 	public static final String fontA = "Lucida Sans Unicode";
@@ -64,6 +64,7 @@ public class GVar {
 	public static void resetGVarDefaults() {
 		playerSelectCount = 1;
 		multiplier = 1;
+		FPS = FPS_DEFAULT;
 		debugToggle = true;
 		pauseToggle = false;		
 		keyManualToggle = false;

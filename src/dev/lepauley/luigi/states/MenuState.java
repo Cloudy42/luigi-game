@@ -19,7 +19,7 @@ public class MenuState extends State {
 	public MenuState(Game game) {
 		super(game, "MenuState");
 		this.game = game;
-		level = new Level("res/levels/1-1.txt");
+		level = new Level("res/levels/level 1-1.txt");
 		player1 = new Player(game, level.getSpawnX(), level.getSpawnY());
 		player2 = new Player(game, level.getSpawnX() + Player.DEFAULT_CREATURE_WIDTH * 2, level.getSpawnY());
 		

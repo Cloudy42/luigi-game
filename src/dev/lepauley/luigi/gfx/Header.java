@@ -164,7 +164,7 @@ public class Header {
 		currentCoins = 0;
 		currentWorld = 1;
 		currentLevel = 1;
-		currentTime = 40;
+		currentTime = 80;
 		timeSpacing = 0;
 		
 		hurry = false;

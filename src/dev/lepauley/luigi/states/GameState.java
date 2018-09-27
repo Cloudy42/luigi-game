@@ -24,7 +24,7 @@ public class GameState extends State {
 	
 	public GameState(Game game) {
 		super(game,"GameState");
-		level = new Level("res/levels/1-1.txt");
+		level = new Level("res/levels/level 1-1.txt");
 		player = new Player(game, level.getSpawnX(), level.getSpawnY());
 	}
 	
