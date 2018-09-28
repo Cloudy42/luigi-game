@@ -109,16 +109,12 @@ public class Game implements Runnable {
 		}
 		
 		//decrease FPS
-		if(keyManager.fpsDown) {
+		if(keyManager.fpsDown)
 			GVar.setFPS(GVar.FPS - 10);
-			System.out.println("FPS: " + GVar.FPS);
-		}
 		
 		//increase FPS
-		if(keyManager.fpsUp) {
+		if(keyManager.fpsUp)
 			GVar.setFPS(GVar.FPS + 10);
-			System.out.println("FPS: " + GVar.FPS);
-		}
 		
 		//If a state exists (not null), then tick it
 		if(StateManager.getCurrentState() != null) {

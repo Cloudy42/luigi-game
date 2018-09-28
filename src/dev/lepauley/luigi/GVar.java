@@ -86,6 +86,11 @@ public class GVar {
 	//10 felt like a solid number to work with.
 	public static void setFPS(int i) {
 		FPS = i;
+		
+		//Only Print this is greater than the minimum or is less than the maximum
+		if(FPS >= GVar.FPS_MIN && GVar.FPS <= GVar.FPS_MAX)
+			System.out.println("FPS: " + GVar.FPS);
+		
 		//If Pause Message = "STOP" and THEN you increase speed, it will resume
 		if(pauseMsg.equals(EnumPause.STOP.toString()) && FPS > FPS_MIN){
 			togglePause(EnumPause.RESUME.toString());
@@ -93,6 +98,9 @@ public class GVar {
 		//If you decrease FPS BELOW the min, it will "STOP" the game
 		if(FPS < FPS_MIN) {
 			FPS = FPS_MIN;
+			//This check makes it so it will only print STOPPED to console once
+			if(!getPause())
+				System.out.println("FPS: STOPPED!");
 			togglePause(EnumPause.STOP.toString());
 		//If increase FPS ABOVE the max, it will lock at the max
 		} else if(FPS > FPS_MAX) {
