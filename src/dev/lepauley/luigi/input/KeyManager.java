@@ -20,6 +20,7 @@ public class KeyManager implements KeyListener {
 				 , start, exit
 	             , fpsDown, fpsUp
 	             , timeDown, timeUp
+	             , volumeDown, volumeUp
 	             , scaleDown, scaleUp
 	             , changePlayer, nextSong
 	             , debugToggle, scrollingToggle, pauseToggle, keyManualToggle;
@@ -37,6 +38,7 @@ public class KeyManager implements KeyListener {
 			                    ,"[N] Next Song"
 			                    ,"[1/2] FPS--/++"
 			                    ,"[3/4] Time--/++"
+			                    ,"[5/6] Volume--/++"
 			                    ,"[</>] Scale--/++"
 			                    ,"[C] Change Player"
 			                    };
@@ -62,6 +64,10 @@ public class KeyManager implements KeyListener {
 		//Increases and Decreased game Time
 		timeDown = keys[KeyEvent.VK_3];
 		timeUp = keys[KeyEvent.VK_4];		
+		
+		//Increases and Decreased game Volume
+		volumeDown = keys[KeyEvent.VK_5];
+		volumeUp = keys[KeyEvent.VK_6];		
 		
 		//Increases and Decreased game Scales (Entities, Tiles, etc.)
 		scaleDown = keys[KeyEvent.VK_COMMA];

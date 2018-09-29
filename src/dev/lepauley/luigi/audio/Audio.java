@@ -1,13 +1,17 @@
 package dev.lepauley.luigi.audio;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -20,7 +24,7 @@ import dev.lepauley.luigi.utilities.EnumMusic;
  * went with this: https://coderanch.com/t/572997/java/Stopping-looping-javax-sound-sampled
  * 
  * Note for Alan: Research distorting/slowing down frequency and speed when controlling time:
- *                https://www.dreamincode.net/forums/topic/163684-sound-audio-effects/
+ *                https://docs.oracle.com/javase/tutorial/sound/controls.html
  */
 public class Audio {
 	
@@ -30,6 +34,14 @@ public class Audio {
 	
 	//Tracks current Song
 	private String currentSong;
+	
+	//Sets Min and Max volume:
+	private final float MIN_VOLUME = -15.0f
+					  , MAX_VOLUME = 6.0206f;//pulled from (FloatControl)gainControl.getMaximum()
+	
+	//Holds CurrentVolumes
+	private float currentVolumeSFX = 0f
+			    , currentVolumeMusic = 0f;
 
 	//Step 1 and 2 of setting audio (pull out CD then put CD in player, so to speak)
 	private AudioInputStream audioSFX, audioMusic;
@@ -94,7 +106,8 @@ public class Audio {
         catch (LineUnavailableException ex2){
             System.out.println("Sorry but there are audio line problems.");
             ex2.printStackTrace();
-        } 
+        }
+		adjustVolume("all",0F);
     }
 
 	//Resume audio
@@ -141,7 +154,115 @@ public class Audio {
 			if(audioType.toLowerCase().equals("music") || audioType.toLowerCase().equals("all"))
 		        clipMusic.close();			
     }
+
+	//Adjust volumne. Base code from here: https://stackoverflow.com/questions/40514910/set-volume-of-java-clip
+	//Modifications by Alan
+	public void adjustVolume(String audioType, float adjust) {
+		
+		FloatControl gainControl = null;
+		float gain = 0F;
+
+		//Loop twice to check for both without needing to duplicate code
+		for(int i = 0; i < 2; i++) {
+			//If SFX or "all" adjust SFX volume
+			if((audioType.equals("sfx") || audioType.equals("all")) && i == 0) {
+				gainControl = (FloatControl) clipSFX.getControl(FloatControl.Type.MASTER_GAIN);
+				gain = currentVolumeSFX;
+			}
+			//If Music or "all" adjust SFX volume
+	        if((audioType.equals("music") || audioType.equals("all")) && i == 1) {
+					gainControl = (FloatControl) clipMusic.getControl(FloatControl.Type.MASTER_GAIN);
+					gain = currentVolumeMusic;
+	        }
+	        
+	        //Add volume and check caps
+				gain += adjust;
+		        if(gain > MAX_VOLUME)
+		        	gain = MAX_VOLUME;
+		        if(gain < MIN_VOLUME)
+		        	gain = MIN_VOLUME;
+		    
+		    //Update master volume for each 
+			if((audioType.equals("sfx") || audioType.equals("all")) && i == 0)
+		        currentVolumeSFX = gain;
+	        if((audioType.equals("music") || audioType.equals("all")) && i == 1)
+		        currentVolumeMusic = gain;
+
+	        //set volume
+	        gainControl.setValue(gain);
+		}
+		System.out.println("Current Volume [SFX: " + currentVolumeSFX + "|Music: " + currentVolumeMusic + "]");
+	}
+
+	//Adjust volumne. Base code from here: https://stackoverflow.com/questions/40514910/set-volume-of-java-clip
+	//Modifications by Alan
+	public void distortAudio() {
+		
+		FloatControl gainControl = null;
+		float gain = 0F;
+
+		gainControl = (FloatControl) clipMusic.getControl(FloatControl.Type.SAMPLE_RATE);
+		System.out.println("test: " + gainControl.getValue());
+		gain = currentVolumeMusic;
+	        
+	    gainControl.setValue(gain);
+		System.out.println("Current Volume [SFX: " + currentVolumeSFX + "|Music: " + currentVolumeMusic + "]");
+	}
 	
+	/*Freaking FloatControl is killing me!
+	public void apTest() {
+	    boolean res = true;
+        Clip clip = null;
+	    try {
+	        AudioInputStream ais = new AudioInputStream(
+	                new ByteArrayInputStream(new byte[2000]),
+	                new AudioFormat(8000.0f, 8, 1, false, false), 2000); //
+	        AudioFormat format = ais.getFormat();
+	        DataLine.Info info = new DataLine.Info(Clip.class, format,
+	                                               ((int) ais.getFrameLength()
+	                                                        * format
+	                                                       .getFrameSize()));
+	        //Clip clip = (Clip) AudioSystem.getLine(info);
+	        clip = AudioSystem.getClip();
+	        AudioInputStream audioTest = AudioSystem.getAudioInputStream(mapMusic.get("Running Around"));
+	        //clipMusic.open(audioTest);
+	        clip.open(audioTest);
+	        //clip.open();
+	        FloatControl rateControl = (FloatControl) clip.getControl(FloatControl.Type.SAMPLE_RATE);
+	        int c = 0;
+	        while (c++ < 10) {
+	            clip.stop();
+	            clip.setFramePosition(0);
+	            clip.start();
+	            for (float frq = 22000; frq < 44100; frq = frq + 100) {
+	                try {
+	                    Thread.currentThread().sleep(20);
+	                } catch (Exception e) {
+	                    break;
+	                }
+	                rateControl.setValue(frq);
+	            }
+	        }
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	        res = ex.getMessage().indexOf(
+	                "This method should not have been invoked!") < 0;
+	    }
+	    if (res) {
+	    	clip.start();
+	        System.out.println("Test passed");
+	    } else {
+	        System.out.println("Test failed");
+	        try {
+				throw new Exception("Test failed");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    }
+	}
+	*/	
+
 	//Populate Hashmaps
 	public void populateHashMaps() {
 		mapSFX.put("1-Up", new File("res/audio/sfx/smb_1-up.wav"));
@@ -210,4 +331,5 @@ public class Audio {
 	public String getCurrentSong() {
 		return currentSong;
 	}
+	
 }

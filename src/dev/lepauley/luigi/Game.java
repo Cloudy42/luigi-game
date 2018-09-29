@@ -116,6 +116,17 @@ public class Game implements Runnable {
 		if(keyManager.fpsUp)
 			GVar.setFPS(GVar.FPS + 10);
 		
+		//I'm currently okay allowing them to change when paused since it makes sense to be able
+		//to change audio in a menu
+		//decrease Volume
+		if(keyManager.volumeDown)
+			Game.gameAudio.adjustVolume("all",-1f);
+		
+		//increase Volume
+		if(keyManager.volumeUp)
+			Game.gameAudio.adjustVolume("all",1f);
+			//Game.gameAudio.distortAudio();
+		
 		//If a state exists (not null), then tick it
 		if(StateManager.getCurrentState() != null) {
 			StateManager.getCurrentState().tick();
