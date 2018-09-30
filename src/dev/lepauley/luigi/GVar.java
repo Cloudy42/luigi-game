@@ -88,8 +88,8 @@ public class GVar {
 		FPS = i;
 		
 		//Only Print this is greater than the minimum or is less than the maximum
-		if(FPS >= GVar.FPS_MIN && GVar.FPS <= GVar.FPS_MAX)
-			System.out.println("FPS: " + GVar.FPS);
+		if(FPS >= FPS_MIN && FPS <= FPS_MAX)
+			System.out.println("FPS: " + FPS);
 		
 		//If Pause Message = "STOP" and THEN you increase speed, it will resume
 		if(pauseMsg.equals(EnumPause.STOP.toString()) && FPS > FPS_MIN){

@@ -2,6 +2,10 @@ package dev.lepauley.luigi;
 
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.io.IOException;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import dev.lepauley.luigi.audio.Audio;
 import dev.lepauley.luigi.display.Display;
@@ -89,7 +93,7 @@ public class Game implements Runnable {
 	}
 	
 	//Update everything for game
-	private void tick() {
+	private void tick(){
 		//Update keys
 		keyManager.tick();
 		
@@ -113,8 +117,27 @@ public class Game implements Runnable {
 			GVar.setFPS(GVar.FPS - 10);
 		
 		//increase FPS
-		if(keyManager.fpsUp)
+		if(keyManager.fpsUp) {
 			GVar.setFPS(GVar.FPS + 10);
+			gameAudio.setCurrentSpeed(0.1f);
+			
+			//uses the ability to speed up and slow down audio, but at what cost
+			// (freezes game til audio completes - not an okay solution)
+			/*try {
+				gameAudio.myTest();
+			} catch (UnsupportedAudioFileException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (LineUnavailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			*/
+
+		}
 		
 		//I'm currently okay allowing them to change when paused since it makes sense to be able
 		//to change audio in a menu
@@ -125,7 +148,6 @@ public class Game implements Runnable {
 		//increase Volume
 		if(keyManager.volumeUp)
 			Game.gameAudio.adjustVolume("all",1f);
-			//Game.gameAudio.distortAudio();
 		
 		//If a state exists (not null), then tick it
 		if(StateManager.getCurrentState() != null) {
@@ -153,7 +175,6 @@ public class Game implements Runnable {
 			
 			//pauseAudio MAY be optional here since closing anyways. Just felt safer.
 			Game.gameAudio.pauseAudio("all");
-			Game.gameAudio.closeAudio("all");
 
 			StateManager.setCurrentState(menuState);
 		}

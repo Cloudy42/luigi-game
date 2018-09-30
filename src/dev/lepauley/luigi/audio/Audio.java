@@ -17,6 +17,12 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 import dev.lepauley.luigi.utilities.EnumMusic;
 
+import javax.sound.sampled.SourceDataLine;
+
+import dev.lepauley.luigi.GVar;
+import dev.lepauley.luigi.audio.Sonic;
+
+
 /*
  * Handles all audio in game
  * Originally followed this stupid tutorial: https://www.youtube.com/watch?v=VMSTTg5EEnY
@@ -36,13 +42,20 @@ public class Audio {
 	private String currentSong;
 	
 	//Sets Min and Max volume:
-	private final float MIN_VOLUME = -15.0f
-					  , MAX_VOLUME = 6.0206f;//pulled from (FloatControl)gainControl.getMaximum()
+	//Note: Min = -80.0f | Max = 6.0206f
+	//pulled from (FloatControl)gainControl.getMaximum()
+	private final float MIN_VOLUME = -15.0f  
+					  , MAX_VOLUME =   6.0f;
 	
 	//Holds CurrentVolumes
-	private float currentVolumeSFX = 0f
-			    , currentVolumeMusic = 0f;
+	private float currentVolumeSFX = 1.0f
+			    , currentVolumeMusic = 1.0f;
 
+	//Sonic variables
+    private float currentSpeed = 1.0f
+                , currentPitch = 1.0f
+                , currentRate = 1.0f;
+	
 	//Step 1 and 2 of setting audio (pull out CD then put CD in player, so to speak)
 	private AudioInputStream audioSFX, audioMusic;
 	private Clip clipSFX, clipMusic;
@@ -75,39 +88,52 @@ public class Audio {
 	
 	//Plays SFX or Music, separate so can run both simultaneously.
 	//Note: May want to consider further channel splits if we need to track enemy sound effects as well
-	public void playAudio(String audioType, String s){
-		try {
-			if(audioType.toLowerCase().equals("sfx") && !clipSFX.isRunning()) {
-				clipSFX.stop();
-				clipSFX = AudioSystem.getClip();
-		        audioSFX = AudioSystem.getAudioInputStream(mapSFX.get(s));
-		        clipSFX.open(audioSFX);
-		        clipSFX.start();
-			}
-			else if(audioType.toLowerCase().equals("music") && !clipMusic.isRunning()) {
-				clipMusic.stop();
-				clipMusic = AudioSystem.getClip();
-		        audioMusic = AudioSystem.getAudioInputStream(mapMusic.get(s));
-		        clipMusic.open(audioMusic);
-		        clipMusic.start();
-		        //Loop BGM continuously
-		        clipMusic.loop(Clip.LOOP_CONTINUOUSLY);
-		        currentSong = s;
-			}
-        }        
-        catch (IOException ex){
-            System.out.println("Sorry but there has been a problem reading your file.");
-            ex.printStackTrace();
-        }
-        catch (UnsupportedAudioFileException ex1){
-            System.out.println("Sorry but the audio file format you are using is not supported.");
-            ex1.printStackTrace();
-        }
-        catch (LineUnavailableException ex2){
-            System.out.println("Sorry but there are audio line problems.");
-            ex2.printStackTrace();
-        }
-		adjustVolume("all",0F);
+	//2018.09.30: Added Close audio because I ran into the following error when overdoing,
+		//and doing the following seems to clean things up. So
+		//far it's working and I haven't hit the error nor the sound
+		//dropping since. *fingers crossed*:
+		/*
+		 * Exception in thread "Thread-3" java.lang.OutOfMemoryError: Java heap space
+		 * at com.sun.media.sound.DirectAudioDevice$DirectClip.open(DirectAudioDevice.java:1135)
+		 * at dev.lepauley.luigi.audio.Audio.playAudio(Audio.java:69)
+		 * at dev.lepauley.luigi.Game.tick(Game.java:102)
+		 * at dev.lepauley.luigi.Game.run(Game.java:240)
+		 * at java.lang.Thread.run(Thread.java:745)
+		 */public void playAudio(String audioType, String s){
+			try {
+				if(audioType.toLowerCase().equals("sfx") && !clipSFX.isRunning()) {
+					clipSFX.stop();
+					clipSFX.close();
+					clipSFX = AudioSystem.getClip();
+			        audioSFX = AudioSystem.getAudioInputStream(mapSFX.get(s));
+			        clipSFX.open(audioSFX);
+			        clipSFX.start();
+				}
+				else if(audioType.toLowerCase().equals("music") && !clipMusic.isRunning()) {
+					clipMusic.stop();
+					clipMusic.close();
+					clipMusic = AudioSystem.getClip();
+			        audioMusic = AudioSystem.getAudioInputStream(mapMusic.get(s));
+			        clipMusic.open(audioMusic);
+			        clipMusic.start();
+			        //Loop BGM continuously
+			        clipMusic.loop(Clip.LOOP_CONTINUOUSLY);
+			        currentSong = s;
+				}
+	        }        
+	        catch (IOException ex){
+	            System.out.println("Sorry but there has been a problem reading your file.");
+	            ex.printStackTrace();
+	        }
+	        catch (UnsupportedAudioFileException ex1){
+	            System.out.println("Sorry but the audio file format you are using is not supported.");
+	            ex1.printStackTrace();
+	        }
+	        catch (LineUnavailableException ex2){
+	            System.out.println("Sorry but there are audio line problems.");
+	            ex2.printStackTrace();
+	        }
+			//adjustVolume("all",0F);
     }
 
 	//Resume audio
@@ -136,25 +162,6 @@ public class Audio {
 		}
 	}
 	
-	//Close audio (I ran into the following error when overdoing,
-	//So trying the following to see if this cleans things up. So
-	//far it's working and I haven't hit the error nor the sound
-	//dropping since. *fingers crossed*:
-	/*
-	 * Exception in thread "Thread-3" java.lang.OutOfMemoryError: Java heap space
-	 * at com.sun.media.sound.DirectAudioDevice$DirectClip.open(DirectAudioDevice.java:1135)
-	 * at dev.lepauley.luigi.audio.Audio.playAudio(Audio.java:69)
-	 * at dev.lepauley.luigi.Game.tick(Game.java:102)
-	 * at dev.lepauley.luigi.Game.run(Game.java:240)
-	 * at java.lang.Thread.run(Thread.java:745)
-	 */
-	public void closeAudio(String audioType){
-			if(audioType.toLowerCase().equals("sfx") || audioType.toLowerCase().equals("all"))
-		        clipSFX.close();
-			if(audioType.toLowerCase().equals("music") || audioType.toLowerCase().equals("all"))
-		        clipMusic.close();			
-    }
-
 	//Adjust volumne. Base code from here: https://stackoverflow.com/questions/40514910/set-volume-of-java-clip
 	//Modifications by Alan
 	public void adjustVolume(String audioType, float adjust) {
@@ -175,8 +182,13 @@ public class Audio {
 					gain = currentVolumeMusic;
 	        }
 	        
-	        //Add volume and check caps
-				gain += adjust;
+			gain += adjust;
+
+			//Only Print this is greater than the minimum or is less than the maximum
+			if(gain >= MIN_VOLUME && gain <= MAX_VOLUME)
+				System.out.println("Current Volume [SFX: " + currentVolumeSFX + "|Music: " + currentVolumeMusic + "]");
+
+			//Add volume and check caps
 		        if(gain > MAX_VOLUME)
 		        	gain = MAX_VOLUME;
 		        if(gain < MIN_VOLUME)
@@ -191,77 +203,7 @@ public class Audio {
 	        //set volume
 	        gainControl.setValue(gain);
 		}
-		System.out.println("Current Volume [SFX: " + currentVolumeSFX + "|Music: " + currentVolumeMusic + "]");
 	}
-
-	//Adjust volumne. Base code from here: https://stackoverflow.com/questions/40514910/set-volume-of-java-clip
-	//Modifications by Alan
-	public void distortAudio() {
-		
-		FloatControl gainControl = null;
-		float gain = 0F;
-
-		gainControl = (FloatControl) clipMusic.getControl(FloatControl.Type.SAMPLE_RATE);
-		System.out.println("test: " + gainControl.getValue());
-		gain = currentVolumeMusic;
-	        
-	    gainControl.setValue(gain);
-		System.out.println("Current Volume [SFX: " + currentVolumeSFX + "|Music: " + currentVolumeMusic + "]");
-	}
-	
-	/*Freaking FloatControl is killing me!
-	public void apTest() {
-	    boolean res = true;
-        Clip clip = null;
-	    try {
-	        AudioInputStream ais = new AudioInputStream(
-	                new ByteArrayInputStream(new byte[2000]),
-	                new AudioFormat(8000.0f, 8, 1, false, false), 2000); //
-	        AudioFormat format = ais.getFormat();
-	        DataLine.Info info = new DataLine.Info(Clip.class, format,
-	                                               ((int) ais.getFrameLength()
-	                                                        * format
-	                                                       .getFrameSize()));
-	        //Clip clip = (Clip) AudioSystem.getLine(info);
-	        clip = AudioSystem.getClip();
-	        AudioInputStream audioTest = AudioSystem.getAudioInputStream(mapMusic.get("Running Around"));
-	        //clipMusic.open(audioTest);
-	        clip.open(audioTest);
-	        //clip.open();
-	        FloatControl rateControl = (FloatControl) clip.getControl(FloatControl.Type.SAMPLE_RATE);
-	        int c = 0;
-	        while (c++ < 10) {
-	            clip.stop();
-	            clip.setFramePosition(0);
-	            clip.start();
-	            for (float frq = 22000; frq < 44100; frq = frq + 100) {
-	                try {
-	                    Thread.currentThread().sleep(20);
-	                } catch (Exception e) {
-	                    break;
-	                }
-	                rateControl.setValue(frq);
-	            }
-	        }
-	    } catch (Exception ex) {
-	        ex.printStackTrace();
-	        res = ex.getMessage().indexOf(
-	                "This method should not have been invoked!") < 0;
-	    }
-	    if (res) {
-	    	clip.start();
-	        System.out.println("Test passed");
-	    } else {
-	        System.out.println("Test failed");
-	        try {
-				throw new Exception("Test failed");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	    }
-	}
-	*/	
 
 	//Populate Hashmaps
 	public void populateHashMaps() {
@@ -311,7 +253,7 @@ public class Audio {
 	
 	//Cycles through songs, just to shake it up when debugging
 	public void nextSong() {
-		closeAudio("music");
+		pauseAudio("music");
 		if(currentSong.equals(EnumMusic.RunningAround.toString())) playAudio("music", EnumMusic.Underground.toString());
 		else if(currentSong.equals(EnumMusic.RunningAround_Hurry.toString())) playAudio("music", EnumMusic.Underground_Hurry.toString());
 		else if(currentSong.equals(EnumMusic.Underground.toString())) playAudio("music", EnumMusic.SwimmingAround.toString());
@@ -332,4 +274,177 @@ public class Audio {
 		return currentSong;
 	}
 	
-}
+	public void setCurrentSpeed(float f) {
+		currentSpeed += f;
+	}
+	
+	public void setCurrentPitch(float f) {
+		currentPitch += f;
+	}
+	
+	public void setCurrentRate(float f) {
+		currentRate += f;
+	}
+	
+	/**********SAFE SPACE TESTING/PRE-PRODUCTION************/
+	 // Run sonic: Audio manipulation
+	 private void runSonic(
+	     AudioInputStream audioStream,
+	     SourceDataLine line,
+	     boolean emulateChordPitch,
+	     int quality,
+	     int sampleRate,
+	     int numChannels) throws IOException
+	 {
+	     Sonic sonic = new Sonic(sampleRate, numChannels);
+	     int bufferSize = line.getBufferSize();
+	     byte inBuffer[] = new byte[bufferSize];
+	     byte outBuffer[] = new byte[bufferSize];
+	     int numRead, numWritten;
+	     System.out.println("test1a");
+
+	     sonic.setSpeed(currentSpeed);
+	     sonic.setPitch(currentPitch);
+	     sonic.setRate(currentRate);
+	     sonic.setVolume(currentVolumeMusic);
+	     sonic.setChordPitch(emulateChordPitch);
+	     sonic.setQuality(quality);
+	     System.out.println("test1b");
+	     do {
+	         numRead = audioStream.read(inBuffer, 0, bufferSize);
+		     System.out.println("test1c");
+	         if(numRead <= 0) {
+	             sonic.flushStream();
+	         } else {
+	             sonic.writeBytesToStream(inBuffer, numRead);
+	         }
+	         do {
+	             numWritten = sonic.readBytesFromStream(outBuffer, bufferSize);
+	             if(numWritten > 0) {
+	                 line.write(outBuffer, 0, numWritten);
+	             }
+	         } while(numWritten > 0);
+	     } while(numRead > 0);
+	 }
+
+	 //Stackoverflow Test
+	 public static void play() {
+		    try {
+		      File fileIn = new File("res/audio/music/07 - Bowser's Castle.wav");
+		      AudioInputStream audioInputStream=AudioSystem.getAudioInputStream(fileIn);
+		      AudioFormat formatIn=audioInputStream.getFormat();
+		      AudioFormat format=new AudioFormat((int)(formatIn.getSampleRate()*2.5), formatIn.getSampleSizeInBits(), formatIn.getChannels(), true, formatIn.isBigEndian());
+		          System.out.println(formatIn.toString());
+		          System.out.println(format.toString());
+		      byte[] data=new byte[1024];
+		      DataLine.Info dinfo=new DataLine.Info(SourceDataLine.class, format);
+		      SourceDataLine line=(SourceDataLine)AudioSystem.getLine(dinfo);
+		      if(line!=null) {
+		        line.open(format);
+		        line.start();
+		        while(true) {
+		          int k=audioInputStream.read(data, 0, data.length);
+		          if(k<0) break;
+		          line.write(data, 0, k);
+		        }
+		        line.stop();
+		        line.close();
+		      }
+		    }
+		    catch(Exception ex) { ex.printStackTrace(); }
+		  }
+	 
+	 
+	 // Integrate Sonic with Audio
+	 public void myTest() throws UnsupportedAudioFileException, IOException, LineUnavailableException
+	 {
+	     boolean emulateChordPitch = false;
+	     int quality = 0;
+	     
+	     AudioInputStream stream = AudioSystem.getAudioInputStream(new File("res/audio/music/01 - Running About.wav"));
+	     AudioFormat format = stream.getFormat();
+	     int sampleRate = (int)format.getSampleRate();
+	     int numChannels = format.getChannels(); 
+	     SourceDataLine.Info info = new DataLine.Info(SourceDataLine.class, format,
+	     	((int)stream.getFrameLength()*format.getFrameSize()));
+	     SourceDataLine line = (SourceDataLine)AudioSystem.getLine(info);
+	     line.open(stream.getFormat());
+	     line.start();
+	     System.out.println("test1");
+	     runSonic(stream, line, emulateChordPitch, quality, sampleRate, numChannels);
+	     System.out.println("test2");
+	     line.drain();
+	     line.stop();
+	     System.out.println("test3");
+	 }
+
+	//Adjust volumne. Base code from here: https://stackoverflow.com/questions/40514910/set-volume-of-java-clip
+	//Modifications by Alan
+	public void distortAudio() {
+		
+		FloatControl gainControl = null;
+		float gain = 0F;
+
+		gainControl = (FloatControl) clipMusic.getControl(FloatControl.Type.SAMPLE_RATE);
+		System.out.println("test: " + gainControl.getValue());
+		gain = currentVolumeMusic;
+	        
+	    gainControl.setValue(gain);
+		System.out.println("Current Volume [SFX: " + currentVolumeSFX + "|Music: " + currentVolumeMusic + "]");
+	}
+	
+	/*Freaking FloatControl is killing me!
+	public void apTest() {
+	    boolean res = true;
+	    Clip clip = null;
+	    try {
+	        AudioInputStream ais = new AudioInputStream(
+	                new ByteArrayInputStream(new byte[2000]),
+	                new AudioFormat(8000.0f, 8, 1, false, false), 2000); //
+	        AudioFormat format = ais.getFormat();
+	        DataLine.Info info = new DataLine.Info(Clip.class, format,
+	                                               ((int) ais.getFrameLength()
+	                                                        * format
+	                                                       .getFrameSize()));
+	        //Clip clip = (Clip) AudioSystem.getLine(info);
+	        clip = AudioSystem.getClip();
+	        AudioInputStream audioTest = AudioSystem.getAudioInputStream(mapMusic.get("Running Around"));
+	        //clipMusic.open(audioTest);
+	        clip.open(audioTest);
+	        //clip.open();
+	        FloatControl rateControl = (FloatControl) clip.getControl(FloatControl.Type.SAMPLE_RATE);
+	        int c = 0;
+	        while (c++ < 10) {
+	            clip.stop();
+	            clip.setFramePosition(0);
+	            clip.start();
+	            for (float frq = 22000; frq < 44100; frq = frq + 100) {
+	                try {
+	                    Thread.currentThread().sleep(20);
+	                } catch (Exception e) {
+	                    break;
+	                }
+	                rateControl.setValue(frq);
+	            }
+	        }
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	        res = ex.getMessage().indexOf(
+	                "This method should not have been invoked!") < 0;
+	    }
+	    if (res) {
+	    	clip.start();
+	        System.out.println("Test passed");
+	    } else {
+	        System.out.println("Test failed");
+	        try {
+				throw new Exception("Test failed");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    }
+	}
+	*/	 
+
+}	
