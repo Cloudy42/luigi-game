@@ -123,8 +123,9 @@ public class Game implements Runnable {
 			
 			//uses the ability to speed up and slow down audio, but at what cost
 			// (freezes game til audio completes - not an okay solution)
-			/*try {
-				gameAudio.myTest();
+			/*
+			try {
+				gameAudio.playSonic("music");
 			} catch (UnsupportedAudioFileException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -143,12 +144,20 @@ public class Game implements Runnable {
 		//to change audio in a menu
 		//decrease Volume
 		if(keyManager.volumeDown)
-			Game.gameAudio.adjustVolume("all",-1f);
+			gameAudio.adjustVolume("all",-1f);
 		
 		//increase Volume
 		if(keyManager.volumeUp)
-			Game.gameAudio.adjustVolume("all",1f);
+			gameAudio.adjustVolume("all",1f);
 		
+		//decrease game Audio speed/rate
+		if(keyManager.rateDown)
+			gameAudio.setCurrentSpeed(-1f);
+		
+		//increase game Audio speed/rate
+		if(keyManager.rateUp)
+			gameAudio.setCurrentSpeed(1f);
+
 		//If a state exists (not null), then tick it
 		if(StateManager.getCurrentState() != null) {
 			StateManager.getCurrentState().tick();
@@ -157,8 +166,9 @@ public class Game implements Runnable {
 		//If MenuState and enter is pressed, change to GameState
 		if(keyManager.start && StateManager.getCurrentState() == menuState) {
 			StateManager.setCurrentState(gameState);
-			Game.gameAudio.pauseAudio("sfx");
-			Game.gameAudio.playAudio("music", EnumMusic.RunningAround.toString());
+			gameAudio.pauseAudio("sfx");
+			gameAudio.playAudio("music", EnumMusic.RunningAround.toString());
+
 		}
 		//If GameState and esc is pressed, change to MenuState
 		if(keyManager.exit && StateManager.getCurrentState() == gameState) {
@@ -174,7 +184,7 @@ public class Game implements Runnable {
 			((GameState)gameState).resetLevelDefaults();
 			
 			//pauseAudio MAY be optional here since closing anyways. Just felt safer.
-			Game.gameAudio.pauseAudio("all");
+			gameAudio.pauseAudio("all");
 
 			StateManager.setCurrentState(menuState);
 		}

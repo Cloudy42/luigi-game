@@ -16,6 +16,5 @@ public class Launcher {
 		Game game = new Game("2018.09.29 - Waruigi, I'mma gonna ween!!", GVar.GAME_WIDTH, GVar.GAME_HEIGHT);
 		//Start game! Run, initialize, game loop
 		game.start();
-		//game.gameAudio.play();
 	}
 }

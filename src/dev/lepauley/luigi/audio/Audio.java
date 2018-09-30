@@ -1,8 +1,8 @@
 package dev.lepauley.luigi.audio;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,14 +13,10 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import dev.lepauley.luigi.utilities.EnumMusic;
-
-import javax.sound.sampled.SourceDataLine;
-
-import dev.lepauley.luigi.GVar;
-import dev.lepauley.luigi.audio.Sonic;
 
 
 /*
@@ -51,6 +47,19 @@ public class Audio {
 	private float currentVolumeSFX = 1.0f
 			    , currentVolumeMusic = 1.0f;
 
+	//Sets Min and Max audio speed/rate:
+	private final float MIN_RATE = -4.0f  
+					  , MAX_RATE =  4.0f;
+	
+
+	private float currentSpeedSFX = 1.0f
+			    , currentSpeedMusic = 1.0f;
+	
+	private boolean alteredSpeedRunning = false;
+	
+	private Thread myThread = null;
+	private Runnable runnable = null;
+	
 	//Sonic variables
     private float currentSpeed = 1.0f
                 , currentPitch = 1.0f
@@ -204,6 +213,80 @@ public class Audio {
 	        gainControl.setValue(gain);
 		}
 	}
+	
+	 //Adjusts Playback Speed
+ 	 //From Stack Overflow in response to my inquiry: https://stackoverflow.com/questions/52572517/java-adjust-playback-speed-of-a-wav-file/52580516#52580516
+	 //I ALSO needed to create a new thread to play this audio, otherwise it freezes game until song ends:
+	 //https://stackoverflow.com/questions/21373231/cannot-do-anything-while-writing-to-a-sourcedataline
+	 /*
+	  * I want to save this for some reason: 
+   		AudioInputStream din = null;
+       	AudioInputStream in = audioInputStream;
+       	AudioFormat baseFormat = in.getFormat();
+   		AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, baseFormat.getSampleRate(), 16, baseFormat.getChannels(), baseFormat.getChannels() * 2, baseFormat.getSampleRate(), false);
+       	din = AudioSystem.getAudioInputStream(decodedFormat, in);
+       	RadioUtils.rawplay(decodedFormat, din, 6f);
+	  */
+	 public void adjustSpeed(String audioType, float adjust) {
+		 float tempCalc = currentSpeedMusic + adjust; 
+		 if(tempCalc > MAX_RATE)
+			 tempCalc = MAX_RATE;
+		 if(tempCalc < MIN_RATE)
+			 tempCalc = MIN_RATE;
+
+		 //for whatever reason, gain has to be final for the below, but I also need to do the 
+		 //checks above, so alas, this is where I end up, with tempCalc above and gain below...
+		 final float gain = tempCalc;
+		 
+		 if(alteredSpeedRunning) {
+			 myThread.stop();
+			 alteredSpeedRunning = false;
+		 }
+		 pauseAudio(audioType);
+		 myThread = new Thread(runnable) {
+			    @Override
+			    public void run() {
+				    try {
+				    	
+					      File fileIn = mapMusic.get(currentSong);
+					      AudioInputStream audioInputStream=AudioSystem.getAudioInputStream(fileIn);
+					      AudioFormat formatIn=audioInputStream.getFormat();
+					      AudioFormat format;
+					      
+					      if(gain < 0) {
+					    	  format = new AudioFormat((int)(formatIn.getSampleRate()/-gain), formatIn.getSampleSizeInBits(), formatIn.getChannels(), true, formatIn.isBigEndian());
+					      } else if(gain > 0) {
+					    	  format = new AudioFormat((int)(formatIn.getSampleRate()*gain), formatIn.getSampleSizeInBits(), formatIn.getChannels(), true, formatIn.isBigEndian());
+					      } else {
+					    	System.out.println("Go back to normal audio");
+					    	format = new AudioFormat((int)(formatIn.getSampleRate()), formatIn.getSampleSizeInBits(), formatIn.getChannels(), true, formatIn.isBigEndian());
+					      }
+					          System.out.println(formatIn.toString());
+					          System.out.println(format.toString());
+					      byte[] data=new byte[1024];
+					      DataLine.Info dinfo=new DataLine.Info(SourceDataLine.class, format);
+					      SourceDataLine line=(SourceDataLine)AudioSystem.getLine(dinfo);
+					      if(line!=null) {
+					        line.open(format);
+					        line.start();
+					        while(true) {
+					          int k=audioInputStream.read(data, 0, data.length);
+					          if(k<0) break;
+					          line.write(data, 0, k);
+					        }
+					        line.stop();
+					        line.close();
+					      }
+					    }
+					    catch(Exception ex) { ex.printStackTrace(); }
+			    }
+			};
+			currentSpeedMusic = gain;
+			System.out.println("currentSpeedMusic: " +  currentSpeedMusic + " | gain: " + gain);
+			myThread.start();
+			alteredSpeedRunning = true;
+		  }
+
 
 	//Populate Hashmaps
 	public void populateHashMaps() {
@@ -288,6 +371,7 @@ public class Audio {
 	
 	/**********SAFE SPACE TESTING/PRE-PRODUCTION************/
 	 // Run sonic: Audio manipulation
+	 // Source: https://github.com/waywardgeek/sonic
 	 private void runSonic(
 	     AudioInputStream audioStream,
 	     SourceDataLine line,
@@ -301,7 +385,6 @@ public class Audio {
 	     byte inBuffer[] = new byte[bufferSize];
 	     byte outBuffer[] = new byte[bufferSize];
 	     int numRead, numWritten;
-	     System.out.println("test1a");
 
 	     sonic.setSpeed(currentSpeed);
 	     sonic.setPitch(currentPitch);
@@ -309,73 +392,74 @@ public class Audio {
 	     sonic.setVolume(currentVolumeMusic);
 	     sonic.setChordPitch(emulateChordPitch);
 	     sonic.setQuality(quality);
-	     System.out.println("test1b");
 	     do {
-	         numRead = audioStream.read(inBuffer, 0, bufferSize);
-		     System.out.println("test1c");
-	         if(numRead <= 0) {
-	             sonic.flushStream();
-	         } else {
-	             sonic.writeBytesToStream(inBuffer, numRead);
-	         }
-	         do {
-	             numWritten = sonic.readBytesFromStream(outBuffer, bufferSize);
-	             if(numWritten > 0) {
-	                 line.write(outBuffer, 0, numWritten);
-	             }
-	         } while(numWritten > 0);
-	     } while(numRead > 0);
+	    	 numRead = audioStream.read(inBuffer, 0, bufferSize);
+	            if(numRead <= 0) {
+	                sonic.flushStream();
+	            } else {
+	                sonic.writeBytesToStream(inBuffer, numRead);
+	            }
+	            do {
+	                numWritten = sonic.readBytesFromStream(outBuffer, bufferSize);
+	                if(numWritten > 0) {
+	                    line.write(outBuffer, 0, numWritten);
+	                }
+	            } while(numWritten > 0);
+	        } while(numRead > 0);
 	 }
-
-	 //Stackoverflow Test
-	 public static void play() {
-		    try {
-		      File fileIn = new File("res/audio/music/07 - Bowser's Castle.wav");
-		      AudioInputStream audioInputStream=AudioSystem.getAudioInputStream(fileIn);
-		      AudioFormat formatIn=audioInputStream.getFormat();
-		      AudioFormat format=new AudioFormat((int)(formatIn.getSampleRate()*2.5), formatIn.getSampleSizeInBits(), formatIn.getChannels(), true, formatIn.isBigEndian());
-		          System.out.println(formatIn.toString());
-		          System.out.println(format.toString());
-		      byte[] data=new byte[1024];
-		      DataLine.Info dinfo=new DataLine.Info(SourceDataLine.class, format);
-		      SourceDataLine line=(SourceDataLine)AudioSystem.getLine(dinfo);
-		      if(line!=null) {
-		        line.open(format);
-		        line.start();
-		        while(true) {
-		          int k=audioInputStream.read(data, 0, data.length);
-		          if(k<0) break;
-		          line.write(data, 0, k);
-		        }
-		        line.stop();
-		        line.close();
-		      }
-		    }
-		    catch(Exception ex) { ex.printStackTrace(); }
-		  }
-	 
 	 
 	 // Integrate Sonic with Audio
-	 public void myTest() throws UnsupportedAudioFileException, IOException, LineUnavailableException
+	 public void playSonic(String audioType) throws UnsupportedAudioFileException, IOException, LineUnavailableException
 	 {
-	     boolean emulateChordPitch = false;
-	     int quality = 0;
-	     
-	     AudioInputStream stream = AudioSystem.getAudioInputStream(new File("res/audio/music/01 - Running About.wav"));
-	     AudioFormat format = stream.getFormat();
-	     int sampleRate = (int)format.getSampleRate();
-	     int numChannels = format.getChannels(); 
-	     SourceDataLine.Info info = new DataLine.Info(SourceDataLine.class, format,
-	     	((int)stream.getFrameLength()*format.getFrameSize()));
-	     SourceDataLine line = (SourceDataLine)AudioSystem.getLine(info);
-	     line.open(stream.getFormat());
-	     line.start();
-	     System.out.println("test1");
-	     runSonic(stream, line, emulateChordPitch, quality, sampleRate, numChannels);
-	     System.out.println("test2");
-	     line.drain();
-	     line.stop();
-	     System.out.println("test3");
+		 boolean emulateChordPitch = false;
+         int quality = 0;
+
+        //Pauses current Audio
+        pauseAudio(audioType);
+        
+        //Loads current Song
+        AudioInputStream stream; 
+        if(audioType.equals("sfx"))
+        	stream = AudioSystem.getAudioInputStream(mapSFX.get(currentSong));
+        //if(audioType.equals("music")) {
+        else {
+        	stream = AudioSystem.getAudioInputStream(mapMusic.get(currentSong));
+        } 
+            
+        //Music-related code
+        AudioFormat format = stream.getFormat();
+        int sampleRate = (int)format.getSampleRate();
+        int numChannels = format.getChannels(); 
+        SourceDataLine.Info info = new DataLine.Info(SourceDataLine.class, format,
+        	((int)stream.getFrameLength()*format.getFrameSize()));
+        SourceDataLine line = (SourceDataLine)AudioSystem.getLine(info);
+        //Checks if thread is currently Running
+        if(alteredSpeedRunning) {
+			 myThread.stop();
+			 alteredSpeedRunning = false;
+		     //used to clear up data for trash collector (not sure if using properly)
+			 line.drain();
+		     line.stop();
+		 }        
+        line.open(stream.getFormat());
+        line.start();
+		 
+        //Creates thread so all processing isn't waiting for this and halting all other code
+		 myThread = new Thread(runnable) {
+		    @Override
+		    public void run() {
+				try {
+					//Runs sonic Code
+				    runSonic(stream, line, emulateChordPitch, quality, sampleRate, numChannels);
+					} catch(Exception ex) { ex.printStackTrace(); }
+			}
+		};
+
+		//Starts thread
+		myThread.start();
+		
+		//Helper to let us know thread is running
+		alteredSpeedRunning = true;
 	 }
 
 	//Adjust volumne. Base code from here: https://stackoverflow.com/questions/40514910/set-volume-of-java-clip
