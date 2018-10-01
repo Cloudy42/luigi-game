@@ -67,6 +67,7 @@ public class Header {
 				hurry = true;
 				try {
 					Game.gameAudio.pauseAudio("MUSIC");
+					Game.gameAudio.setSecondsToSkip(0);
 					Game.gameAudio.playAudio("MUSIC", Game.gameAudio.getCurrentMusic() + " (Hurry!)");
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -180,7 +181,7 @@ public class Header {
 	
 	public void resetDefaults() {
 		currentScore = 0;
-		currentCoins = 0;
+		currentCoins = 97;
 		currentWorld = 1;
 		currentLevel = 1;
 		currentTime = 80;

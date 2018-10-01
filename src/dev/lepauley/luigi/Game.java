@@ -106,18 +106,7 @@ public class Game implements Runnable {
 		
 		//Change Song if in GameState (just to shake up debugging)
 		if(keyManager.nextSong && StateManager.getCurrentState() == gameState) {
-			try {
 				gameAudio.nextSong();
-			} catch (UnsupportedAudioFileException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (LineUnavailableException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		
 		//Decreases Time
@@ -224,13 +213,46 @@ public class Game implements Runnable {
 		//to change audio in a menu:
 
 		//Decrease Volume
-		if(keyManager.volumeDown)
-			gameAudio.setCurrentVolume("ALL",-1f);
+		if(keyManager.volumeDown) {
+			gameAudio.setCurrentVolume("ALL",-0.1f);
+			System.out.println("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
+			try {
+				gameAudio.playAudio("MUSIC",gameAudio.getCurrentMusic());
+			} catch (UnsupportedAudioFileException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (LineUnavailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		//Increase Volume
-		if(keyManager.volumeUp)
-			gameAudio.setCurrentVolume("ALL",1f);
-		
+		if(keyManager.volumeUp) {
+			gameAudio.setCurrentVolume("ALL",0.1f);
+			System.out.println("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
+			try {
+				gameAudio.playAudio("MUSIC",gameAudio.getCurrentMusic());
+			} catch (UnsupportedAudioFileException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (LineUnavailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}		
 		//If a state exists (not null), then tick it
 		if(StateManager.getCurrentState() != null) {
 			StateManager.getCurrentState().tick();
@@ -239,8 +261,27 @@ public class Game implements Runnable {
 		//If MenuState and enter is pressed, change to GameState
 		if(keyManager.start && StateManager.getCurrentState() == menuState) {
 			StateManager.setCurrentState(gameState);
-			//gameAudio.pauseAudio("SFX");
-			//gameAudio.playAudio("MUSIC", EnumMusic.RunningAround.toString());
+			try {
+				gameAudio.pauseAudio("SFX");
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				gameAudio.playAudio("MUSIC", EnumMusic.RunningAround.toString());
+			} catch (UnsupportedAudioFileException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (LineUnavailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 		//If GameState and esc is pressed, change to MenuState
@@ -249,6 +290,7 @@ public class Game implements Runnable {
 			//Reset Defaults:
 			gameHeader.resetDefaults();
 			GVar.resetGVarDefaults();
+			gameAudio.resetDefaults();
 			
 			//Resets Players Position & selection:
 			((GameState)gameState).resetPlayerDefaults();
@@ -298,6 +340,10 @@ public class Game implements Runnable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			
+			//Increment SecondsToSkip (if in game state) for tracking how long music has been playing (once per second, hence why here)
+			if(StateManager.getCurrentState() == gameState)
+				gameAudio.incrementSecondsToSkip();
 		}		
 	}
 	

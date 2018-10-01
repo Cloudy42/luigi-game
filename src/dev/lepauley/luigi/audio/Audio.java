@@ -42,10 +42,8 @@ public class Audio {
 	             , currentMusic;
 
 	//Sets Min and Max volume:
-	//Note: Min = -80.0f | Max = 6.0206f
-	//pulled from (FloatControl)gainControl.getMaximum()
-	private final float MIN_VOLUME = -15.0f  
-					  , MAX_VOLUME =   6.0f;
+	private final float MIN_VOLUME = 0.0f  
+					  , MAX_VOLUME = 4.0f;
 	
 	//Sets Min and Max audio speed/rate:
 	private final float MIN_RATE = -4.0f  
@@ -73,6 +71,9 @@ public class Audio {
                 , currentPitch = 1.0f
                 , currentRate = 1.0f;
 	
+	//Tracks how many seconds have elapsed in song:
+	int secondsToSkip = 0;
+	
 	//Constructor to get default audio loaded to hashmaps
 	public Audio(){
 			currentSFX = EnumSFX.Coin.toString();
@@ -95,6 +96,13 @@ public class Audio {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		try {
+			//Only pausing music since I like the "boot up" coin sound. Reminds me of the chime from some old games when booting up.
+			pauseAudio("MUSIC");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	//Plays SFX or Music, separate so can run both simultaneously.
@@ -111,6 +119,8 @@ public class Audio {
 	     ,int sampleRate
 	     ,int numChannels
 	     ,String audioType
+	     ,long bytesToSkip
+	     ,AudioInputStream stream
 	     ) throws IOException
 	 {
 	     Sonic sonic = new Sonic(sampleRate, numChannels);
@@ -134,6 +144,17 @@ public class Audio {
 
 	     sonic.setChordPitch(emulateChordPitch);
 	     sonic.setQuality(quality);
+	     
+	     //From SO: https://stackoverflow.com/questions/52595473/java-start-audio-playback-at-x-position/52596824
+	     // now skip until the correct number of bytes have been skipped
+	     long justSkipped = 0;
+	     if(audioType.equals("SFX"))
+	    	 bytesToSkip = 0;
+	     while (bytesToSkip > 0 && (justSkipped = stream.skip(bytesToSkip)) > 0) {
+	         bytesToSkip -= justSkipped;
+	     }
+	     // then proceed with writing to your line like you have done before
+	     
 	     do {
 	    	 numRead = audioStream.read(inBuffer, 0, bufferSize);
 	            if(numRead <= 0) {
@@ -177,7 +198,10 @@ public class Audio {
         int numChannels = format.getChannels(); 
         SourceDataLine.Info info = new DataLine.Info(SourceDataLine.class, format,((int)stream.getFrameLength()*format.getFrameSize()));
         SourceDataLine line = (SourceDataLine)AudioSystem.getLine(info);
-        
+
+	     // find out how many bytes you have to skip, this depends on bytes per frame (a.k.a. frameSize)
+	     long bytesToSkip = format.getFrameSize() * ((int)format.getFrameRate()) * secondsToSkip;
+
         //Checks if sfxThread is currently Running. If so, stop it:
         if(sfxThreadRunning && audioType.equals("SFX")) {
 			 sfxThread.stop();
@@ -202,7 +226,7 @@ public class Audio {
 			    public void run() {
 					try {
 						//Runs sonic Code
-					    runSonic(stream, lineSFX, emulateChordPitch, quality, sampleRate, numChannels, audioType);
+					    runSonic(stream, lineSFX, emulateChordPitch, quality, sampleRate, numChannels, audioType,bytesToSkip,stream);
 						} catch(Exception ex) { ex.printStackTrace(); }
 				}
 			};
@@ -222,7 +246,7 @@ public class Audio {
 			    public void run() {
 					try {
 						//Runs sonic Code
-					    runSonic(stream, lineMusic, emulateChordPitch, quality, sampleRate, numChannels, audioType);
+					    runSonic(stream, lineMusic, emulateChordPitch, quality, sampleRate, numChannels, audioType,bytesToSkip,stream);
 						} catch(Exception ex) { ex.printStackTrace(); }
 				}
 			};
@@ -239,35 +263,78 @@ public class Audio {
 
 	//Resumes audio
 	public void resumeAudio(String audioType){
-			if(audioType.toLowerCase().equals("SFX")) {
-		        sfxThread.start();
+			if(audioType.equals("SFX")) {
+				try {
+					playAudio(audioType, EnumMusic.RunningAround.toString());
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		        sfxThreadRunning = true;
 			}
-			else if(audioType.toLowerCase().equals("MUSIC")) {
-		        musicThread.start();
-		        musicThreadRunning = true;
+			else if(audioType.equals("MUSIC")) {
+					System.out.println("Music: resumed!");
+					try {
+						playAudio(audioType, EnumMusic.RunningAround.toString());
+					} catch (UnsupportedAudioFileException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (LineUnavailableException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					musicThreadRunning = true;
 			}
     }
 	
 	//Abruptly pauses audio
+    //Note: Need to do "synchronized" when pausing audio
 	public void pauseAudio(String audioType) throws InterruptedException{
-		if(audioType.toLowerCase().equals("SFX") && sfxThreadRunning) {
-			//sfxThread.stop();
-			lineSFX.stop();
-	        sfxThreadRunning = false;
+		if(audioType.equals("SFX") && sfxThreadRunning) {
+			synchronized(sfxThread) { 
+				sfxThread.stop();
+				//lineSFX.wait();
+		        sfxThreadRunning = false;
+			}
 		}
-		if(audioType.toLowerCase().equals("MUSIC") && musicThreadRunning) {
-			//musicThread.stop();
-			lineMusic.stop();
-	        musicThreadRunning = false;
+		
+		if(audioType.equals("MUSIC") && musicThreadRunning) {
+			synchronized(musicThread) { 
+				musicThread.stop();
+				//lineMusic.wait();
+		        musicThreadRunning = false;
+			}
 		}
-		if(audioType.toLowerCase().equals("ALL") && sfxThreadRunning && musicThreadRunning) {
-			//sfxThread.stop();
-			//musicThread.stop();
-			lineSFX.stop();
-			lineMusic.stop();
-			sfxThreadRunning = false;
-	        musicThreadRunning = false;
+		
+		//Broke out both separately since sometimes both aren't running and didn't want to proc an error.
+		if(audioType.equals("ALL") && sfxThreadRunning) {
+			synchronized(sfxThread) {
+				sfxThread.stop();
+				//lineSFX.wait();
+				sfxThreadRunning = false;
+			}
+		}
+		if(audioType.equals("ALL") && musicThreadRunning) {
+			synchronized(musicThread) { 
+				musicThread.stop();
+				//lineMusic.wait();
+		        musicThreadRunning = false;
+			}
 		}
 	}
 
@@ -318,7 +385,8 @@ public class Audio {
 	}
 	
 	//Cycles through songs, just to shake it up when debugging
-	public void nextSong() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+	public void nextSong() {
+		secondsToSkip = 0;
 		try {
 			pauseAudio("MUSIC");
 		} catch (InterruptedException e) {
@@ -327,28 +395,220 @@ public class Audio {
 		}
 		if(currentMusic.equals(EnumMusic.RunningAround.toString()))
 			try {
-				playAudio("MUSIC", EnumMusic.Underground.toString());
+				try {
+					playAudio("MUSIC", EnumMusic.Underground.toString());
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		else if(currentMusic.equals(EnumMusic.RunningAround_Hurry.toString()))
 			try {
-				playAudio("MUSIC", EnumMusic.Underground_Hurry.toString());
+				try {
+					playAudio("MUSIC", EnumMusic.Underground_Hurry.toString());
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		else if(currentMusic.equals(EnumMusic.Underground.toString())) playAudio("MUSIC", EnumMusic.SwimmingAround.toString());
-		else if(currentMusic.equals(EnumMusic.Underground_Hurry.toString())) playAudio("MUSIC", EnumMusic.SwimmingAround_Hurry.toString());
-		else if(currentMusic.equals(EnumMusic.SwimmingAround.toString())) playAudio("MUSIC", EnumMusic.BowserCastle.toString());
-		else if(currentMusic.equals(EnumMusic.SwimmingAround_Hurry.toString())) playAudio("MUSIC", EnumMusic.BowserCastle_Hurry.toString());
-		else if(currentMusic.equals(EnumMusic.BowserCastle.toString())) playAudio("MUSIC", EnumMusic.Invincible.toString());
-		else if(currentMusic.equals(EnumMusic.BowserCastle_Hurry.toString())) playAudio("MUSIC", EnumMusic.Invincible_Hurry.toString());
-		else if(currentMusic.equals(EnumMusic.Invincible.toString())) playAudio("MUSIC", EnumMusic.IntoThePipe.toString());
-		else if(currentMusic.equals(EnumMusic.Invincible_Hurry.toString())) playAudio("MUSIC", EnumMusic.IntoThePipe_Hurry.toString());
-		else if(currentMusic.equals(EnumMusic.IntoThePipe.toString())) playAudio("MUSIC", EnumMusic.RunningAround.toString());
-		else if(currentMusic.equals(EnumMusic.IntoThePipe_Hurry.toString())) playAudio("MUSIC", EnumMusic.RunningAround_Hurry.toString());
+		else if(currentMusic.equals(EnumMusic.Underground.toString()))
+			try {
+				try {
+					playAudio("MUSIC", EnumMusic.SwimmingAround.toString());
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		else if(currentMusic.equals(EnumMusic.Underground_Hurry.toString()))
+			try {
+				try {
+					playAudio("MUSIC", EnumMusic.SwimmingAround_Hurry.toString());
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (InterruptedException e8) {
+				// TODO Auto-generated catch block
+				e8.printStackTrace();
+			}
+		else if(currentMusic.equals(EnumMusic.SwimmingAround.toString()))
+			try {
+				try {
+					playAudio("MUSIC", EnumMusic.BowserCastle.toString());
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (InterruptedException e7) {
+				// TODO Auto-generated catch block
+				e7.printStackTrace();
+			}
+		else if(currentMusic.equals(EnumMusic.SwimmingAround_Hurry.toString()))
+			try {
+				try {
+					playAudio("MUSIC", EnumMusic.BowserCastle_Hurry.toString());
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (InterruptedException e6) {
+				// TODO Auto-generated catch block
+				e6.printStackTrace();
+			}
+		else if(currentMusic.equals(EnumMusic.BowserCastle.toString()))
+			try {
+				try {
+					playAudio("MUSIC", EnumMusic.Invincible.toString());
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (InterruptedException e5) {
+				// TODO Auto-generated catch block
+				e5.printStackTrace();
+			}
+		else if(currentMusic.equals(EnumMusic.BowserCastle_Hurry.toString()))
+			try {
+				try {
+					playAudio("MUSIC", EnumMusic.Invincible_Hurry.toString());
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (InterruptedException e4) {
+				// TODO Auto-generated catch block
+				e4.printStackTrace();
+			}
+		else if(currentMusic.equals(EnumMusic.Invincible.toString()))
+			try {
+				try {
+					playAudio("MUSIC", EnumMusic.IntoThePipe.toString());
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (InterruptedException e3) {
+				// TODO Auto-generated catch block
+				e3.printStackTrace();
+			}
+		else if(currentMusic.equals(EnumMusic.Invincible_Hurry.toString()))
+			try {
+				try {
+					playAudio("MUSIC", EnumMusic.IntoThePipe_Hurry.toString());
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (InterruptedException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+		else if(currentMusic.equals(EnumMusic.IntoThePipe.toString()))
+			try {
+				try {
+					playAudio("MUSIC", EnumMusic.RunningAround.toString());
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		else if(currentMusic.equals(EnumMusic.IntoThePipe_Hurry.toString()))
+			try {
+				try {
+					playAudio("MUSIC", EnumMusic.RunningAround_Hurry.toString());
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 
 	/*************** GETTERS and SETTERS ***************/
@@ -386,17 +646,65 @@ public class Audio {
 		currentRate += f;
 	}
 	
-	public void setCurrentVolume(String audioType, float f) {
+	public void setCurrentVolume(String audioType, float adjust) {
 		if(audioType.equals("SFX")) {
-			currentVolumeSFX += f;
+			adjust += currentVolumeSFX;
 		}else if(audioType.equals("MUSIC")) {
-			currentVolumeMusic += f;
+			adjust += currentVolumeMusic;
 		}else if(audioType.equals("ALL")) {
-			currentVolumeSFX += f;
-			currentVolumeMusic += f;
+			adjust += currentVolumeSFX;
 		}else {
 			System.out.println("Error! AudioType doesn't match in setCurrentVolume!");
 		}
+		
+		if(adjust < MIN_VOLUME)
+			adjust = MIN_VOLUME;
+		if(adjust > MAX_VOLUME)
+			adjust = MAX_VOLUME;			
+		
+		if(audioType.equals("SFX")) {
+			currentVolumeSFX = adjust;
+		}else if(audioType.equals("MUSIC")) {
+			currentVolumeMusic = adjust;
+		}else if(audioType.equals("ALL")) {
+			currentVolumeSFX = adjust;
+			currentVolumeMusic = adjust;
+		}		
+	}
+	
+	public float getCurrentVolume(String audioType) {
+		if(audioType.equals("SFX")) {
+			return currentVolumeSFX;
+		}else if(audioType.equals("MUSIC")) {
+			return currentVolumeMusic;
+		}else {
+			System.out.println("Error! AudioType doesn't match in setCurrentVolume!");
+			return 0f;
+		}		
+	}
+	
+	//Increments How many seconds have elapsed for current Song
+	public void incrementSecondsToSkip() {
+		secondsToSkip++;
+	}
+
+	//Sets How many seconds have elapsed for current Song
+	public void setSecondsToSkip(int i) {
+		secondsToSkip = i;
+	}
+
+	//Gets How many seconds have elapsed for current Song
+	public int getSecondsToSkip() {
+		return secondsToSkip;
+	}
+	
+	public void resetDefaults() {
+		currentVolumeSFX = 1.0f;
+	    currentVolumeMusic = 1.0f;
+        currentSpeed = 1.0f;
+        currentPitch = 1.0f;
+        currentRate = 1.0f;
+        secondsToSkip = 0;
 	}
 	
 }	
