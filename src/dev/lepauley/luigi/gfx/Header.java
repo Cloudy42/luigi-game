@@ -181,7 +181,7 @@ public class Header {
 	
 	public void resetDefaults() {
 		currentScore = 0;
-		currentCoins = 97;
+		currentCoins = 0;
 		currentWorld = 1;
 		currentLevel = 1;
 		currentTime = 80;

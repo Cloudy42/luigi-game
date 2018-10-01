@@ -2,7 +2,7 @@ package dev.lepauley.luigi.audio;
 
 /* Found here: https://github.com/waywardgeek/sonic*/
 
-public class Sonic {
+public class AudioManipulationGitHelper {
 
  private static final int SONIC_MIN_PITCH = 65;
  private static final int SONIC_MAX_PITCH = 400;
@@ -242,7 +242,7 @@ public class Sonic {
  }
 
  // Create a sonic stream.
- public Sonic(
+ public AudioManipulationGitHelper(
      int sampleRate,
      int numChannels)
  {
@@ -1033,7 +1033,7 @@ public class Sonic {
      int sampleRate,
      int numChannels)
  {
-     Sonic stream = new Sonic(sampleRate, numChannels);
+     AudioManipulationGitHelper stream = new AudioManipulationGitHelper(sampleRate, numChannels);
 
      stream.setSpeed(speed);
      stream.setPitch(pitch);
@@ -1059,7 +1059,7 @@ public class Sonic {
      int sampleRate,
      int numChannels)
  {
-     Sonic stream = new Sonic(sampleRate, numChannels);
+     AudioManipulationGitHelper stream = new AudioManipulationGitHelper(sampleRate, numChannels);
 
      stream.setSpeed(speed);
      stream.setPitch(pitch);

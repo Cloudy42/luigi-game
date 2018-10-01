@@ -159,7 +159,7 @@ public class Game implements Runnable {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			gameAudio.setCurrentSpeed(-0.1f);
+			gameAudio.setCurrentSpeed(-0.08f);
 			try {
 				gameAudio.playAudio("MUSIC",gameAudio.getCurrentMusic());
 			} catch (UnsupportedAudioFileException e) {
@@ -191,7 +191,7 @@ public class Game implements Runnable {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			gameAudio.setCurrentSpeed(0.1f);
+			gameAudio.setCurrentSpeed(0.08f);
 			try {
 				gameAudio.playAudio("MUSIC",gameAudio.getCurrentMusic());
 			} catch (UnsupportedAudioFileException e) {

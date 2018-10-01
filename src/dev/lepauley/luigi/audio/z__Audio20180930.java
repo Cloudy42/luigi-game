@@ -28,7 +28,7 @@ import dev.lepauley.luigi.utilities.EnumMusic;
  * Note for Alan: Research distorting/slowing down frequency and speed when controlling time:
  *                https://docs.oracle.com/javase/tutorial/sound/controls.html
  */
-public class Audio20180930 {
+public class z__Audio20180930 {
 	
 	//Holds all sfx	& Music respectively
 	Map<String, File> mapSFX = new HashMap<String, File>();
@@ -71,7 +71,7 @@ public class Audio20180930 {
 	private Clip clipSFX, clipMusic;
 	
 	//Constructor to get default audio loaded
-	public Audio20180930() {
+	public z__Audio20180930() {
 		//Add all SFX and Music to hashmaps
 		populateHashMaps();
 		try {
@@ -299,7 +299,7 @@ public class Audio20180930 {
 		     int sampleRate,
 		     int numChannels) throws IOException
 		 {
-		     Sonic sonic = new Sonic(sampleRate, numChannels);
+		     AudioManipulationGitHelper sonic = new AudioManipulationGitHelper(sampleRate, numChannels);
 		     int bufferSize = line.getBufferSize();
 		     byte inBuffer[] = new byte[bufferSize];
 		     byte outBuffer[] = new byte[bufferSize];
