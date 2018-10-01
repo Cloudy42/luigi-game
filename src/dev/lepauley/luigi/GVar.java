@@ -1,6 +1,10 @@
 package dev.lepauley.luigi;
 
 import java.awt.Font;
+import java.io.IOException;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import dev.lepauley.luigi.states.StateManager;
 import dev.lepauley.luigi.utilities.EnumPause;
@@ -61,6 +65,7 @@ public class GVar {
 	//Denotes whether key manual is active or not
 	private static boolean keyManualToggle;
 
+	//Resets GVar variables to their default Values
 	public static void resetGVarDefaults() {
 		playerSelectCount = 1;
 		multiplier = 1;
@@ -72,19 +77,22 @@ public class GVar {
 		pauseMsgLen = pauseMsg.length();
 	}
 	
-	public static int getShadowFont(int currentFontSize) {
-		return currentFontSize / 10;
-	}
-	
 	/*************** GETTERS and SETTERS ***************/
 	
+	//Gets font size
 	public static Font setFont(String font, int size) {
 		return new Font(font, 1, size);
 	}
 
+	//Gets font size used for shadow lettering
+	public static int getShadowFont(int currentFontSize) {
+		return currentFontSize / 10;
+	}
+	
+	//Sets FPS
 	//Note, I didn't set 0 FPS since it will lock game, and I didn't do below 10 since that makes input very laggy and such.
 	//10 felt like a solid number to work with.
-	public static void setFPS(int i) {
+	public static void setFPS(int i) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		FPS = i;
 		
 		//Only Print this is greater than the minimum or is less than the maximum
@@ -95,13 +103,16 @@ public class GVar {
 		if(pauseMsg.equals(EnumPause.STOP.toString()) && FPS > FPS_MIN){
 			togglePause(EnumPause.RESUME.toString());
 		} 
+		
 		//If you decrease FPS BELOW the min, it will "STOP" the game
 		if(FPS < FPS_MIN) {
 			FPS = FPS_MIN;
+			
 			//This check makes it so it will only print STOPPED to console once
 			if(!getPause())
 				System.out.println("FPS: STOPPED!");
 			togglePause(EnumPause.STOP.toString());
+
 		//If increase FPS ABOVE the max, it will lock at the max
 		} else if(FPS > FPS_MAX) {
 			FPS = FPS_MAX;	
@@ -115,34 +126,52 @@ public class GVar {
 	public static void setMultiplier(int multiplier) {
 		GVar.multiplier = multiplier;
 	}
-	
+
+	//Increments Multipler by x amount
 	public static void incrementMultiplier(int x) {
 		multiplier += x;
 	}
 
+	//Gets message used in pause screen
 	public static String getPauseMsg() {
 		return pauseMsg;
 	}
+
+	//Sets message used in pause screen
 	public static void setPauseMsg(String newMsg) {
 		pauseMsg = newMsg;
 		pauseMsgLen = pauseMsg.length();
 	}
+
+	//Gets length of message used in pause screen
+	//Useful for quickly centering with game screen
 	public static int getPauseMsgLen() {
 		return pauseMsgLen;
 	}
 
+	//Gets how many players are currently selected
 	public static int getPlayerSelectCount() {
 		return playerSelectCount;
 	}
-	public static void setPlayerSelectCount(int no) {
+
+	//Sets how many players are currently selected
+	public static void setPlayerSelectCount(int no) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		playerSelectCount = no;
-		Game.gameAudio.pauseAudio("sfx");
-		Game.gameAudio.playAudio("sfx", EnumSFX.Bump.toString());
+		try {
+			Game.gameAudio.pauseAudio("SFX");
+			Game.gameAudio.playAudio("SFX", EnumSFX.Bump.toString());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
+	//Gets whether debug mode is currently enabled or not
 	public static boolean getDebug() {
 		return debugToggle;
 	}
+
+	//Sets whether debug mode is currently enabled or not
 	public static void toggleDebug() {
 		if(debugToggle) 
 			debugToggle = false;
@@ -150,44 +179,73 @@ public class GVar {
 			debugToggle = true;
 	}
 
+	//Gets whether game is currently Paused or not
+	//Note: Time "Stopped" also qualifies
 	public static boolean getPause() {
 		return pauseToggle;
 	}
-	public static void togglePause(String msg) {
+	
+	//Sets whether game is currently Paused or not
+	//Note: Time "Stopped" also qualifies
+	public static void togglePause(String msg) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+
+		//Sets the pause message
 		setPauseMsg(msg);
+
 		//if Pause Message == STOP, stop time (if not currently paused)
 		if(msg.equals(EnumPause.STOP.toString())){
 			if(!pauseToggle && StateManager.getCurrentStateName() == "GameState") {
+				
+				//Clears message and "pauses" game
 				setPauseMsg("");
 				pauseToggle = true;
 			}
+
 		//If Pause Message == RESUME, then unpause game
 		} else if(msg.equals(EnumPause.RESUME.toString())){
 			if(pauseToggle && StateManager.getCurrentStateName() == "GameState") {
+
+				//Clears message and "unpauses" game
 				setPauseMsg("");
 				pauseToggle = false;
 			}
-		//Else do normal pause rules:
+
+		//Otherwise do normal pause rules:
 		} else {
+
 			//if Game is paused and you're not dead, unpause and resume audio
 			if(pauseToggle && !Game.gameHeader.getDead()) { 
 				pauseToggle = false;
-				Game.gameAudio.pauseAudio("all");
-				Game.gameAudio.playAudio("sfx", EnumSFX.Pause.toString());
-				Game.gameAudio.resumeAudio("music");
+				try {
+					Game.gameAudio.pauseAudio("ALL");
+					Game.gameAudio.playAudio("SFX", EnumSFX.Pause.toString());
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Game.gameAudio.resumeAudio("MUSIC");
 			}
+			
 			//Else pause game (Note: Game should already be paused if dead, so that check doesn't matter)
 			else {
 				pauseToggle = true;
-				Game.gameAudio.pauseAudio("all");
-				Game.gameAudio.playAudio("sfx", EnumSFX.Pause.toString());
+				try {
+					Game.gameAudio.pauseAudio("ALL");
+					Game.gameAudio.playAudio("SFX", EnumSFX.Pause.toString());
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}	
 	
+	//Gets whether controls are displayed to Player or not
 	public static boolean getKeyManual() {
 		return keyManualToggle;
 	}
+
+	//Sets whether controls are displayed to Player or not
 	public static void toggleKeyManual() {
 		if(keyManualToggle) 
 			keyManualToggle = false;

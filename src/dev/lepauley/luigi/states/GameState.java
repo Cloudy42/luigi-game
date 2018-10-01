@@ -1,6 +1,11 @@
 package dev.lepauley.luigi.states;
 
 import java.awt.Graphics;
+import java.io.IOException;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 import dev.lepauley.luigi.GVar;
 import dev.lepauley.luigi.Game;
 import dev.lepauley.luigi.entities.creatures.Creature;
@@ -33,7 +38,18 @@ public class GameState extends State {
 	public void tick() {
 		//Toggles Pause On/Off (only if not dead)
 		if(game.getKeyManager().pauseToggle && !Game.gameHeader.getDead())
-			GVar.togglePause(EnumPause.PAUSED.toString());
+			try {
+				GVar.togglePause(EnumPause.PAUSED.toString());
+			} catch (UnsupportedAudioFileException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (LineUnavailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		//If Game = UnPaused, tick
 		if(!GVar.getPause()) {

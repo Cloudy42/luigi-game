@@ -5,6 +5,10 @@ package dev.lepauley.luigi.gfx;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.IOException;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import dev.lepauley.luigi.GVar;
 import dev.lepauley.luigi.Game;
@@ -44,20 +48,30 @@ public class Header {
 		resetDefaults();
 	}
 	
-	public void tick() {
+	public void tick() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		if(!dead && !GVar.getPause()) {
 			currentScore++;
 			currentTime--;
 			currentCoins++;
 			if(currentCoins >= 100) {
 				currentCoins = 0;
-				Game.gameAudio.playAudio("SFX", EnumSFX.OneUp.toString());
+				try {
+					Game.gameAudio.playAudio("SFX", EnumSFX.OneUp.toString());
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			//If Time is almost out (100 seconds left), change song to indicate "hurry" state.
 			if(currentTime <= HURRY_TIME && !hurry) {
 				hurry = true;
-				Game.gameAudio.pauseAudio("Music");
-				Game.gameAudio.playAudio("Music", Game.gameAudio.getCurrentSong() + " (Hurry!)");
+				try {
+					Game.gameAudio.pauseAudio("MUSIC");
+					Game.gameAudio.playAudio("MUSIC", Game.gameAudio.getCurrentMusic() + " (Hurry!)");
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			if(currentTime <= 0) {
 				//I'm setting this first since I swear the first time I tested this it said "PAUSED"
@@ -65,8 +79,13 @@ public class Header {
 				dead = true;
 				currentTime = 0;
 				GVar.togglePause(EnumPause.TIMESUP.toString());
-				Game.gameAudio.pauseAudio("all");
-				Game.gameAudio.playAudio("sfx", EnumSFX.LuigiDie.toString());
+				try {
+					Game.gameAudio.pauseAudio("ALL");
+					Game.gameAudio.playAudio("SFX", EnumSFX.LuigiDie.toString());
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				//Sets HighScore if a new one was reached
 				if(currentScore > highScore)
 					highScore = currentScore;
@@ -178,11 +197,11 @@ public class Header {
 	}
 	
 	//Allows user to change time
-	public void adjustTime(int time) {
+	public void adjustTime(int time) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		//Only allow changing time if NOT dead and NOT paused (and don't let values go negative)
 		if(!dead && currentTime >= 1 && !GVar.getPause()) {
 			currentTime += time;
-			String tempSong = Game.gameAudio.getCurrentSong();
+			String tempSong = Game.gameAudio.getCurrentMusic();
 			String tempHurry = " (Hurry!)";
 			int tempSongLen = tempSong.length();
 			int tempHurryLen = tempHurry.length();
@@ -190,8 +209,13 @@ public class Header {
 			//Resets hurry
 			if(hurry && currentTime > HURRY_TIME) {
 				hurry = false;
-				Game.gameAudio.pauseAudio("Music");
-				Game.gameAudio.playAudio("Music", tempSong.substring(0, tempSongLen - tempHurryLen));
+				try {
+					Game.gameAudio.pauseAudio("MUSIC");
+					Game.gameAudio.playAudio("MUSIC", tempSong.substring(0, tempSongLen - tempHurryLen));
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}

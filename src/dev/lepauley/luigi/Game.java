@@ -34,7 +34,7 @@ public class Game implements Runnable {
 	public String title;
 	public int width, height;
 
-	//Font Info
+	//Current Font Size
 	public int currentFontSize;
 	
 	//Used to access all game audio
@@ -66,7 +66,7 @@ public class Game implements Runnable {
 	//State objects
 	private State gameState, menuState;
 	
-	//Input
+	//Input/Controls
 	private KeyManager keyManager;
 	
 	public Game(String title, int width, int height) {
@@ -74,58 +74,40 @@ public class Game implements Runnable {
 		this.width = width;
 		this.height = height;
 		keyManager = new KeyManager();
+
+		//Resets GVar variables to default values
 		GVar.resetGVarDefaults();
 	}
 	
 	//Called only once to initialize all of the graphics and get everything ready for game
 	private void init() {
+
 		//Sets display for Game instance
 		display = new Display(title, width, height);
+		
 		//Needed just so we can manage keys
 		display.getFrame().addKeyListener(keyManager);
+		
 		//Loads all SpriteSheets to objects
 		Assets.init();
 		
 		gameState = new GameState(this);
 		menuState = new MenuState(this);
+		
+		//Sets current state = "menuState", where we will start game (for now)
 		StateManager.setCurrentState(menuState);
-		//StateManager.setCurrentState(gameState);
 	}
 	
 	//Update everything for game
 	private void tick(){
+
 		//Update keys
 		keyManager.tick();
 		
-		//Decreases Time
-		if(keyManager.timeDown && StateManager.getCurrentState() == gameState) {
-			gameHeader.adjustTime(-1);
-		}
-		
-		//Increases Time
-		if(keyManager.timeUp && StateManager.getCurrentState() == gameState) {
-			gameHeader.adjustTime(1);
-		}
-		
 		//Change Song if in GameState (just to shake up debugging)
 		if(keyManager.nextSong && StateManager.getCurrentState() == gameState) {
-			gameAudio.nextSong();
-		}
-		
-		//decrease FPS
-		if(keyManager.fpsDown)
-			GVar.setFPS(GVar.FPS - 10);
-		
-		//increase FPS
-		if(keyManager.fpsUp) {
-			GVar.setFPS(GVar.FPS + 10);
-			gameAudio.setCurrentSpeed(0.1f);
-			
-			//uses the ability to speed up and slow down audio, but at what cost
-			// (freezes game til audio completes - not an okay solution)
-			/*
 			try {
-				gameAudio.playSonic("music");
+				gameAudio.nextSong();
 			} catch (UnsupportedAudioFileException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -136,28 +118,119 @@ public class Game implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			*/
+		}
+		
+		//Decreases Time
+		if(keyManager.timeDown && StateManager.getCurrentState() == gameState) {
+			try {
+				gameHeader.adjustTime(-1);
+			} catch (UnsupportedAudioFileException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (LineUnavailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		//Increases Time
+		if(keyManager.timeUp && StateManager.getCurrentState() == gameState) {
+			try {
+				gameHeader.adjustTime(1);
+			} catch (UnsupportedAudioFileException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (LineUnavailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		//I'm currently okay allowing them to change FPS when paused due to the "stopped" 
+		//scenario 
+		//to change audio in a menu:
 
+		//Decrease FPS
+		if(keyManager.fpsDown) {
+			try {
+				GVar.setFPS(GVar.FPS - 10);
+			} catch (UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (LineUnavailableException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			gameAudio.setCurrentSpeed(-0.1f);
+			try {
+				gameAudio.playAudio("MUSIC",gameAudio.getCurrentMusic());
+			} catch (UnsupportedAudioFileException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (LineUnavailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		//Increase FPS
+		if(keyManager.fpsUp) {
+			try {
+				GVar.setFPS(GVar.FPS + 10);
+			} catch (UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (LineUnavailableException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			gameAudio.setCurrentSpeed(0.1f);
+			try {
+				gameAudio.playAudio("MUSIC",gameAudio.getCurrentMusic());
+			} catch (UnsupportedAudioFileException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (LineUnavailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		//I'm currently okay allowing them to change when paused since it makes sense to be able
-		//to change audio in a menu
-		//decrease Volume
-		if(keyManager.volumeDown)
-			gameAudio.adjustVolume("all",-1f);
-		
-		//increase Volume
-		if(keyManager.volumeUp)
-			gameAudio.adjustVolume("all",1f);
-		
-		//decrease game Audio speed/rate
-		if(keyManager.rateDown)
-			gameAudio.setCurrentSpeed(-1f);
-		
-		//increase game Audio speed/rate
-		if(keyManager.rateUp)
-			gameAudio.setCurrentSpeed(1f);
+		//to change audio in a menu:
 
+		//Decrease Volume
+		if(keyManager.volumeDown)
+			gameAudio.setCurrentVolume("ALL",-1f);
+		
+		//Increase Volume
+		if(keyManager.volumeUp)
+			gameAudio.setCurrentVolume("ALL",1f);
+		
 		//If a state exists (not null), then tick it
 		if(StateManager.getCurrentState() != null) {
 			StateManager.getCurrentState().tick();
@@ -166,8 +239,8 @@ public class Game implements Runnable {
 		//If MenuState and enter is pressed, change to GameState
 		if(keyManager.start && StateManager.getCurrentState() == menuState) {
 			StateManager.setCurrentState(gameState);
-			gameAudio.pauseAudio("sfx");
-			gameAudio.playAudio("music", EnumMusic.RunningAround.toString());
+			//gameAudio.pauseAudio("SFX");
+			//gameAudio.playAudio("MUSIC", EnumMusic.RunningAround.toString());
 
 		}
 		//If GameState and esc is pressed, change to MenuState
@@ -184,7 +257,12 @@ public class Game implements Runnable {
 			((GameState)gameState).resetLevelDefaults();
 			
 			//pauseAudio MAY be optional here since closing anyways. Just felt safer.
-			gameAudio.pauseAudio("all");
+			try {
+				gameAudio.pauseAudio("ALL");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			StateManager.setCurrentState(menuState);
 		}
@@ -208,7 +286,18 @@ public class Game implements Runnable {
 			//Moved here to be in line with once per second. Doing elsewhere means there will be fluctuations
 			//as FPS move around, so this feels like the smarter place to put it. 
 			if(StateManager.getCurrentState() == gameState)
-				gameHeader.tick();
+				try {
+					gameHeader.tick();
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}		
 	}
 	

@@ -1,6 +1,10 @@
 package dev.lepauley.luigi.states;
 
 import java.awt.Graphics;
+import java.io.IOException;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import dev.lepauley.luigi.GVar;
 import dev.lepauley.luigi.Game;
@@ -32,9 +36,31 @@ public class MenuState extends State {
 	public void tick() {
 		//Selects # of players 
 		if(GVar.getPlayerSelectCount() == 1 && game.getKeyManager().down)
-			GVar.setPlayerSelectCount(2);
+			try {
+				GVar.setPlayerSelectCount(2);
+			} catch (UnsupportedAudioFileException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (LineUnavailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		if(GVar.getPlayerSelectCount() == 2 && game.getKeyManager().up)
-			GVar.setPlayerSelectCount(1);
+			try {
+				GVar.setPlayerSelectCount(1);
+			} catch (UnsupportedAudioFileException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (LineUnavailableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 
 	@Override
