@@ -113,23 +113,20 @@ public class Audio {
 		}
 	}
 
-	//Used as a staging Area for playing Audio so the "ugly" try/catch code only needs to go there, not in general code
-	public void pauseAudioStagingArea(String audioType) {
-		try {
-			pauseAudio(audioType);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 	//Plays SFX or Music, separate so can run both simultaneously.
 	//Note: May want to consider further channel splits if we need to track enemy sound effects as well
 	 //Integrates AudioManipulation (custom git code that allows manipulation of audio) with our SFX and Music.
 	 //Plays audio at end in separate thread
-	 public void playAudio(String audioType, String targetAudio) throws UnsupportedAudioFileException, IOException, LineUnavailableException, InterruptedException
+	//Note: @@SuppressWarnings("deprecation") related to the Thread.stop() methods. Highlight methods to read about deprecation.
+	 @SuppressWarnings("deprecation")
+	public void playAudio(String audioType, String targetAudio) throws UnsupportedAudioFileException, IOException, LineUnavailableException, InterruptedException
 	 {
 		 boolean emulateChordPitch = false;
          int quality = 0;
+         
+         //Tracks whether audio about to be played is new or not 
+         //(used purely for debug purposes atm not wanting to keep displaying same song with all audio modifications)
+         boolean newAudio = false;
 
         //Pauses current Audio
         pauseAudioStagingArea(audioType);
@@ -137,15 +134,17 @@ public class Audio {
         //Loads current Song
         AudioInputStream stream;
         
+        //Based on audioType, populated map[SFX/Music] with targetAudio
         if(audioType.equals("SFX")) {
         	stream = AudioSystem.getAudioInputStream(mapSFX.get(targetAudio));
         } else if(audioType.equals("MUSIC")) {
         	stream = AudioSystem.getAudioInputStream(mapMusic.get(targetAudio));
         } else {
         	stream = null;
+	    	 System.out.println("Error! AudioType doesn't match in playAudio!");
         } 
             
-        //Music-related code
+        //Music-related code (from online)
         AudioFormat format = stream.getFormat();
         int sampleRate = (int)format.getSampleRate();
         int numChannels = format.getChannels(); 
@@ -182,15 +181,27 @@ public class Audio {
 						} catch(Exception ex) { ex.printStackTrace(); }
 				}
 			};
+			
 			//Starts thread
 			sfxThread.start();
 			
 			//Helper to let us know thread is running
 			sfxThreadRunning = true;
 
-			//Sets current SFX
-        	setCurrentSFX(targetAudio);
+        	//Checks if audioType = SFX and currentSFX audio is NOT equal to audio about to play, then this is a new SFX.
+	         //(used purely for debug purposes atm not wanting to keep displaying same song with all audio modifications)
+			if(audioType.equals("SFX") && !currentSFX.equals(targetAudio))
+        		newAudio = true;
+
+        	//Sets current SFX
+			setCurrentSFX(targetAudio);
+
+        	//Displays current SFX played if in Debug Mode AND it's a new SFX
+        	if(GVar.getDebug() && newAudio)
+        		System.out.println("currentSFX: " + currentSFX); 			
         }
+
+        //Creates thread so all processing isn't waiting for this and halting all other code
         if(audioType.equals("MUSIC")) {
         	musicThread = new Thread(runnable) {
 			    @Override
@@ -201,111 +212,140 @@ public class Audio {
 						} catch(Exception ex) { ex.printStackTrace(); }
 				}
 			};
+			
 			//Starts thread
 			musicThread.start();
 			
 			//Helper to let us know thread is running
 			musicThreadRunning = true;
 
+        	//Checks if audioType = Music and currentMusic audio is NOT equal to audio about to play, then this is a new Music.
+	         //(used purely for debug purposes atm not wanting to keep displaying same song with all audio modifications)
+			if(audioType.equals("MUSIC") && !currentMusic.equals(targetAudio))
+				newAudio = true;
+
 			//Sets current Music
 			setCurrentMusic(targetAudio);
+			
+        	//Displays current Music played if in Debug Mode AND it's a new Song
+        	if(GVar.getDebug() && newAudio)
+        		System.out.println("currentMusic: " + currentMusic); 			
         }
 	 }
 
-		//Run sonic: Audio manipulation
-		//Original Source: https://github.com/waywardgeek/sonic
-		//I didn't write code, so won't be commenting it other than the changes I made. Otherwise, untouched.
-		 private void runAudioManipulation(
-		     AudioInputStream audioStream
-		     ,SourceDataLine line
-		     ,boolean emulateChordPitch
-		     ,int quality
-		     ,int sampleRate
-		     ,int numChannels
-		     
-		     //Added these 3 variables because:
-		     //audioType is needed to differentiate SFX vs. Music, and 
-		     //the other two needed to start audio x seconds into file
-		     ,String audioType
-		     ,long bytesToSkip
-		     ,AudioInputStream stream
-		     ) throws IOException
-		 {
-		     AudioManipulationGitHelper audioManipulation = new AudioManipulationGitHelper(sampleRate, numChannels);
-		     int bufferSize = line.getBufferSize();
-		     byte inBuffer[] = new byte[bufferSize];
-		     byte outBuffer[] = new byte[bufferSize];
-		     int numRead, numWritten;
+	//Run sonic: Audio manipulation
+	//Original Source: https://github.com/waywardgeek/sonic
+	//I didn't write code, so won't be commenting it other than the changes I made. Otherwise, untouched.
+	 private void runAudioManipulation(
+	     AudioInputStream audioStream
+	     ,SourceDataLine line
+	     ,boolean emulateChordPitch
+	     ,int quality
+	     ,int sampleRate
+	     ,int numChannels
+	     
+	     //Added these 3 variables because:
+	     //audioType is needed to differentiate SFX vs. Music, and 
+	     //the other two needed to start audio x seconds into file
+	     ,String audioType
+	     ,long bytesToSkip
+	     ,AudioInputStream stream
+	     ) throws IOException
+	 {
+	     AudioManipulationGitHelper audioManipulation = new AudioManipulationGitHelper(sampleRate, numChannels);
+	     int bufferSize = line.getBufferSize();
+	     byte inBuffer[] = new byte[bufferSize];
+	     byte outBuffer[] = new byte[bufferSize];
+	     int numRead, numWritten;
 
-		     //Uses our global "current" variables
-		     audioManipulation.setSpeed(currentSpeed);
-		     audioManipulation.setPitch(currentPitch);
-		     audioManipulation.setRate(currentRate);
+	     //Uses our global "current" variables
+	     audioManipulation.setSpeed(currentSpeed);
+	     audioManipulation.setPitch(currentPitch);
+	     audioManipulation.setRate(currentRate);
 
-		     //if SFX, use the SFX volume (since can be separate), if Music, use music, 
-		     //if neither, print error out! (shouldn't happen but if it does could be useful to debug?)
-		     if(audioType.equals("SFX")) {
-		    	 audioManipulation.setVolume(currentVolumeSFX);
-		     }else if(audioType.equals("MUSIC")) {
-		    	 audioManipulation.setVolume(currentVolumeMusic);
-		     }else {
-		    	 audioManipulation.setVolume(0F);
-		    	 System.out.println("Error! AudioType doesn't match in runAudioManipulation!");
-		     }
+	     //if SFX, use the SFX volume (since can be separate), if Music, use music, 
+	     //else if neither, print error out! (shouldn't happen but if it does could be useful to debug?)
+	     if(audioType.equals("SFX")) {
+	    	 audioManipulation.setVolume(currentVolumeSFX);
+	     }else if(audioType.equals("MUSIC")) {
+	    	 audioManipulation.setVolume(currentVolumeMusic);
+	     }else {
+	    	 audioManipulation.setVolume(0F);
+	    	 System.out.println("Error! AudioType doesn't match in runAudioManipulation!");
+	     }
 
-		     audioManipulation.setChordPitch(emulateChordPitch);
-		     audioManipulation.setQuality(quality);
-		     
-		     //From SO: https://stackoverflow.com/questions/52595473/java-start-audio-playback-at-x-position/52596824
-		     //Skip based on seconds elapsed so the correct number of bytes have been skipped
-		     long justSkipped = 0;
-		     
-		     //If SFX, DON'T skip! Sound effects are so short this feels unnecessary. IF we need to do other logic down the road, we can reassess.
-		     if(audioType.equals("SFX"))
-		    	 bytesToSkip = 0;
-		     while (bytesToSkip > 0 && (justSkipped = stream.skip(bytesToSkip)) > 0) {
-		         bytesToSkip -= justSkipped;
-		     }
+	     audioManipulation.setChordPitch(emulateChordPitch);
+	     audioManipulation.setQuality(quality);
+	     
+	     //From Stack Overflow: https://stackoverflow.com/questions/52595473/java-start-audio-playback-at-x-position/52596824
+	     //Skip based on seconds elapsed so the correct number of bytes have been skipped
+	     long justSkipped = 0;
+	     
+	     //If SFX, DON'T skip! Sound effects are so short this feels unnecessary. 
+	     //IF we need to do other logic down the road, we can reassess.
+	     if(audioType.equals("SFX"))
+	    	 bytesToSkip = 0;
+	     while (bytesToSkip > 0 && (justSkipped = stream.skip(bytesToSkip)) > 0) {
+	         bytesToSkip -= justSkipped;
+	     }
 
-		     //Original code I didn't write/touch, but looks like it reads and writes audio based on input.
-		     do {
-		    	 numRead = audioStream.read(inBuffer, 0, bufferSize);
-		            if(numRead <= 0) {
-		                audioManipulation.flushStream();
-		            } else {
-		                audioManipulation.writeBytesToStream(inBuffer, numRead);
-		            }
-		            do {
-		                numWritten = audioManipulation.readBytesFromStream(outBuffer, bufferSize);
-		                if(numWritten > 0) {
-		                    line.write(outBuffer, 0, numWritten);
-		                }
-		            } while(numWritten > 0);
-		        } while(numRead > 0);
-		 }
-		 
+	     //Original code I didn't write/touch, but looks like it reads and writes audio based on input.
+	     do {
+	    	 numRead = audioStream.read(inBuffer, 0, bufferSize);
+             if(numRead <= 0) {
+            	 audioManipulation.flushStream();
+             } else {
+            	 audioManipulation.writeBytesToStream(inBuffer, numRead);
+             }
+             do {
+            	 numWritten = audioManipulation.readBytesFromStream(outBuffer, bufferSize);
+            	 if(numWritten > 0) {
+            		 line.write(outBuffer, 0, numWritten);
+            	 }
+             } while(numWritten > 0);
+	     } while(numRead > 0);
+ 	}
+	 
 	//Resumes audio 
 	//(but ACTUALLY just destroys old audio and creates new audio, even if the same song. 
     //I haven't figured out how to unpause these threads and resume audio correctly, so this is working for now, though feels like it must be inefficient)
 	public void resumeAudio(String audioType){
-			if(audioType.equals("SFX")) {
-				playAudioStagingArea(audioType, EnumMusic.RunningAround.toString());
-				
-				//IFF we figure out how to unpause threads, will want to uncomment this boolean
-		        //sfxThreadRunning = true;
-			}
-			else if(audioType.equals("MUSIC")) {
-				playAudioStagingArea(audioType, EnumMusic.RunningAround.toString());
 
-				//IFF we figure out how to unpause threads, will want to uncomment this boolean
-				//musicThreadRunning = true;
-			}
+		//If audioType = SFX, load up SFX to play
+		if(audioType.equals("SFX")) {
+			playAudioStagingArea(audioType, currentSFX);
+			
+			//IFF we figure out how to unpause threads, will want to uncomment this boolean
+	        //sfxThreadRunning = true;
+		}
+
+		//If audioType = Music, load up Music to play
+		else if(audioType.equals("MUSIC")) {
+			playAudioStagingArea(audioType, currentMusic);
+
+			//IFF we figure out how to unpause threads, will want to uncomment this boolean
+			//musicThreadRunning = true;
+		}
     }
 	
-	//Abruptly pauses audio
+	//Used as a staging Area for playing Audio so the "ugly" try/catch code only needs to go there, not in general code
+	public void pauseAudioStagingArea(String audioType) {
+		try {
+			pauseAudio(audioType);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	//Abruptly pauses audio (though used to be more abrupt. I'd like to see if I can make it more abrupt again... </3)
 	//Checks audioType AND that thread is currently running so we don't get null pointer errors
     //Note: Need to do "synchronized" when pausing audio, but not currently pausing so don't NEED, but I don't think hurting, so keeping for now
+	//Note: @@SuppressWarnings("deprecation") related to the Thread.stop() methods. Highlight methods to read about deprecation.
+	@SuppressWarnings("deprecation")
 	public void pauseAudio(String audioType) throws InterruptedException{
+
+		//If audioType = SFX and the SFX thread is currently running, stop thread and running boolean
 		if(audioType.equals("SFX") && sfxThreadRunning) {
 			synchronized(sfxThread) { 
 				sfxThread.stop();
@@ -313,6 +353,7 @@ public class Audio {
 			}
 		}
 		
+		//If audioType = Music and the Music thread is currently running, stop thread and running boolean
 		if(audioType.equals("MUSIC") && musicThreadRunning) {
 			synchronized(musicThread) { 
 				musicThread.stop();
@@ -321,12 +362,15 @@ public class Audio {
 		}
 		
 		//Broke out both separately since sometimes both aren't running and didn't want to proc an error. Also it will not work if lumped.
+		//If audioType = SFX and the SFX thread is currently running, stop thread and running boolean
 		if(audioType.equals("ALL") && sfxThreadRunning) {
 			synchronized(sfxThread) {
 				sfxThread.stop();
 				sfxThreadRunning = false;
 			}
 		}
+
+		//If audioType = Music and the Music thread is currently running, stop thread and running boolean
 		if(audioType.equals("ALL") && musicThreadRunning) {
 			synchronized(musicThread) { 
 				musicThread.stop();
@@ -433,8 +477,8 @@ public class Audio {
 	}
 
 	//Sets current SFX playing
-	public void setCurrentSFX(String s){
-		currentSFX = s;
+	public void setCurrentSFX(String audio){
+		currentSFX = audio;
 	}
 
 	//Gets current Music playing
@@ -443,8 +487,8 @@ public class Audio {
 	}
 
 	//Sets current Music playing
-	public void setCurrentMusic(String s){
-		currentMusic = s;
+	public void setCurrentMusic(String audio){
+		currentMusic = audio;
 	}
 
 	//Sets current Audio Speed
@@ -522,7 +566,7 @@ public class Audio {
 		}		
 	}
 	
-	//Gets current Audio volume per audioType
+	//Gets current Audio volume based on audioType
 	public float getCurrentVolume(String audioType) {
 		if(audioType.equals("SFX")) {
 			return currentVolumeSFX;

@@ -1,10 +1,6 @@
 package dev.lepauley.luigi.states;
 
 import java.awt.Graphics;
-import java.io.IOException;
-
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import dev.lepauley.luigi.GVar;
 import dev.lepauley.luigi.Game;
@@ -38,18 +34,7 @@ public class GameState extends State {
 	public void tick() {
 		//Toggles Pause On/Off (only if not dead)
 		if(game.getKeyManager().pauseToggle && !Game.gameHeader.getDead())
-			try {
-				GVar.togglePause(EnumPause.PAUSED.toString());
-			} catch (UnsupportedAudioFileException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (LineUnavailableException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			GVar.togglePause(EnumPause.PAUSED.toString());
 
 		//If Game = UnPaused, tick
 		if(!GVar.getPause()) {
@@ -69,6 +54,7 @@ public class GameState extends State {
 			currentFontSize = 30;
 			g.setFont (GVar.setFont(GVar.fontA, currentFontSize));
 			Utilities.drawShadowString(g, GVar.getPauseMsg(), GVar.GAME_WIDTH/2 - GVar.getPauseMsgLen()/2 * currentFontSize, GVar.GAME_HEIGHT/2 - currentFontSize/2, GVar.getShadowFont(currentFontSize));
+
 			//This seems like it SHOULD be writing it perfectly centered, but for some reason it's not. whyyyyyyy </3 
 			//50% of GVar.GAME_WIDTH = 1050; //525
 			//50% of GVar.GAME_HEIGHT = 470; //235
@@ -78,7 +64,7 @@ public class GameState extends State {
 			//    and when you do 50% of font subtracted from center = 235 - 15 = 220. 
 			//So why is it not drawing dead center? Brian? MATH! I need help! (/ToT)/
 			//I think Left and right it's fine, but vertically I think it's too high... :'( 
-			if(tempDebugPausedPosition) {
+			if(tempDebugPausedPosition && GVar.getDebug()) {
 				tempDebugPausedPosition = false;
 				System.out.println("//////////////////////////////////////");
 				System.out.println("GVar.GAME_WIDTH/2: " + GVar.GAME_WIDTH/2);

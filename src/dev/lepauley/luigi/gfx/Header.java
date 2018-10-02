@@ -19,10 +19,10 @@ import dev.lepauley.luigi.utilities.Utilities;
 
 public class Header {
 
-	//Font Info
+	//Tracks Current Font Size
 	private int currentFontSize;
 	
-	//"current" Variables
+	//tracks "current" Variables for Header
 	private int currentScore;
 	private int currentCoins;
 	private int currentWorld;
@@ -30,48 +30,77 @@ public class Header {
 	private int currentTime;
 
 	//Holds High Score
-	//(we'll need to figure out a way to save this between play throughs
-	//  currently setting to 0)
+	//(we'll need to figure out a way to save this between play throughs. Setting to 0 until then)
 	private int highScore = 0;
 		
 	//Default Hurry time
+	//once time dips below default time, audio will change to "Hurry" version
 	private final int HURRY_TIME = 60;
 
-	//Adjusts spacing if minutes = 0
-	private int timeSpacing = 0; 
+	//Adjusts spacing if minutes = 0 AND/OR tens of seconds < 10
+	//Example:				              WITH       vs       WITHOUT
+	//                   				  TIME                 TIME
+	//Minutes >=  1      				  2:00                 2:00
+	//Minutes  =  0 && Seconds >= 10       39                  39
+	//Seconds <  10       				    8                  8
+	private int timeSpacing; 
 	
 	//boolean checks (likely a smarter way to do this)
+	//Also dead check should be on player, but have here for now. Easy enough to move when time comes.
+	//Hurry = time < default HURRY_TIME so "Hurry" audio should be playing
+	//Dead = player = dead (in this case, it's cause time ran out)
 	private boolean hurry;
 	private boolean dead;
 	
+	//Header Constructor
 	public Header() {
+
+		//Resets defaults to their...default values ;P 
 		resetDefaults();
 	}
 	
-	public void tick() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+	//Header tick() method updates various aspects of Header
+	public void tick(){
+		
+		//If Player = Dead and Game is NOT paused, adjust various variables
 		if(!dead && !GVar.getPause()) {
 			currentScore++;
 			currentTime--;
 			currentCoins++;
+
+			//If Coin count >= 100, reset to zero and play the 1-up sound (and give player extra life when we get there :P )
 			if(currentCoins >= 100) {
 				currentCoins = 0;
 				Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.OneUp.toString());
 			}
-			//If Time is almost out (100 seconds left), change song to indicate "hurry" state.
+
+			//If Time is almost out (HURRY_TIME) and haven't set hurry boolean yet,
+			//change song to indicate "hurry" state and set hurry boolean
 			if(currentTime <= HURRY_TIME && !hurry) {
 				hurry = true;
+
+				//Need to pause audio and set setSecondsToSkip = 0 so it plays hurry state song from the start
 				Game.gameAudio.pauseAudioStagingArea("MUSIC");
 				Game.gameAudio.setSecondsToSkip(0);
 				Game.gameAudio.playAudioStagingArea("MUSIC", Game.gameAudio.getCurrentMusic() + " (Hurry!)");
 			}
+
+			//If Current Time <=0, kill player (and various other related bookkeeping things)
 			if(currentTime <= 0) {
+
 				//I'm setting this first since I swear the first time I tested this it said "PAUSED"
 				//for a hot second before switching to TIME UP! Just seems safer to do this first.
 				dead = true;
 				currentTime = 0;
+
+				//Sets pauseMessage = "TIME UP"
 				GVar.togglePause(EnumPause.TIMESUP.toString());
+				
+				//Need to pause audio and plays death song
+				//(don't need to set setSecondsToSkip = 0 because we don't do that for SFX) 
 				Game.gameAudio.pauseAudioStagingArea("ALL");
 				Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.LuigiDie.toString());
+
 				//Sets HighScore if a new one was reached
 				if(currentScore > highScore)
 					highScore = currentScore;

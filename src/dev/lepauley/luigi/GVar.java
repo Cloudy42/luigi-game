@@ -92,12 +92,15 @@ public class GVar {
 	//Sets FPS
 	//Note, I didn't set 0 FPS since it will lock game, and I didn't do below 10 since that makes input very laggy and such.
 	//10 felt like a solid number to work with.
-	public static void setFPS(int i) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+	public static void setFPS(int i) {
 		FPS = i;
 		
 		//Only Print this is greater than the minimum or is less than the maximum
 		if(FPS >= FPS_MIN && FPS <= FPS_MAX)
-			System.out.println("FPS: " + FPS);
+
+			//Displays FPS if in Debug Mode
+        	if(GVar.getDebug())
+        		System.out.println("FPS: " + FPS);
 		
 		//If Pause Message = "STOP" and THEN you increase speed, it will resume
 		if(pauseMsg.equals(EnumPause.STOP.toString()) && FPS > FPS_MIN){
@@ -109,9 +112,14 @@ public class GVar {
 			FPS = FPS_MIN;
 			
 			//This check makes it so it will only print STOPPED to console once
-			if(!getPause())
-				System.out.println("FPS: STOPPED!");
-			togglePause(EnumPause.STOP.toString());
+			if(!getPause()) {
+
+				//Displays current Volume if in Debug Mode
+	        	if(GVar.getDebug())
+	        		System.out.println("FPS: STOPPED!");
+
+	        	togglePause(EnumPause.STOP.toString());
+			}
 
 		//If increase FPS ABOVE the max, it will lock at the max
 		} else if(FPS > FPS_MAX) {
@@ -182,7 +190,7 @@ public class GVar {
 	
 	//Sets whether game is currently Paused or not
 	//Note: Time "Stopped" also qualifies
-	public static void togglePause(String msg) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+	public static void togglePause(String msg) {
 
 		//Sets the pause message
 		setPauseMsg(msg);

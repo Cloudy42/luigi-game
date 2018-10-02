@@ -145,38 +145,16 @@ public class Game implements Runnable {
 		//scenario 
 		//to change audio in a menu:
 
-		//Decrease FPS
-		if(keyManager.fpsDown) {
-			try {
-				GVar.setFPS(GVar.FPS - 10);
-			} catch (UnsupportedAudioFileException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (LineUnavailableException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+		//Decrease FPS (only in GameState when game is NOT paused)
+		if(keyManager.fpsDown && StateManager.getCurrentState() == gameState && !GVar.getPause()) {
+			GVar.setFPS(GVar.FPS - 10);
 			gameAudio.setCurrentSpeed(-0.08f);
 			gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}
 		
-		//Increase FPS
-		if(keyManager.fpsUp) {
-			try {
-				GVar.setFPS(GVar.FPS + 10);
-			} catch (UnsupportedAudioFileException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (LineUnavailableException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+		//Increase FPS (only in GameState when game is NOT paused)
+		if(keyManager.fpsUp && StateManager.getCurrentState() == gameState && !GVar.getPause()) {
+			GVar.setFPS(GVar.FPS + 10);
 			gameAudio.setCurrentSpeed(0.08f);
 			gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}
@@ -187,15 +165,23 @@ public class Game implements Runnable {
 		//Decrease Volume
 		if(keyManager.volumeDown) {
 			gameAudio.setCurrentVolume("ALL",-0.1f);
-			System.out.println("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
-			gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
+
+			//Displays current Volume if in Debug Mode
+        	if(GVar.getDebug())
+        		System.out.println("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
+			
+        	gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}
 		
 		//Increase Volume
 		if(keyManager.volumeUp) {
 			gameAudio.setCurrentVolume("ALL",0.1f);
-			System.out.println("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
-			gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
+
+			//Displays current Volume if in Debug Mode
+        	if(GVar.getDebug())
+    			System.out.println("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
+
+        	gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}		
 		//If a state exists (not null), then tick it
 		if(StateManager.getCurrentState() != null) {
@@ -248,18 +234,7 @@ public class Game implements Runnable {
 			//Moved here to be in line with once per second. Doing elsewhere means there will be fluctuations
 			//as FPS move around, so this feels like the smarter place to put it. 
 			if(StateManager.getCurrentState() == gameState)
-				try {
-					gameHeader.tick();
-				} catch (UnsupportedAudioFileException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (LineUnavailableException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				gameHeader.tick();
 			
 			//Increment SecondsToSkip (if in game state) for tracking how long music has been playing (once per second, hence why here)
 			if(StateManager.getCurrentState() == gameState)
