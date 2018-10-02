@@ -157,13 +157,8 @@ public class GVar {
 	//Sets how many players are currently selected
 	public static void setPlayerSelectCount(int no) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
 		playerSelectCount = no;
-		try {
-			Game.gameAudio.pauseAudio("SFX");
-			Game.gameAudio.playAudio("SFX", EnumSFX.Bump.toString());
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Game.gameAudio.pauseAudioStagingArea("SFX");
+		Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.Bump.toString());
 	}
 	
 	//Gets whether debug mode is currently enabled or not
@@ -216,26 +211,16 @@ public class GVar {
 			//if Game is paused and you're not dead, unpause and resume audio
 			if(pauseToggle && !Game.gameHeader.getDead()) { 
 				pauseToggle = false;
-				try {
-					Game.gameAudio.pauseAudio("ALL");
-					Game.gameAudio.playAudio("SFX", EnumSFX.Pause.toString());
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				Game.gameAudio.pauseAudioStagingArea("ALL");
+				Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.Pause.toString());
 				Game.gameAudio.resumeAudio("MUSIC");
 			}
 			
 			//Else pause game (Note: Game should already be paused if dead, so that check doesn't matter)
 			else {
 				pauseToggle = true;
-				try {
-					Game.gameAudio.pauseAudio("ALL");
-					Game.gameAudio.playAudio("SFX", EnumSFX.Pause.toString());
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				Game.gameAudio.pauseAudioStagingArea("ALL");
+				Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.Pause.toString());
 			}
 		}
 	}	

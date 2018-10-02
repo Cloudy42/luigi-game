@@ -55,24 +55,14 @@ public class Header {
 			currentCoins++;
 			if(currentCoins >= 100) {
 				currentCoins = 0;
-				try {
-					Game.gameAudio.playAudio("SFX", EnumSFX.OneUp.toString());
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.OneUp.toString());
 			}
 			//If Time is almost out (100 seconds left), change song to indicate "hurry" state.
 			if(currentTime <= HURRY_TIME && !hurry) {
 				hurry = true;
-				try {
-					Game.gameAudio.pauseAudio("MUSIC");
-					Game.gameAudio.setSecondsToSkip(0);
-					Game.gameAudio.playAudio("MUSIC", Game.gameAudio.getCurrentMusic() + " (Hurry!)");
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				Game.gameAudio.pauseAudioStagingArea("MUSIC");
+				Game.gameAudio.setSecondsToSkip(0);
+				Game.gameAudio.playAudioStagingArea("MUSIC", Game.gameAudio.getCurrentMusic() + " (Hurry!)");
 			}
 			if(currentTime <= 0) {
 				//I'm setting this first since I swear the first time I tested this it said "PAUSED"
@@ -80,13 +70,8 @@ public class Header {
 				dead = true;
 				currentTime = 0;
 				GVar.togglePause(EnumPause.TIMESUP.toString());
-				try {
-					Game.gameAudio.pauseAudio("ALL");
-					Game.gameAudio.playAudio("SFX", EnumSFX.LuigiDie.toString());
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				Game.gameAudio.pauseAudioStagingArea("ALL");
+				Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.LuigiDie.toString());
 				//Sets HighScore if a new one was reached
 				if(currentScore > highScore)
 					highScore = currentScore;
@@ -210,13 +195,8 @@ public class Header {
 			//Resets hurry
 			if(hurry && currentTime > HURRY_TIME) {
 				hurry = false;
-				try {
-					Game.gameAudio.pauseAudio("MUSIC");
-					Game.gameAudio.playAudio("MUSIC", tempSong.substring(0, tempSongLen - tempHurryLen));
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				Game.gameAudio.pauseAudioStagingArea("MUSIC");
+				Game.gameAudio.playAudioStagingArea("MUSIC", tempSong.substring(0, tempSongLen - tempHurryLen));
 			}
 		}
 	}

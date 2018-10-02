@@ -160,21 +160,7 @@ public class Game implements Runnable {
 				e1.printStackTrace();
 			}
 			gameAudio.setCurrentSpeed(-0.08f);
-			try {
-				gameAudio.playAudio("MUSIC",gameAudio.getCurrentMusic());
-			} catch (UnsupportedAudioFileException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (LineUnavailableException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}
 		
 		//Increase FPS
@@ -192,21 +178,7 @@ public class Game implements Runnable {
 				e1.printStackTrace();
 			}
 			gameAudio.setCurrentSpeed(0.08f);
-			try {
-				gameAudio.playAudio("MUSIC",gameAudio.getCurrentMusic());
-			} catch (UnsupportedAudioFileException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (LineUnavailableException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}
 		
 		//I'm currently okay allowing them to change when paused since it makes sense to be able
@@ -216,42 +188,14 @@ public class Game implements Runnable {
 		if(keyManager.volumeDown) {
 			gameAudio.setCurrentVolume("ALL",-0.1f);
 			System.out.println("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
-			try {
-				gameAudio.playAudio("MUSIC",gameAudio.getCurrentMusic());
-			} catch (UnsupportedAudioFileException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (LineUnavailableException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}
 		
 		//Increase Volume
 		if(keyManager.volumeUp) {
 			gameAudio.setCurrentVolume("ALL",0.1f);
 			System.out.println("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
-			try {
-				gameAudio.playAudio("MUSIC",gameAudio.getCurrentMusic());
-			} catch (UnsupportedAudioFileException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (LineUnavailableException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}		
 		//If a state exists (not null), then tick it
 		if(StateManager.getCurrentState() != null) {
@@ -261,28 +205,8 @@ public class Game implements Runnable {
 		//If MenuState and enter is pressed, change to GameState
 		if(keyManager.start && StateManager.getCurrentState() == menuState) {
 			StateManager.setCurrentState(gameState);
-			try {
-				gameAudio.pauseAudio("SFX");
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			try {
-				gameAudio.playAudio("MUSIC", EnumMusic.RunningAround.toString());
-			} catch (UnsupportedAudioFileException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (LineUnavailableException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+			gameAudio.pauseAudioStagingArea("SFX");
+			gameAudio.playAudioStagingArea("MUSIC", EnumMusic.RunningAround.toString());
 		}
 		//If GameState and esc is pressed, change to MenuState
 		if(keyManager.exit && StateManager.getCurrentState() == gameState) {
@@ -299,13 +223,9 @@ public class Game implements Runnable {
 			((GameState)gameState).resetLevelDefaults();
 			
 			//pauseAudio MAY be optional here since closing anyways. Just felt safer.
-			try {
-				gameAudio.pauseAudio("ALL");
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			gameAudio.pauseAudioStagingArea("ALL");
 
+			//Sets currentState to "Menu State"
 			StateManager.setCurrentState(menuState);
 		}
 		
