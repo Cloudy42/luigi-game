@@ -14,7 +14,8 @@ import dev.lepauley.luigi.gfx.Assets;
 public class Player extends Creature{
 
 	//imported so we can access things like key manager
-	private Game game;
+	//not currently used
+	//private Game game;
 	
 	//Keeps Track of Current Player (Animation skin/palette)
 	private int currentPlayer;
@@ -31,8 +32,12 @@ public class Player extends Creature{
 	//Constructor that sets up some defaults
 	public Player(Game game, float x, float y) {
 		super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT_BIG);
-		this.game = game;
-		this.currentPlayer = 0;
+
+		//Not currently used
+		//this.game = game;
+
+		//Sets currentPlayer = index 0 (used for array)
+		currentPlayer = 0;
 	}
 
 	@Override
@@ -53,20 +58,20 @@ public class Player extends Creature{
 		yMove = 0;
 		
 		//Setting x/y move to a certain speed, THEN moving player that much
-		if(game.getKeyManager().up) 
+		if(Game.keyManager.up) 
 			yMove = -speed;
 		
-		if(game.getKeyManager().down)
+		if(Game.keyManager.down)
 			yMove = speed;
 		
-		if(game.getKeyManager().left)
+		if(Game.keyManager.left)
 			xMove = -speed;
 
-		if(game.getKeyManager().right)
+		if(Game.keyManager.right)
 			xMove = speed;
 		
 		//Scale player Down
-		if(game.getKeyManager().scaleDown)
+		if(Game.keyManager.scaleDown)
 			if(GVar.getMultiplier() > GVar.MIN_SCALE) {
 				GVar.incrementMultiplier(-1);
 
@@ -75,7 +80,7 @@ public class Player extends Creature{
 			}
 
 		//Scale player Up
-		if(game.getKeyManager().scaleUp)
+		if(Game.keyManager.scaleUp)
 			if(GVar.getMultiplier() < GVar.MAX_SCALE) {
 				GVar.incrementMultiplier(1);
 				
@@ -84,7 +89,7 @@ public class Player extends Creature{
 			}
 
 		//Swap Current Player for next in lineup
-		if(game.getKeyManager().changePlayer)
+		if(Game.keyManager.changePlayer)
 			incrementCurrentPlayer();
 	}
 

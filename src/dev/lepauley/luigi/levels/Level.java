@@ -54,14 +54,19 @@ public class Level {
 	}
 	
 	public void render(Graphics g) {
-		//Start with y for loop first because it can prevent issues (he didn't explain why)
 
 		//Honestly not sure why I was doing this and not just drawing a big rectangle in the background.
 		//The only thing I can think of is because you mentioned wanting to do stars and such eventually
 		//so if/when that time comes, we can revisit, but for now I'm gonna just stretch since only sky atm
-		//and leaving old code so easy enough to swap:
+		//and leaving old code so easy enough to swap. 
+		//
+		//This causes issues in zones with different backgrounds but I imagine we either can:
+		//  1.) Won't be an issue and can just use tiles when only rendering what's on screen (probably best solution long term - code below iirc)
+		//  2.) We can just change background imagine/color when changing zones (feels more "hacky". I like above solution better if retains FPS)
 		g.drawImage(Assets.bg001Sky, 0, 0, GVar.GAME_WIDTH, GVar.GAME_HEIGHT, null);
+
 			/*************** Temporary Fix: START ***************/
+			//Note: This is likely the long term solution we want when only rendering what is on screen:
 			//Temporary Fix for transparency: VERY inefficient! Likely we'd want 
 			//to target which are transparent and add background for those only. Should be
 			//easy enough...
@@ -72,11 +77,15 @@ public class Level {
 			//} 
 			/*************** Temporary Fix: END ***************/
 
+		//Loops through level text file and populates all tiles (inefficient until we are only rendering what is on screen) 
+		//Note: Start with y for loop first because it can prevent issues (he didn't explain why)
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
+
 				//If NOT a BG tile, will get tile and print to screen
 				if(checkTile(x,y)) {
-					//debugScrollLevel used to test scrolling level:
+
+					//scrollLevel used to test scrolling level (moves all of the tiles left or right):
 					getTile(x,y).render(g, defaultXSpawnOffset + x * Tile.TILEWIDTH * GVar.getMultiplier() - scrollLevel, y * Tile.TILEHEIGHT * GVar.getMultiplier());
 				}
 			}
@@ -85,24 +94,33 @@ public class Level {
 	
 	//Borrows same logic from getTile, BUT returns false if a BG tile, thus stopping it from being drawn and saving memory.
 	public boolean checkTile(int x, int y) {
+
 		//If a BG tile, return false to stop from drawing to screen
 		if(getTile(x,y) == Tile.bg001Sky)
 			return false;
+		
+		//Otherwise, will draw to screen
 		return true;
 	}
 	
 	//Takes tile array and indexes at whatever tile is in the tile array at each x and y position
 	public Tile getTile(int x, int y) {
 		Tile t = Tile.tiles[tiles[x][y]];
+		
 		//If cannot find a result, return missingTile to point out that there is an issue
 		if(t == null) 
 			return Tile.missingTile;
+		
+		//Returns tile as x|y index
 		return t;
 	}
 	
 	//Gets data from txt file and stores in tiles multidimensional array
 	public void loadLevel(String path) {
+		
+		//Holds txt level path
 		String file = Utilities.loadFileAsString(path);
+		
 		//Split all characters from input file using spaces ("\\s+")
 		String[] tokens = file.split("\\s+");
 		
@@ -118,10 +136,14 @@ public class Level {
 		//Player Spawn X Position
 		spawnY = Utilities.parseInt(tokens[3]);
 
+		//Creates tiles multidimensional array based on width and height
 		tiles = new int[width][height];
+		
+		//Loops through width and height and adds tiles to multidimensional array
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
-				//Need to add 4 because we are setting first 4 elements above from level file
+
+				//Need to do + 4 because we are setting first 4 variables above from level file, so skip those when doing tiles
 				tiles[x][y] = Utilities.parseInt(tokens[(x + y * width) + 4]);
 			}
 		}

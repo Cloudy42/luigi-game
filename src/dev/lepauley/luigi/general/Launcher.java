@@ -1,9 +1,7 @@
 package dev.lepauley.luigi.general;
 
-import java.io.IOException;
-
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /*
  * Responsible for starting game
@@ -11,10 +9,14 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Launcher {
 
-	public static void main(String[] args) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+	public static void main(String[] args){
 		
-		//Starts new game with underlying display built in 
-		Game game = new Game("2018.10.01 - I'mma Waruigi, I'mma gonna comment mah code!!", GVar.GAME_WIDTH, GVar.GAME_HEIGHT);
+	    //Used for getting current Date (from here: https://www.javatpoint.com/java-get-current-date)
+		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy @ hh:mm:ss a");  
+	    Date date = new Date();  
+	    
+	    //Starts new game with underlying display built in 
+		Game game = new Game(formatter.format(date) + " - I'mma Waruigi, I'mma gonna comment mah code!!", GVar.GAME_WIDTH, GVar.GAME_HEIGHT);
 		
 		//Start game! Run, initialize, game loop
 		game.start();

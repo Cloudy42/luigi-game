@@ -1,10 +1,6 @@
 package dev.lepauley.luigi.general;
 
 import java.awt.Font;
-import java.io.IOException;
-
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import dev.lepauley.luigi.states.StateManager;
 import dev.lepauley.luigi.utilities.EnumPause;
@@ -167,7 +163,7 @@ public class GVar {
 	}
 
 	//Sets how many players are currently selected
-	public static void setPlayerSelectCount(int no) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+	public static void setPlayerSelectCount(int no){
 		playerSelectCount = no;
 		Game.gameAudio.pauseAudioStagingArea("SFX");
 		Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.Bump.toString());

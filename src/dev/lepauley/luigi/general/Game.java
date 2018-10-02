@@ -26,6 +26,7 @@ import dev.lepauley.luigi.utilities.Utilities;
 //Note: Requires a public void run(){} method otherwise will get error
 public class Game implements Runnable {
 
+	//Tracks General variables
 	private Display display;
 	public String title;
 	public int width, height;
@@ -36,9 +37,12 @@ public class Game implements Runnable {
 	//Used to access all game audio
 	public static Audio gameAudio = new Audio();
 	
-	//Used to house all header info
+	//Used to access all menu/game header info
 	public static Header gameHeader = new Header();
 	
+	//Used to access all keyboard controls
+	public static KeyManager keyManager = new KeyManager();
+		
 	//While Running = true, game will loop
 	private boolean running = false;
 	
@@ -62,14 +66,13 @@ public class Game implements Runnable {
 	//State objects
 	private State gameState, menuState;
 	
-	//Input/Controls
-	private KeyManager keyManager;
-	
+	//Constructor
 	public Game(String title, int width, int height) {
+		
+		//sets general variables
 		this.title = title;
 		this.width = width;
 		this.height = height;
-		keyManager = new KeyManager();
 
 		//Resets GVar variables to default values
 		GVar.resetGVarDefaults();
@@ -87,6 +90,7 @@ public class Game implements Runnable {
 		//Loads all SpriteSheets to objects
 		Assets.init();
 		
+		//initializes States and puts game in as parameter
 		gameState = new GameState(this);
 		menuState = new MenuState(this);
 		
@@ -101,9 +105,8 @@ public class Game implements Runnable {
 		keyManager.tick();
 		
 		//Change Song if in GameState (just to shake up debugging)
-		if(keyManager.nextSong && StateManager.getCurrentState() == gameState) {
-				gameAudio.nextSong();
-		}
+		if(keyManager.nextSong && StateManager.getCurrentState() == gameState)
+			gameAudio.nextSong();
 		
 		//Decreases Time
 		if(keyManager.timeDown && StateManager.getCurrentState() == gameState)
@@ -113,77 +116,98 @@ public class Game implements Runnable {
 		if(keyManager.timeUp && StateManager.getCurrentState() == gameState)
 			gameHeader.adjustTime(1);
 		
-		//I'm currently okay allowing them to change FPS when paused due to the "stopped" 
-		//scenario 
-		//to change audio in a menu:
-
+		//Note: I'm Not currently allowing them to change FPS when paused but the "stopped" scenario
+		//      makes me want to treat them separately so that stopped does toggle Pause
 		//Decrease FPS (only in GameState when game is NOT paused)
 		if(keyManager.fpsDown && StateManager.getCurrentState() == gameState && !GVar.getPause()) {
+
+			//Decreases FPS
 			GVar.setFPS(GVar.FPS - 10);
+			
+			//Decreases speed to coincide with lower FPS
 			gameAudio.setCurrentSpeed(-0.08f);
+			
+			//plays slower song due to speed adjust above
 			gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}
 		
 		//Increase FPS (only in GameState when game is NOT paused)
 		if(keyManager.fpsUp && StateManager.getCurrentState() == gameState && !GVar.getPause()) {
+
+			//Increases FPS
 			GVar.setFPS(GVar.FPS + 10);
+
+			//Increases speed to coincide with higher FPS
 			gameAudio.setCurrentSpeed(0.08f);
+			
+			//plays faster song due to speed adjust above
 			gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}
 		
-		//I'm currently okay allowing them to change when paused since it makes sense to be able
-		//to change audio in a menu:
-
+		//Note: I'm currently okay allowing player to change volume when paused since it makes sense to be able to change volume in a menu:
 		//Decrease Volume
 		if(keyManager.volumeDown) {
+
+			//Decrease Volume
 			gameAudio.setCurrentVolume("ALL",-0.1f);
 
 			//Displays current Volume if in Debug Mode
         	if(GVar.getDebug())
         		System.out.println("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
 			
+			//plays quieter song due to speed adjust above
         	gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}
 		
 		//Increase Volume
 		if(keyManager.volumeUp) {
+
+			//Increase Volume
 			gameAudio.setCurrentVolume("ALL",0.1f);
 
 			//Displays current Volume if in Debug Mode
         	if(GVar.getDebug())
     			System.out.println("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
 
+			//plays louder song due to speed adjust above
         	gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}		
 
-		//If a state exists (not null), then tick it
-		if(StateManager.getCurrentState() != null) {
+		//If a state exists (not null), then tick state
+		if(StateManager.getCurrentState() != null)
 			StateManager.getCurrentState().tick();
-		}
 		
-		//If MenuState and enter is pressed, change to GameState
+		//If currentState = MenuState and enter is pressed, change to GameState
 		if(keyManager.start && StateManager.getCurrentState() == menuState) {
-			StateManager.setCurrentState(gameState);
-			gameAudio.pauseAudioStagingArea("SFX");
+
+			//Pauses all audio in preparation for changing states
+			//Note: (only SFX atm but just seems safer in case we add menu music)
+			gameAudio.pauseAudioStagingArea("ALL");
+			
+			//plays Level 1-1 song
 			gameAudio.playAudioStagingArea("MUSIC", EnumMusic.RunningAround.toString());
+
+			//Sets currentState to now be gameState
+			StateManager.setCurrentState(gameState);
 		}
-		//If GameState and esc is pressed, change to MenuState
+
+		//If currentState = GameState and esc is pressed, change to MenuState
 		if(keyManager.exit && StateManager.getCurrentState() == gameState) {
+
+			//Pauses all audio in preparation for changing states
+			gameAudio.pauseAudioStagingArea("ALL");
 
 			//Reset Defaults:
 			gameHeader.resetDefaults();
 			GVar.resetGVarDefaults();
 			gameAudio.resetDefaults();
 			
-			//Resets Players Position & selection:
+			//Resets Players Position & selection (need to cast since gameState is a State object)
 			((GameState)gameState).resetPlayerDefaults();
 
-			//Resets Level Tile Position:
+			//Resets Level Tile Position (need to cast since gameState is a State object)
 			((GameState)gameState).resetLevelDefaults();
 			
-			//pauseAudio MAY be optional here since closing anyways. Just felt safer.
-			gameAudio.pauseAudioStagingArea("ALL");
-
 			//Sets currentState to "Menu State"
 			StateManager.setCurrentState(menuState);
 		}
@@ -196,7 +220,7 @@ public class Game implements Runnable {
 		if(keyManager.scrollToggle)
 			GVar.toggleScroll();
 
-		//If Scroll Direction button is pressed, Change Scroll Direction
+		//If Scroll Direction button is pressed, Change Scroll Direction (need to cast since gameState is a State object)
 		if(keyManager.scrollDirection)
 			((GameState) gameState).getLevel().toggleScrollConst();
 
@@ -204,20 +228,23 @@ public class Game implements Runnable {
 		if(keyManager.keyManualToggle)
 			GVar.toggleKeyManual();
 
-		//I am moving it from the render() method 
-		//to the tick() method since we're not drawing to console any longer, and even then, it's not really a 
-		//render so makes sense to not be in render().
+		//if timer > 1 second in nanotime, reset timer varaibles and do some time-sensitive ticking
 		if(timer >= 1000000000) {
-			//System.out.println("Ticks and Frames: " + ticks);
+
+			//reset timer variables
 			lastTicks = ticks;
 			ticks = 0;
 			timer = 0;
-			//Moved here to be in line with once per second. Doing elsewhere means there will be fluctuations
-			//as FPS move around, so this feels like the smarter place to put it. 
+
+			//If in game state, tick Game header variables  
+			//Note: Placed here to be in line with once per second. Doing elsewhere means there will be fluctuations
+			//      as FPS move around, so this feels like the smarter place to put it. 
 			if(StateManager.getCurrentState() == gameState)
 				gameHeader.tick();
 			
-			//Increment SecondsToSkip (if in game state) for tracking how long music has been playing (once per second, hence why here)
+			//If in game state, Increment SecondsToSkip
+			//Note: I'm unsure if it should be here only because we're adjusting audio speed, so if it's running faster based on 
+			//      FPS, I feel like we're going to be jumping around in audio incrementing this based on IRL second ticks, no?
 			if(StateManager.getCurrentState() == gameState)
 				gameAudio.incrementSecondsToSkip();
 		}		
@@ -225,48 +252,52 @@ public class Game implements Runnable {
 	
 	//Render everything for game
 	private void render() {
+
 		/*************** INITIAL SETUP (e.g. clear screen) ***************/
-		//Get current buffer strategy of display
-		bs = display.getCanvas().getBufferStrategy();
 		
-		//If bs doesn't exist, create one!
-		//3 should be max number of buffers we ever need (may not work with >3)
-		if(bs == null) {
-			display.getCanvas().createBufferStrategy(3);
-			return;
-		}
-		
-		//Graphics object is like our (magical) paint brush, way of drawing
-		g = bs.getDrawGraphics();
-		
-		//Clear screen
-		g.clearRect(0, 0, width, height);
-		
+			//Get current buffer strategy of display
+			bs = display.getCanvas().getBufferStrategy();
+			
+			//If bs doesn't exist, create one!
+			//3 should be max number of buffers we ever need (may not work with >3)
+			if(bs == null) {
+				display.getCanvas().createBufferStrategy(3);
+				return;
+			}
+			
+			//Graphics object is like our (magical) paint brush, way of drawing
+			g = bs.getDrawGraphics();
+			
+			//Clear screen
+			g.clearRect(0, 0, width, height);
+	
+		/*************** END INITIAL SETUP ***************/
+
 		/*************** DRAW HERE ***************/
-		//If a state exists (not null), then render it
-		if(StateManager.getCurrentState() != null) {
-			StateManager.getCurrentState().render(g);
-		}
+		
+			//If a state exists (not null), then render it
+			if(StateManager.getCurrentState() != null)
+				StateManager.getCurrentState().render(g);
 		
 		/*************** END DRAWING ***************/
-		/*************** BEGIN DEBUG ***************/
-		//FPS on screen
-		currentFontSize = 20;
-		g.setFont (GVar.setFont(GVar.fontA, currentFontSize));
-
-		//If Debug Mode = Active, print FPS
-		if(GVar.getDebug()) {
-			Utilities.drawShadowString(g, "FPS:" + lastTicks, 3, 23, GVar.getShadowFont(currentFontSize));
-		}
 		
-		//If Key Manual Mode = Active, print Controls
-		if(GVar.getKeyManual()) {
-			for(int i = 0; i < keyManager.getKeyManual().length; i++) {
-				Utilities.drawShadowString(g, keyManager.getKeyManual()[i], GVar.GAME_WIDTH - GVar.KEY_MANUAL_POSITION_X, 23 + GVar.KEY_MANUAL_OFFSET_Y * i, GVar.getShadowFont(currentFontSize));
-			}
-		}
+		/*************** BEGIN DEBUG ***************/
+	
+			//sets font size and font
+			currentFontSize = 20;
+			g.setFont (GVar.setFont(GVar.fontA, currentFontSize));
+	
+			//If Debug Mode = Active, print FPS to screen
+			if(GVar.getDebug())
+				Utilities.drawShadowString(g, "FPS:" + lastTicks, 3, 23, GVar.getShadowFont(currentFontSize));
+			
+			//If Key Manual Mode = Active, print Controls
+			if(GVar.getKeyManual())
+				for(int i = 0; i < keyManager.getKeyManual().length; i++)
+					Utilities.drawShadowString(g, keyManager.getKeyManual()[i], GVar.GAME_WIDTH - GVar.KEY_MANUAL_POSITION_X, 23 + GVar.KEY_MANUAL_OFFSET_Y * i, GVar.getShadowFont(currentFontSize));
 		
 		/*************** END DEBUG ***************/
+
 		//Work buffer magic (presumably to transfer between buffers, ending at screen
 		bs.show();
 		
@@ -279,6 +310,8 @@ public class Game implements Runnable {
 	// - Required to implement Runnable. 
 	// - Is called by start() method.
 	public void run() {
+
+		//initialize all of the graphics and get everything ready for game
 		init();
 		
 		//1 billion nanoseconds within a second. So below translates to 1 per second,
@@ -296,6 +329,7 @@ public class Game implements Runnable {
 		// 2.) Render (draw) everything to the screen
 		// 3.) Repeat
 		while(running){
+
 			//Below will do how much time we have before we can call tick() and render() again.
 			/*
 			 * Delta is difference of now/last in nano seconds, divided by time per tick
@@ -305,12 +339,12 @@ public class Game implements Runnable {
 			 * Not sure why doing it this way instead of just doing (now - last),
 			 * and then checking if delta is >= timePerTick?
 			 */
-
 			timePerTick = 1000000000 / GVar.FPS;
 			now = System.nanoTime();
 			delta += (now - lastTime) / timePerTick;
 			timer += now - lastTime;
 			lastTime = now;
+
 			//If enough time has elapsed, can run tick() and render().
 			if(delta >= 1) {
 				tick();
@@ -327,12 +361,13 @@ public class Game implements Runnable {
 	//"Synchronized" is keyword for whenever we're working with threads directly (starting/stopping).
 	// - Prevents things from getting "messed up"
 	public synchronized void start() {
+
 		//Check if already running game loop
 		if(running) {
 			return;
-		}
-		else {
-			//Used in game loop
+		} else {
+			
+			//Set running = true. Used in game loop
 			running = true;
 			
 			//Initialize thread and pass in Game class
@@ -349,8 +384,9 @@ public class Game implements Runnable {
 		//Check if already running game loop
 		if(!running) {
 			return;
-		}
-		else {
+		} else {
+
+			//Set running = false. Used in game loop
 			running = false;
 			try {
 				thread.join();
@@ -361,8 +397,5 @@ public class Game implements Runnable {
 	}
 	
 	/*************** GETTERS and SETTERS ***************/
-	public KeyManager getKeyManager() {
-		return keyManager;
-	}
 	
 }
