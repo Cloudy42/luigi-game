@@ -20,12 +20,6 @@ import dev.lepauley.luigi.utilities.EnumSFX;
 
 /*
  * Handles all audio in game
- * Originally followed this stupid tutorial: https://www.youtube.com/watch?v=VMSTTg5EEnY
- * but I thought it was dumb and not clear. Heck the guy sounded confused at times. So ultimately
- * went with this: https://coderanch.com/t/572997/java/Stopping-looping-javax-sound-sampled
- * 
- * Note for Alan: Research distorting/slowing down frequency and speed when controlling time:
- *                https://docs.oracle.com/javase/tutorial/sound/controls.html
  */
 public class Audio {
 	

@@ -1,4 +1,4 @@
-package dev.lepauley.luigi.audio.tempaudioPlayground_20180929;
+package dev.lepauley.luigi.zArchive.tempaudioPlayground_20180929;
 
 import java.io.*;
 import sun.audio.*;

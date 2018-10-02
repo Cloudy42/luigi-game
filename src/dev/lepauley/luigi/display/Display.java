@@ -25,14 +25,19 @@ public class Display {
 	
 	//Constructor
 	public Display(String title, int width, int height) {
+
 		//Initialize class variables
 		this.title = title;
 		this.width = width;
 		this.height = height;
+		
+		//Method to create GUI display
 		createDisplay();
 	}
 	
+	//Creates GUI display 
 	private void createDisplay() {
+
 		//Set window attributes
 		frame = new JFrame(title);
 		frame.setSize(width, height);
@@ -71,10 +76,13 @@ public class Display {
 	}
 
 	/***************** GETTERS AND SETTERS *****************/
+	
+	//Gets Canvas (Where we draw graphics on the frame)
 	public Canvas getCanvas() {
 		return canvas;
 	}
 	
+	//Gets JFrame (window display)
 	public JFrame getFrame() {
 		return frame;
 	}

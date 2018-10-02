@@ -1,4 +1,4 @@
-package dev.lepauley.luigi.audio.tempaudioPlayground_20180929;
+package dev.lepauley.luigi.zArchive.tempaudioPlayground_20180929;
 
 import javax.swing.JOptionPane;
 import javax.sound.sampled.*;
@@ -11,7 +11,6 @@ public class AcceleratedPlayback {
 
     public static void main(String[] args) throws Exception {
         int playBackSpeed = 2;
-        int skip = playBackSpeed-1;
         System.out.println("Playback Rate: " + playBackSpeed);
 
         //URL url = new URL("http://www.talkingwav.com/wp-content/uploads/2017/10/mario_01.wav");

@@ -1,8 +1,4 @@
-package dev.lepauley.luigi.audio.tempaudioPlayground_20180929;
-
-import com.sun.media.sound.AudioFloatFormatConverter;
-import com.sun.media.sound.JavaSoundAudioClip;
-import com.sun.media.sound.SoftMixingDataLine;
+package dev.lepauley.luigi.zArchive.tempaudioPlayground_20180929;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
@@ -17,22 +13,18 @@ public class Player implements Playable {
  private final URL soundUrl;
  private final boolean[] stopped;
  private float playRate;
- private boolean playRateChanged;
  private int bytesWritten;
  private int bytesIgnorred;
-
 
 public Player(URL soundUrl) throws LineUnavailableException, MalformedURLException {
     this.format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,44100, 16, 2 , 4, 44100,false);
     this.info = new DataLine.Info(SourceDataLine.class, format);
     this.sourceDataLine =  (SourceDataLine) AudioSystem.getLine(info);
-    TargetDataLine tdl = AudioSystem.getTargetDataLine(format);
 
     this.soundUrl = soundUrl;
     this.stopped = new boolean[1];
     this.stopped[0] = false;
     this.playRate = 1;
-    this.playRateChanged = false;
     this.bytesWritten =0;
     this.bytesIgnorred = 0;
 }
@@ -98,7 +90,6 @@ public boolean stop() {
 @Override
 public boolean setPlayRate(float playRate) {
     this.playRate = playRate;
-    this.playRateChanged = true;
     return false;
 }
 }

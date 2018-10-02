@@ -1,13 +1,8 @@
-package dev.lepauley.luigi.audio.tempaudioPlayground_20180929;
+package dev.lepauley.luigi.zArchive.tempaudioPlayground_20180929;
 
 import java.io.File;
-import javax.swing.JOptionPane;
 import javax.sound.sampled.*;
 import javax.sound.sampled.AudioFormat.Encoding;
-
-import java.io.ByteArrayOutputStream;
-import java.io.ByteArrayInputStream;
-import java.util.Date;
 
 public class ResampleMusic {
 
@@ -18,7 +13,7 @@ public class ResampleMusic {
 	//destination file
 	
 	//audio stream of file1
-	final AudioInputStream in1 = AudioSystem.getAudioInputStream(file1);
+	final AudioInputStream in1 = null;// = AudioSystem.getAudioInputStream(file1);
 	
 	//get audio format for targetted sound
 	final AudioFormat inFormat = getOutFormat(in1.getFormat());
@@ -34,5 +29,5 @@ public class ResampleMusic {
 	//get the target file audio stream using file format
 	final AudioInputStream in2 = AudioSystem.getAudioInputStream(inFormat, in1);
 	//write the audio file in targeted pitch file
-	AudioSystem.write(in2, AudioFileFormat.Type.WAVE, file2);
+	//AudioSystem.write(in2, AudioFileFormat.Type.WAVE, file2);
 }

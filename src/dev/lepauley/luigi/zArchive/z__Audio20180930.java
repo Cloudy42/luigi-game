@@ -1,8 +1,7 @@
-package dev.lepauley.luigi.audio;
+package dev.lepauley.luigi.zArchive;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +15,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import dev.lepauley.luigi.audio.AudioManipulationGitHelper;
 import dev.lepauley.luigi.utilities.EnumMusic;
 
 
@@ -35,8 +35,7 @@ public class z__Audio20180930 {
 	Map<String, File> mapMusic = new HashMap<String, File>();
 	
 	//Tracks current SFX/Song
-	private String currentSFX
-	             , currentMusic;
+	private String currentMusic;
 	
 	//Sets Min and Max volume:
 	//Note: Min = -80.0f | Max = 6.0206f
@@ -69,6 +68,7 @@ public class z__Audio20180930 {
 	//Step 1 and 2 of setting audio (pull out CD then put CD in player, so to speak)
 	private AudioInputStream audioSFX, audioMusic;
 	private Clip clipSFX, clipMusic;
+	private float currentSpeedMusic;
 	
 	//Constructor to get default audio loaded
 	public z__Audio20180930() {
@@ -228,7 +228,8 @@ public class z__Audio20180930 {
        	din = AudioSystem.getAudioInputStream(decodedFormat, in);
        	RadioUtils.rawplay(decodedFormat, din, 6f);
 	  */
-	 public void adjustSpeed(String audioType, float adjust) {
+	 @SuppressWarnings("deprecation")
+	public void adjustSpeed(String audioType, float adjust) {
 		 float tempCalc = currentSpeedMusic + adjust; 
 		 if(tempCalc > MAX_RATE)
 			 tempCalc = MAX_RATE;
@@ -331,7 +332,8 @@ public class z__Audio20180930 {
 		 
 		 //Integrates Sonic (custom git code that allows manipulation of audio) with our SFX and Music.
 		 //Plays audio at end in separate thread
-		 public void playSonic(String audioType) throws UnsupportedAudioFileException, IOException, LineUnavailableException
+		 @SuppressWarnings("deprecation")
+		public void playSonic(String audioType) throws UnsupportedAudioFileException, IOException, LineUnavailableException
 		 {
 			 boolean emulateChordPitch = false;
 	         int quality = 0;

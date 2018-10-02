@@ -10,17 +10,23 @@ import dev.lepauley.luigi.gfx.Assets;
 /*
  * The player that our users will control.
  */
+
 public class Player extends Creature{
-	//So we can access things like key manager
+
+	//imported so we can access things like key manager
 	private Game game;
 	
-	//Keeps Track of Current Player
+	//Keeps Track of Current Player (Animation skin/palette)
 	private int currentPlayer;
+
+	//Various player selection Sprites (Alive and dead since not animating yet)
+	//Once animating, we can consolidate
 	private BufferedImage[] playerImage = {Assets.player1, Assets.player2, Assets.player3
 										 , Assets.player4, Assets.player5, Assets.player6};
 	private BufferedImage[] playerImageDead = {Assets.player1Dead, Assets.player2Dead, Assets.player3Dead
 			 								 , Assets.player4Dead, Assets.player5Dead, Assets.player6Dead};
 	
+	//Constructor that sets up some defaults
 	public Player(Game game, float x, float y) {
 		super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT_BIG);
 		this.game = game;
@@ -29,38 +35,51 @@ public class Player extends Creature{
 
 	@Override
 	public void tick() {
+
 		//Gets movement using speed
 		getInput();		
+		
 		//Sets position using movement
 		move();
 	}
 	
+	//Takes user input and performs various actions
 	private void getInput() {
+
 		//Very important that every time we call this method we set xMove and yMove to 0
 		xMove = 0;
 		yMove = 0;
 		
 		//Setting x/y move to a certain speed, THEN moving player that much
-		if(game.getKeyManager().up) {
+		if(game.getKeyManager().up) 
 			yMove = -speed;
-		}
-		if(game.getKeyManager().down) {
+		
+		if(game.getKeyManager().down)
 			yMove = speed;
-		}
+		
 		if(game.getKeyManager().left)
 			xMove = -speed;
+
 		if(game.getKeyManager().right)
 			xMove = speed;
 		
-		//Scale player Down/Up AND adjust speed
+		//Scale player Down
 		if(game.getKeyManager().scaleDown)
-			if(GVar.getMultiplier() > GVar.MIN_SCALE)
+			if(GVar.getMultiplier() > GVar.MIN_SCALE) {
 				GVar.incrementMultiplier(-1);
+
+				//Adjust speed accordingly
 				setSpeed(DEFAULT_SPEED * GVar.getMultiplier());
+			}
+
+		//Scale player Up
 		if(game.getKeyManager().scaleUp)
-			if(GVar.getMultiplier() < GVar.MAX_SCALE)
+			if(GVar.getMultiplier() < GVar.MAX_SCALE) {
 				GVar.incrementMultiplier(1);
+				
+				//Adjust speed accordingly
 				setSpeed(DEFAULT_SPEED * GVar.getMultiplier());
+			}
 
 		//Swap Current Player
 		if(game.getKeyManager().changePlayer)
