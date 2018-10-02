@@ -2,10 +2,10 @@ package dev.lepauley.luigi.states;
 
 import java.awt.Graphics;
 
-import dev.lepauley.luigi.GVar;
-import dev.lepauley.luigi.Game;
 import dev.lepauley.luigi.entities.creatures.Creature;
 import dev.lepauley.luigi.entities.creatures.Player;
+import dev.lepauley.luigi.general.GVar;
+import dev.lepauley.luigi.general.Game;
 import dev.lepauley.luigi.levels.Level;
 import dev.lepauley.luigi.utilities.EnumPause;
 import dev.lepauley.luigi.utilities.Utilities;
@@ -32,6 +32,7 @@ public class GameState extends State {
 	//Must tick level before player do to proper layer positioning
 	@Override
 	public void tick() {
+		
 		//Toggles Pause On/Off (only if not dead)
 		if(game.getKeyManager().pauseToggle && !Game.gameHeader.getDead())
 			GVar.togglePause(EnumPause.PAUSED.toString());
@@ -93,7 +94,7 @@ public class GameState extends State {
 	//Self-explanatory, resets Level defaults
 	public void resetLevelDefaults() {
 		//Resets Level Tile Position:
-		level.setDebugScrollLevel(0);
+		level.setScrollLevelDefaults(0);
 	}
 
 	/*************** GETTERS and SETTERS ***************/

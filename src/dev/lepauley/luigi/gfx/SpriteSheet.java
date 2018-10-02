@@ -16,6 +16,7 @@ public class SpriteSheet {
 	
 	//Method to Crop the spriteSheet into animations/images
 	public BufferedImage crop(int x, int y, int width, int height) {
+		
 		//Returns BufferedImage with coordinates we specify
 		return sheet.getSubimage(x, y, width, height);
 	}

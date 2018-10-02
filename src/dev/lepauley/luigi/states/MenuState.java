@@ -6,9 +6,9 @@ import java.io.IOException;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import dev.lepauley.luigi.GVar;
-import dev.lepauley.luigi.Game;
 import dev.lepauley.luigi.entities.creatures.Player;
+import dev.lepauley.luigi.general.GVar;
+import dev.lepauley.luigi.general.Game;
 import dev.lepauley.luigi.levels.Level;
 
 /*

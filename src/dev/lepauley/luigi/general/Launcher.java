@@ -1,4 +1,4 @@
-package dev.lepauley.luigi;
+package dev.lepauley.luigi.general;
 
 import java.io.IOException;
 

@@ -2,8 +2,8 @@ package dev.lepauley.luigi.levels;
 
 import java.awt.Graphics;
 
-import dev.lepauley.luigi.GVar;
-import dev.lepauley.luigi.Game;
+import dev.lepauley.luigi.general.GVar;
+import dev.lepauley.luigi.general.Game;
 import dev.lepauley.luigi.gfx.Assets;
 import dev.lepauley.luigi.tiles.Tile;
 import dev.lepauley.luigi.utilities.Utilities;
@@ -24,24 +24,32 @@ public class Level {
 	private int[][] tiles;
 	
 	//Used to test all tiles are there (Allows Scrolling through level)
-	private int debugScrollLevel = 0;
-	private int debugConst = 4;
+	private int scrollLevel;
+	private int scrollConst;
+	
 	private int defaultXSpawnOffset = -Tile.TILEWIDTH;
 	
+	//Constructor
 	public Level(String path) {
+		setScrollLevelDefaults(0);
 		loadLevel(path);
 	}
 	
 	public void tick() {
-		if(!Game.gameHeader.getDead()) {
+
+		//If player is NOT dead and scroll Toggle is enabled
+		if(!Game.gameHeader.getDead() && GVar.getScroll()) {
+
 			//Used to test scrolling level, IF scrolling is toggled
-			debugScrollLevel+=debugConst;
-			//I added && debugConst < 0 and > 0 because if, for whatever reason, code ever gets behind those thresholds,
+			scrollLevel+=scrollConst;
+
+			//I added "&& scrollConst < 0 and > 0" because if, for whatever reason, code ever gets behind those thresholds,
 			//it will constantly be flicking from positive to negative and start a looped jitter effect
-			if(debugScrollLevel <= 32 && debugConst < 0 || debugScrollLevel >= 6210 && debugConst > 0)
-				debugConst *= -1;
+			if(scrollLevel <= Tile.TILEWIDTH && scrollConst < 0 || scrollLevel >= (width - 34) * Tile.TILEWIDTH && scrollConst > 0)
+				toggleScrollConst();
+
 			//Or Can set value here and look at specific areas of map 
-			//debugScrollLevel = 6210;
+			//scrollLevel = 6208;
 		}
 	}
 	
@@ -69,7 +77,7 @@ public class Level {
 				//If NOT a BG tile, will get tile and print to screen
 				if(checkTile(x,y)) {
 					//debugScrollLevel used to test scrolling level:
-					getTile(x,y).render(g, defaultXSpawnOffset + x * Tile.TILEWIDTH * GVar.getMultiplier() - debugScrollLevel, y * Tile.TILEHEIGHT * GVar.getMultiplier());
+					getTile(x,y).render(g, defaultXSpawnOffset + x * Tile.TILEWIDTH * GVar.getMultiplier() - scrollLevel, y * Tile.TILEHEIGHT * GVar.getMultiplier());
 				}
 			}
 		}
@@ -121,16 +129,34 @@ public class Level {
 
 	/*************** GETTERS and SETTERS ***************/
 	
+	//Gets Player Spawn Position - X
 	public int getSpawnX() {
 		return spawnX;
 	}
 
+	//Gets Player Spawn Position - Y
 	public int getSpawnY() {
 		return spawnY;
 	}
 	
-	public void setDebugScrollLevel(int i) {
-		debugScrollLevel = i;
-		debugConst = 4;
+	//Sets Default Scroll Level Values
+	public void setScrollLevelDefaults(int i) {
+		
+		//ScrollLevel is where the level will start at relative to x position
+		scrollLevel = i;
+		
+		//ScrollConst is how fast level will scroll
+		scrollConst = 4;
 	}
+	
+	//Get Scroll Constant (direction Scrolling is going)
+	public int getScrollConst() {
+		return scrollConst;
+	}
+	
+	//Toggles Scroll Constant (direction Scrolling is going)
+	public void toggleScrollConst() {
+		scrollConst *= -1;
+	}
+	
 }

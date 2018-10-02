@@ -3,8 +3,8 @@ package dev.lepauley.luigi.entities.creatures;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import dev.lepauley.luigi.GVar;
-import dev.lepauley.luigi.Game;
+import dev.lepauley.luigi.general.GVar;
+import dev.lepauley.luigi.general.Game;
 import dev.lepauley.luigi.gfx.Assets;
 
 /*
@@ -21,6 +21,8 @@ public class Player extends Creature{
 
 	//Various player selection Sprites (Alive and dead since not animating yet)
 	//Once animating, we can consolidate
+	//Note: Using arrays because it makes swapping players much easier, as you can
+	//      increment index rather than doing series of if/else checks
 	private BufferedImage[] playerImage = {Assets.player1, Assets.player2, Assets.player3
 										 , Assets.player4, Assets.player5, Assets.player6};
 	private BufferedImage[] playerImageDead = {Assets.player1Dead, Assets.player2Dead, Assets.player3Dead
@@ -81,17 +83,23 @@ public class Player extends Creature{
 				setSpeed(DEFAULT_SPEED * GVar.getMultiplier());
 			}
 
-		//Swap Current Player
+		//Swap Current Player for next in lineup
 		if(game.getKeyManager().changePlayer)
 			incrementCurrentPlayer();
 	}
 
 	@Override
 	public void render(Graphics g) {
-		//For funsies draw different player if dead:
+		
+		//If player = Dead, draw player as dead sprite (short term solution):
 		if(Game.gameHeader.getDead()) {
+		
+			//Need to readjust height too since shorter than Big Luigi
 			this.setHeight(Creature.DEFAULT_CREATURE_HEIGHT_SMALL);
 			g.drawImage(playerImageDead[currentPlayer], (int) x, (int) y, (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
+
+		//If player = Alive, draw player as alive sprite
+		//We're not reviving player, so don't need to set height back to Big here
 		} else {
 			//Draws player. Utilizes Cropping method via SpriteSheet class to only pull part of image
 			// - Takes in integers, not floats, so need to cast x and y position:
@@ -102,6 +110,7 @@ public class Player extends Creature{
 	
 	/*************** GETTERS and SETTERS ***************/
 	
+	//Gets current Player (or sprite skin swapping)
 	public int getCurrentPlayer() {
 		return currentPlayer;
 	}

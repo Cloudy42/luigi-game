@@ -2,7 +2,7 @@ package dev.lepauley.luigi.states;
 
 import java.awt.Graphics;
 
-import dev.lepauley.luigi.Game;
+import dev.lepauley.luigi.general.Game;
 
 /*
  * Base class to handle all game states

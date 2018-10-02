@@ -3,7 +3,7 @@ package dev.lepauley.luigi.tiles;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import dev.lepauley.luigi.GVar;
+import dev.lepauley.luigi.general.GVar;
 
 /*
  * Contains Everything that every tile must have

@@ -13,7 +13,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import dev.lepauley.luigi.GVar;
+import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.utilities.EnumMusic;
 import dev.lepauley.luigi.utilities.EnumSFX;
 

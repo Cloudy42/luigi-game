@@ -1,11 +1,7 @@
-package dev.lepauley.luigi;
+package dev.lepauley.luigi.general;
 
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
-import java.io.IOException;
-
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import dev.lepauley.luigi.audio.Audio;
 import dev.lepauley.luigi.display.Display;
@@ -110,36 +106,12 @@ public class Game implements Runnable {
 		}
 		
 		//Decreases Time
-		if(keyManager.timeDown && StateManager.getCurrentState() == gameState) {
-			try {
-				gameHeader.adjustTime(-1);
-			} catch (UnsupportedAudioFileException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (LineUnavailableException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		if(keyManager.timeDown && StateManager.getCurrentState() == gameState)
+			gameHeader.adjustTime(-1);
 		
 		//Increases Time
-		if(keyManager.timeUp && StateManager.getCurrentState() == gameState) {
-			try {
-				gameHeader.adjustTime(1);
-			} catch (UnsupportedAudioFileException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (LineUnavailableException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		if(keyManager.timeUp && StateManager.getCurrentState() == gameState)
+			gameHeader.adjustTime(1);
 		
 		//I'm currently okay allowing them to change FPS when paused due to the "stopped" 
 		//scenario 
@@ -183,6 +155,7 @@ public class Game implements Runnable {
 
         	gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}		
+
 		//If a state exists (not null), then tick it
 		if(StateManager.getCurrentState() != null) {
 			StateManager.getCurrentState().tick();
@@ -219,12 +192,20 @@ public class Game implements Runnable {
 		if(keyManager.debugToggle)
 			GVar.toggleDebug();
 
+		//If Scroll button is pressed, toggle Scroll Mode on/off
+		if(keyManager.scrollToggle)
+			GVar.toggleScroll();
+
+		//If Scroll Direction button is pressed, Change Scroll Direction
+		if(keyManager.scrollDirection)
+			((GameState) gameState).getLevel().toggleScrollConst();
+
 		//If Key Manual button is pressed, toggle Key Manual Mode on/off
 		if(keyManager.keyManualToggle)
 			GVar.toggleKeyManual();
 
 		//I am moving it from the render() method 
-		//to the tick() method sicne we're not drawing to console any longer, and even then, it's not really a 
+		//to the tick() method since we're not drawing to console any longer, and even then, it's not really a 
 		//render so makes sense to not be in render().
 		if(timer >= 1000000000) {
 			//System.out.println("Ticks and Frames: " + ticks);

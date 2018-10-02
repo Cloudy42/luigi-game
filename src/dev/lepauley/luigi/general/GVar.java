@@ -1,4 +1,4 @@
-package dev.lepauley.luigi;
+package dev.lepauley.luigi.general;
 
 import java.awt.Font;
 import java.io.IOException;
@@ -6,7 +6,6 @@ import java.io.IOException;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import dev.lepauley.luigi.states.GameState;
 import dev.lepauley.luigi.states.StateManager;
 import dev.lepauley.luigi.utilities.EnumPause;
 import dev.lepauley.luigi.utilities.EnumSFX;
@@ -60,6 +59,9 @@ public class GVar {
 	//Denotes whether debug mode is active or not
 	private static boolean debugToggle;
 	
+	//Denotes whether game is scrolling or not
+	private static boolean scrollToggle;
+
 	//Denotes whether game is paused or not
 	private static boolean pauseToggle;
 
@@ -72,6 +74,7 @@ public class GVar {
 		multiplier = 1;
 		FPS = FPS_DEFAULT;
 		debugToggle = true;
+		scrollToggle = true;
 		pauseToggle = false;		
 		keyManualToggle = false;
 		pauseMsg = "PAUSED";
@@ -181,6 +184,19 @@ public class GVar {
 			debugToggle = false;
 		else
 			debugToggle = true;
+	}
+
+	//Gets whether scroll mode is currently enabled or not
+	public static boolean getScroll() {
+		return scrollToggle;
+	}
+
+	//Sets whether debug mode is currently enabled or not
+	public static void toggleScroll() {
+		if(scrollToggle) 
+			scrollToggle = false;
+		else
+			scrollToggle = true;
 	}
 
 	//Gets whether game is currently Paused or not

@@ -5,13 +5,9 @@ package dev.lepauley.luigi.gfx;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.io.IOException;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
-import dev.lepauley.luigi.GVar;
-import dev.lepauley.luigi.Game;
+import dev.lepauley.luigi.general.GVar;
+import dev.lepauley.luigi.general.Game;
 import dev.lepauley.luigi.states.StateManager;
 import dev.lepauley.luigi.utilities.EnumPause;
 import dev.lepauley.luigi.utilities.EnumSFX;
@@ -108,40 +104,52 @@ public class Header {
 		}
 	}
 	
+	//Draws Header assets to display
 	public void render(Graphics g) {
+
+		//sets current Font & size
 		currentFontSize = 20;
 		g.setFont (GVar.setFont(GVar.fontA, currentFontSize));
 
-		//Only Display the title screen, player select, and high score in the MenuState
+		//Only Display the title screen, player select, and high score if in MenuState
 		if(StateManager.getCurrentStateName() == "MenuState") {
+
 			//Menu
 			g.drawImage(Assets.menu,215,50,625,185,null);
 	
-			//Player Select
+			//Player Select (with toad icon as selector)
 			g.drawImage(Assets.toad,380,(int)(260 + (GVar.getPlayerSelectCount() - 1) * currentFontSize * 1.5),null);
 			Utilities.drawShadowString(g, "1 PLAYER GAME",	400, 275, GVar.getShadowFont(currentFontSize));
 			Utilities.drawShadowString(g, "2 PLAYER GAME",	400, (int)(275 + currentFontSize * 1.5), GVar.getShadowFont(currentFontSize));
 	
 			//High Score
-			Utilities.drawShadowString(g, "TOP - " + zeroPrefixToString(4, highScore),	400 + currentFontSize * 1, (int)(275 + currentFontSize * 3), GVar.getShadowFont(currentFontSize));
+			Utilities.drawShadowString(g, "TOP - " + zeroPrefixToString(5, highScore),	400 + currentFontSize * 1, (int)(275 + currentFontSize * 3), GVar.getShadowFont(currentFontSize));
 		}
 	
 		//Header Info
+		//Current Score
 		Utilities.drawShadowString(g, "MARIO",	215, 20, GVar.getShadowFont(currentFontSize));
-		Utilities.drawShadowString(g, zeroPrefixToString(4, currentScore),	215, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
+		Utilities.drawShadowString(g, zeroPrefixToString(5, currentScore),	215, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
 	
+		//Current Coins (with Coin icon) - should be animated in future
 		g.drawImage(Assets.coin,410,25,null);
-		Utilities.drawShadowString(g, "x" + zeroPrefixToString(1, currentCoins),	425, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
+		Utilities.drawShadowString(g, "x" + zeroPrefixToString(2, currentCoins),	425, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
 	
+		//Current World-Level
 		Utilities.drawShadowString(g, "WORLD", 	585, 20, GVar.getShadowFont(currentFontSize));
 		Utilities.drawShadowString(g, currentWorld + "-" + currentLevel,   	585  + currentFontSize * 1, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
 	
+		//Current Time (Minutes:seconds)
 		Utilities.drawShadowString(g, "TIME", 	785, 20, GVar.getShadowFont(currentFontSize));
 
+		//If in "Hurry" Mode, display time in different color
 		if(StateManager.getCurrentStateName() == "GameState") {
+
 			//Sets Color to red if in hurry mode, else default:
 			if(hurry) {
 				Utilities.drawShadowString(g, Color.red, convertTime(), 785 + currentFontSize/2 * timeSpacing, 20 + currentFontSize * 1, GVar.getShadowFont(currentFontSize));
+
+			//Sets color to default (currently white) if NOT in hurry mode
 			} else {
 				Utilities.drawShadowString(g, convertTime(), 	785 + currentFontSize/2 * timeSpacing, 20 + currentFontSize * 1, GVar.getShadowFont(currentFontSize));
 			}
@@ -149,13 +157,15 @@ public class Header {
 	}
 	
 	//Probably a smarter algorithm for this, but basically forces string to be count # of characters prefixed with all zeroes:
-	public String zeroPrefixToString(int count, int stat) {
+	//Example: zeroPrefixToString(5,15) means we want the String to contain 5 digits and we're going to append 15 on the end,
+	//         which gives us "0000015", but since we only want it to be 5 digits, we're going to keep chopping off the first
+	//         digit until we have 5 digits, so final result would be "00015"
+	public String zeroPrefixToString(int target, int value) {
 		String s = "";
 		int sLen = 0;
-		int target = count + 1;
-		for(int z = 0; z < count; z++)
+		for(int z = 0; z < target; z++)
 			s += "0";
-		s += stat;
+		s += value;
 		sLen = s.length();
 		
 		if(sLen > target) {
@@ -175,13 +185,17 @@ public class Header {
 		//Only display minutes if > 0
 		if(minutes > 0)
 			time += String.valueOf(minutes) + ":";
+		
+		//Seconds is the remainder when dividing by 60
 		int seconds = currentTime % 60;
 
 		//Only prefix seconds with 0 IF minutes still exist 
 		if(minutes != 0 || seconds >= 10) {
-		    time += zeroPrefixToString(1, seconds);
+		    time += zeroPrefixToString(2, seconds);
+
+		//Otherwise should only be 1 digit
 		} else {
-		    time += zeroPrefixToString(0, seconds);
+		    time += zeroPrefixToString(1, seconds);
 		}
 
 		//Used to adjust spacing when losing digits
@@ -190,9 +204,11 @@ public class Header {
 		if(minutes == 0 && seconds < 10)
 			timeSpacing = 2;
 
+		//Return time to display in header
 		return time;
 	}
 	
+	//Resets defaults for Header
 	public void resetDefaults() {
 		currentScore = 0;
 		currentCoins = 0;
@@ -207,25 +223,38 @@ public class Header {
 	
 	/*************** GETTERS and SETTERS ***************/
 	
+	//Gets whether player is dead or not
 	public boolean getDead() {
 		return dead;
 	}
 	
+	//Sets whether player is dead or not
+	public void setDead(boolean bool) {
+		dead = bool;
+	}
+	
 	//Allows user to change time
-	public void adjustTime(int time) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-		//Only allow changing time if NOT dead and NOT paused (and don't let values go negative)
+	public void adjustTime(int time){
+
+		//Only allow changing time if Player is NOT dead and Game is NOT paused 
+		//(and don't let values go negative so stop it 1 early since will tick down to 0)
 		if(!dead && currentTime >= 1 && !GVar.getPause()) {
+
+			//Increment time
 			currentTime += time;
-			String tempSong = Game.gameAudio.getCurrentMusic();
+
+			//Get some song stats so we can "undo" the Hurry song if we add time and take it out of hurry mode 
 			String tempHurry = " (Hurry!)";
-			int tempSongLen = tempSong.length();
 			int tempHurryLen = tempHurry.length();
+			int tempSongLen = Game.gameAudio.getCurrentMusic().length();
 			
-			//Resets hurry
+			//Resets hurry mode if currently in hurry mode and current time > HURRY_TIME
 			if(hurry && currentTime > HURRY_TIME) {
 				hurry = false;
+
+				//Pauses audio and converts it from Hurry audio to standard audio (same song)
 				Game.gameAudio.pauseAudioStagingArea("MUSIC");
-				Game.gameAudio.playAudioStagingArea("MUSIC", tempSong.substring(0, tempSongLen - tempHurryLen));
+				Game.gameAudio.playAudioStagingArea("MUSIC", Game.gameAudio.getCurrentMusic().substring(0, tempSongLen - tempHurryLen));
 			}
 		}
 	}
