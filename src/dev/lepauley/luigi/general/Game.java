@@ -1,5 +1,6 @@
 package dev.lepauley.luigi.general;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
@@ -12,7 +13,10 @@ import dev.lepauley.luigi.states.GameState;
 import dev.lepauley.luigi.states.MenuState;
 import dev.lepauley.luigi.states.State;
 import dev.lepauley.luigi.states.StateManager;
+import dev.lepauley.luigi.utilities.ColorManager;
+import dev.lepauley.luigi.utilities.EnumColor;
 import dev.lepauley.luigi.utilities.EnumMusic;
+import dev.lepauley.luigi.utilities.FontManager;
 import dev.lepauley.luigi.utilities.Utilities;
 
 /*
@@ -42,6 +46,12 @@ public class Game implements Runnable {
 	
 	//Used to access all keyboard controls
 	public static KeyManager keyManager = new KeyManager();
+		
+	//Used to access all colors
+	public static ColorManager colorManager = new ColorManager();
+	
+	//Used to access all fonts
+	public static FontManager fontManager = new FontManager();
 		
 	//While Running = true, game will loop
 	private boolean running = false;
@@ -285,17 +295,27 @@ public class Game implements Runnable {
 	
 			//sets font size and font
 			currentFontSize = 20;
-			g.setFont (GVar.setFont(GVar.fontA, currentFontSize));
+			g.setFont (GVar.setFont(GVar.defaultFont, currentFontSize));
 	
 			//If Debug Mode = Active, print FPS to screen
 			if(GVar.getDebug())
-				Utilities.drawShadowString(g, "FPS:" + lastTicks, 3, 23, GVar.getShadowFont(currentFontSize));
+				Utilities.drawShadowString(g, ColorManager.mapColors.get(EnumColor.BrightPurple), "FPS:" + lastTicks, 3, 23, GVar.getShadowFont(currentFontSize));
 			
-			//If Key Manual Mode = Active, print Controls
-			if(GVar.getKeyManual())
+			//sets font and font a bit smaller since running out of space
+			currentFontSize = 18;
+			g.setFont (GVar.setFont(GVar.defaultFont, currentFontSize));
+			
+			//If Key Manual = Active, display controls and rectangle
+			if(GVar.getKeyManual()) {
+				//Draw rectangle behind since a bit hard to read font
+				g.setColor(Color.DARK_GRAY);
+				g.fillRect(GVar.KEY_MANUAL_RECT_X, GVar.KEY_MANUAL_RECT_Y, GVar.KEY_MANUAL_RECT_WIDTH, currentFontSize * (keyManager.getKeyManual().length + 2));
+				
+				//If Key Manual Mode = Active, print Controls
 				for(int i = 0; i < keyManager.getKeyManual().length; i++)
-					Utilities.drawShadowString(g, keyManager.getKeyManual()[i], GVar.GAME_WIDTH - GVar.KEY_MANUAL_POSITION_X, 23 + GVar.KEY_MANUAL_OFFSET_Y * i, GVar.getShadowFont(currentFontSize));
-		
+					Utilities.drawShadowString(g, ColorManager.mapColors.get(EnumColor.BrightOrange), keyManager.getKeyManual()[i], GVar.GAME_WIDTH - GVar.KEY_MANUAL_POSITION_X, GVar.KEY_MANUAL_POSITION_Y + GVar.KEY_MANUAL_OFFSET_Y * i, GVar.getShadowFont(currentFontSize));
+			}
+			
 		/*************** END DEBUG ***************/
 
 		//Work buffer magic (presumably to transfer between buffers, ending at screen

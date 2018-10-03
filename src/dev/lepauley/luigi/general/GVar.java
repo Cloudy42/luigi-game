@@ -3,25 +3,18 @@ package dev.lepauley.luigi.general;
 import java.awt.Font;
 
 import dev.lepauley.luigi.states.StateManager;
+import dev.lepauley.luigi.utilities.EnumFont;
 import dev.lepauley.luigi.utilities.EnumPause;
 import dev.lepauley.luigi.utilities.EnumSFX;
+import dev.lepauley.luigi.utilities.FontManager;
 
 /*
  * Class of global variables to use throughout code:
- * 	- multiplier
- * 		Adjust size of all assets (e.g. tiles, entities, act like a zoom essentially)
- * 	- <placeholder variable name>
- * 		<PH description>
  */
 
-/*
- * Locations that multiplier variable is used:
- * 1. 
- * 2. 
- */
 public class GVar {
 
-	//Manages how small and large entites can scale to
+	//Manages how small/large entities can scale to
 	public static final int MIN_SCALE = 1;
 	public static final int MAX_SCALE = 5;
 	
@@ -29,18 +22,28 @@ public class GVar {
 	public static final int GAME_WIDTH = 1050; //525
 	public static final int GAME_HEIGHT = 470; //235
 	
-	//Manages keyManual positioning:
+	//Manages keyManual positioning for displaying controls to screen:
 	public static final int KEY_MANUAL_POSITION_X = 200;
-	public static final int KEY_MANUAL_OFFSET_Y = 30;
+	public static final int KEY_MANUAL_POSITION_Y = 23;
+	public static final int KEY_MANUAL_OFFSET_Y = 20;
 
-	//Target FPS
+	//Manages keyManual rectangle so easier to read
+	public static final int KEY_MANUAL_RECT_Y = 6;
+	public static final int KEY_MANUAL_RECT_X = GAME_WIDTH - KEY_MANUAL_POSITION_X - KEY_MANUAL_RECT_Y/2;
+	public static final int KEY_MANUAL_RECT_WIDTH = KEY_MANUAL_POSITION_X - KEY_MANUAL_RECT_Y;
+	//This one should be dynamic based on how many items are in controls array:
+	//public static final int KEY_MANUAL_RECT_HEIGHT = 0;  
+
+	//Min/Max/and Default FPS
 	public static final int FPS_MIN = 10;
 	public static final int FPS_MAX = 150;
 	public static final int FPS_DEFAULT = 60;
+	
+	//Tracks FPS throughout game. Sets to default value at initialization.
 	public static int FPS = FPS_DEFAULT;
 	
 	//Default font
-	public static final String fontA = "Lucida Sans Unicode";
+	public static String defaultFont;
 	
 	//Message To Player (Pause, Game Over, etc.)
 	private static String pauseMsg; 
@@ -75,6 +78,7 @@ public class GVar {
 		keyManualToggle = false;
 		pauseMsg = "PAUSED";
 		pauseMsgLen = pauseMsg.length();
+		defaultFont = FontManager.mapFonts.get(EnumFont.LucidaSansUnicode);
 	}
 	
 	/*************** GETTERS and SETTERS ***************/
@@ -99,8 +103,9 @@ public class GVar {
 		if(FPS >= FPS_MIN && FPS <= FPS_MAX)
 
 			//Displays FPS if in Debug Mode
-        	if(GVar.getDebug())
+        	if(GVar.getDebug()) {
         		System.out.println("FPS: " + FPS);
+        	}
 		
 		//If Pause Message = "STOP" and THEN you increase speed, it will resume
 		if(pauseMsg.equals(EnumPause.STOP.toString()) && FPS > FPS_MIN){

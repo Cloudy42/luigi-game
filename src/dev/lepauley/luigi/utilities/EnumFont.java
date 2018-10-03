@@ -1,20 +1,19 @@
 package dev.lepauley.luigi.utilities;
 
 /*
- * Holds Pause Message String names in an Enum
+ * Holds Font String names in an Enum
  */
 
-
-public enum EnumPause {
-     PAUSED("PAUSED")
-	,TIMESUP("TIME UP!")
-	,STOP("")
-	,RESUME("RESUME");
+public enum EnumFont {
+	 Arial				("Arial")
+	,SansSerif 			("Sans Serif")
+	,LucidaSansUnicode	("Lucida Sans Unicode")
+	,ComicSans			("Comic Sans");
 	
 	//Pulled below from: https://stackoverflow.com/questions/3978654/best-way-to-create-enum-of-strings
 	private final String text;
 
-	EnumPause(final String text) {
+	EnumFont(final String text) {
 		this.text = text;
 	}
 
@@ -22,5 +21,4 @@ public enum EnumPause {
     public String toString() {
         return text;
     }
-
 }

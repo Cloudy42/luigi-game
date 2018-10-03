@@ -25,8 +25,8 @@ public class Audio {
 	
 	//Holds all SFX	& Music paths in a user-friendly easy to read way
 	//For example. If we type mapSFX.Coin it will pull the file path for the Coin sound effect ("res/audio/sfx/smb_coin.wav") 
-	Map<String, File> mapSFX = new HashMap<String, File>()
-	                , mapMusic = new HashMap<String, File>();
+	private Map<String, File> mapSFX = new HashMap<String, File>()
+	                        , mapMusic = new HashMap<String, File>();
 	
 	//Tracks current SFX/Song
 	private String currentSFX

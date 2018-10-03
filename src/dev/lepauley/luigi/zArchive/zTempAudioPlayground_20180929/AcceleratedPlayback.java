@@ -1,4 +1,4 @@
-package dev.lepauley.luigi.zArchive.tempaudioPlayground_20180929;
+package dev.lepauley.luigi.zArchive.zTempAudioPlayground_20180929;
 
 import javax.swing.JOptionPane;
 import javax.sound.sampled.*;

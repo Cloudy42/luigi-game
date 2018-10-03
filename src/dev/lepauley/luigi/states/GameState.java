@@ -73,7 +73,7 @@ public class GameState extends State {
 
 			//Sets font & font size
 			currentFontSize = 30;
-			g.setFont (GVar.setFont(GVar.fontA, currentFontSize));
+			g.setFont (GVar.setFont(GVar.defaultFont, currentFontSize));
 			
 			//Draws pause Message to screen with a shadow
 			Utilities.drawShadowString(g, GVar.getPauseMsg(), GVar.GAME_WIDTH/2 - GVar.getPauseMsgLen()/2 * currentFontSize, GVar.GAME_HEIGHT/2 - currentFontSize/2, GVar.getShadowFont(currentFontSize));

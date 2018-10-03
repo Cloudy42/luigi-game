@@ -26,8 +26,6 @@ public enum EnumMusic {
 	,SavedThePrincess("Saved The Princess");
 	
 	//Pulled below from: https://stackoverflow.com/questions/3978654/best-way-to-create-enum-of-strings
-	//I ignored toString() override since .name() works just fine for our needs
-	//I honestly don't understand why it needs the input parameter, but whatever, keeping for now
 	private final String text;
 
 	EnumMusic(final String text) {

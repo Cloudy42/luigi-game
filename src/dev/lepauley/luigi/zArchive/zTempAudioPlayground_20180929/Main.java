@@ -1,8 +1,8 @@
-package dev.lepauley.luigi.zArchive.tempaudioPlayground_20180929;
+package dev.lepauley.luigi.zArchive.zTempAudioPlayground_20180929;
 
 import javax.sound.sampled.LineUnavailableException;
 
-import dev.lepauley.luigi.zArchive.tempaudioPlayground_20180929.Player;
+import dev.lepauley.luigi.zArchive.zTempAudioPlayground_20180929.Player;
 
 import java.net.MalformedURLException;
 import java.net.URL;

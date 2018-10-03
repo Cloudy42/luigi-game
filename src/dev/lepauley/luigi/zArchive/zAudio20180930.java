@@ -28,7 +28,7 @@ import dev.lepauley.luigi.utilities.EnumMusic;
  * Note for Alan: Research distorting/slowing down frequency and speed when controlling time:
  *                https://docs.oracle.com/javase/tutorial/sound/controls.html
  */
-public class z__Audio20180930 {
+public class zAudio20180930 {
 	
 	//Holds all sfx	& Music respectively
 	Map<String, File> mapSFX = new HashMap<String, File>();
@@ -71,7 +71,7 @@ public class z__Audio20180930 {
 	private float currentSpeedMusic;
 	
 	//Constructor to get default audio loaded
-	public z__Audio20180930() {
+	public zAudio20180930() {
 		//Add all SFX and Music to hashmaps
 		populateHashMaps();
 		try {

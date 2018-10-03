@@ -3,12 +3,13 @@ package dev.lepauley.luigi.gfx;
  * Will house all of the header information
  */
 
-import java.awt.Color;
 import java.awt.Graphics;
 
 import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.general.Game;
 import dev.lepauley.luigi.states.StateManager;
+import dev.lepauley.luigi.utilities.ColorManager;
+import dev.lepauley.luigi.utilities.EnumColor;
 import dev.lepauley.luigi.utilities.EnumPause;
 import dev.lepauley.luigi.utilities.EnumSFX;
 import dev.lepauley.luigi.utilities.Utilities;
@@ -109,7 +110,7 @@ public class Header {
 
 		//sets current Font & size
 		currentFontSize = 20;
-		g.setFont (GVar.setFont(GVar.fontA, currentFontSize));
+		g.setFont (GVar.setFont(GVar.defaultFont, currentFontSize));
 
 		//Only Display the title screen, player select, and high score if in MenuState
 		if(StateManager.getCurrentStateName() == "MenuState") {
@@ -147,7 +148,7 @@ public class Header {
 
 			//Sets Color to red if in hurry mode, else default:
 			if(hurry) {
-				Utilities.drawShadowString(g, Color.red, convertTime(), 785 + currentFontSize/2 * timeSpacing, 20 + currentFontSize * 1, GVar.getShadowFont(currentFontSize));
+				Utilities.drawShadowString(g, ColorManager.mapColors.get(EnumColor.PrimaryRed), convertTime(), 785 + currentFontSize/2 * timeSpacing, 20 + currentFontSize * 1, GVar.getShadowFont(currentFontSize));
 
 			//Sets color to default (currently white) if NOT in hurry mode
 			} else {
