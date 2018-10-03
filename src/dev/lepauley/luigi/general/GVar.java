@@ -45,7 +45,7 @@ public class GVar {
 	//Default font
 	public static String defaultFont;
 	
-	//Message To Player (Pause, Game Over, etc.)
+	//Message To Player (Pause, Game Over, etc.) & length of message
 	private static String pauseMsg; 
 	private static int pauseMsgLen;	
 
@@ -83,34 +83,40 @@ public class GVar {
 	
 	/*************** GETTERS and SETTERS ***************/
 	
-	//Gets font size
-	public static Font setFont(String font, int size) {
+	//Gets font using the fontManager and currentSize
+	//Honestly I'm not 100% sure we need to do it how we're doing it, but I haven't considered what an alternate way to do it would be, but works as we're doing it...
+	public static Font getFont(String font, int size) {
 		return new Font(font, 1, size);
 	}
 
-	//Gets font size used for shadow lettering
+	//Gets font size used for shadow lettering by taking the currentFontSize and dividing to cast a smaller shadow
+	//Note: larger denominator = larger shadow
 	public static int getShadowFont(int currentFontSize) {
 		return currentFontSize / 10;
 	}
 	
 	//Sets FPS
-	//Note, I didn't set 0 FPS since it will lock game, and I didn't do below 10 since that makes input very laggy and such.
-	//10 felt like a solid number to work with.
-	public static void setFPS(int i) {
-		FPS = i;
+	//Note: I didn't set 0 FPS since it will lock game, and I didn't do below 10 since that makes input very laggy and such. 10 still feels slow 
+	//      but maybe in the heat of the game it'd be okay. I almost wonder if we should keep FPS higher and just slow movement so it's like a 
+	//      smooth movement that doesn't feel laggy, but purposefully slow? Then slow enemies/items/everything  as well to match or something. I dunno.
+	//      It would require reworking it considerably but I think would have a better effect. I imagine that's the correct way to do it, speed up/slow
+	//      down player and enemies/items and keep FPS locked. The more I think about it I say 100%, just need to figure out the best way to do that since
+	//      a lot of moving parts involved from various classes, so need to be smart about it.
+	public static void setFPS(int newFPS) {
+
+		//sets FPS equal to the new value then we're gonna run some checks on it
+		FPS = newFPS;
 		
-		//Only Print this is greater than the minimum or is less than the maximum
+		//Only Print this if FPS is greater than the minimum or is less than the maximum
 		if(FPS >= FPS_MIN && FPS <= FPS_MAX)
 
-			//Displays FPS if in Debug Mode
-        	if(GVar.getDebug()) {
+			//Displays FPS if in Debug Mode and game NOT paused!
+        	if(GVar.getDebug()) 
         		System.out.println("FPS: " + FPS);
-        	}
 		
-		//If Pause Message = "STOP" and THEN you increase speed, it will resume
-		if(pauseMsg.equals(EnumPause.STOP.toString()) && FPS > FPS_MIN){
+		//If Pause Message = "STOP" and THEN you increase speed, it will resume (don't have to push pause)
+		if(pauseMsg.equals(EnumPause.STOP.toString()) && FPS > FPS_MIN)
 			togglePause(EnumPause.RESUME.toString());
-		} 
 		
 		//If you decrease FPS BELOW the min, it will "STOP" the game
 		if(FPS < FPS_MIN) {
@@ -232,7 +238,7 @@ public class GVar {
 			}
 
 		//Otherwise do normal pause rules:
-		} else {
+		} else if(!msg.equals(EnumPause.STOP.toString())) {
 
 			//if Game is paused and you're not dead, unpause and resume audio
 			if(pauseToggle && !Game.gameHeader.getDead()) { 

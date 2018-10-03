@@ -42,8 +42,8 @@ public class GameState extends State {
 	@Override
 	public void tick() {
 		
-		//Toggles Pause On/Off (only if not dead)
-		if(Game.keyManager.pauseToggle && !Game.gameHeader.getDead())
+		//Toggles Pause On/Off (only if not dead) AND not in "STOP" mode
+		if(Game.keyManager.pauseToggle && !Game.gameHeader.getDead() && !GVar.getPauseMsg().equals(EnumPause.STOP.toString()))
 			GVar.togglePause(EnumPause.PAUSED.toString());
 
 		//If Game = UnPaused, tick
@@ -73,7 +73,7 @@ public class GameState extends State {
 
 			//Sets font & font size
 			currentFontSize = 30;
-			g.setFont (GVar.setFont(GVar.defaultFont, currentFontSize));
+			g.setFont (GVar.getFont(GVar.defaultFont, currentFontSize));
 			
 			//Draws pause Message to screen with a shadow
 			Utilities.drawShadowString(g, GVar.getPauseMsg(), GVar.GAME_WIDTH/2 - GVar.getPauseMsgLen()/2 * currentFontSize, GVar.GAME_HEIGHT/2 - currentFontSize/2, GVar.getShadowFont(currentFontSize));

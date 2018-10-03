@@ -16,6 +16,7 @@ import dev.lepauley.luigi.states.StateManager;
 import dev.lepauley.luigi.utilities.ColorManager;
 import dev.lepauley.luigi.utilities.EnumColor;
 import dev.lepauley.luigi.utilities.EnumMusic;
+import dev.lepauley.luigi.utilities.EnumPause;
 import dev.lepauley.luigi.utilities.FontManager;
 import dev.lepauley.luigi.utilities.Utilities;
 
@@ -126,10 +127,10 @@ public class Game implements Runnable {
 		if(keyManager.timeUp && StateManager.getCurrentState() == gameState)
 			gameHeader.adjustTime(1);
 		
-		//Note: I'm Not currently allowing them to change FPS when paused but the "stopped" scenario
-		//      makes me want to treat them separately so that stopped does toggle Pause
+		//Note: I have a special check for whether game is stopped since they should be able to increase/decrease FPS to get out of that mode
+		//      but may be worthwhile to make these separate processes so that stopped doesn't toggle Pause but something else that does something similar.
 		//Decrease FPS (only in GameState when game is NOT paused)
-		if(keyManager.fpsDown && StateManager.getCurrentState() == gameState && !GVar.getPause()) {
+		if((keyManager.fpsDown && StateManager.getCurrentState() == gameState) && (!GVar.getPause() || GVar.getPauseMsg().equals(EnumPause.STOP.toString()))) {
 
 			//Decreases FPS
 			GVar.setFPS(GVar.FPS - 10);
@@ -142,7 +143,7 @@ public class Game implements Runnable {
 		}
 		
 		//Increase FPS (only in GameState when game is NOT paused)
-		if(keyManager.fpsUp && StateManager.getCurrentState() == gameState && !GVar.getPause()) {
+		if((keyManager.fpsUp && StateManager.getCurrentState() == gameState) && (!GVar.getPause() || GVar.getPauseMsg().equals(EnumPause.STOP.toString()))) {
 
 			//Increases FPS
 			GVar.setFPS(GVar.FPS + 10);
@@ -295,20 +296,20 @@ public class Game implements Runnable {
 	
 			//sets font size and font
 			currentFontSize = 20;
-			g.setFont (GVar.setFont(GVar.defaultFont, currentFontSize));
+			g.setFont (GVar.getFont(GVar.defaultFont, currentFontSize));
 	
 			//If Debug Mode = Active, print FPS to screen
 			if(GVar.getDebug())
-				Utilities.drawShadowString(g, ColorManager.mapColors.get(EnumColor.BrightPurple), "FPS:" + lastTicks, 3, 23, GVar.getShadowFont(currentFontSize));
+				Utilities.drawShadowString(g, ColorManager.mapColors.get(EnumColor.LightGreen), "FPS:" + lastTicks, 3, 23, GVar.getShadowFont(currentFontSize));
 			
 			//sets font and font a bit smaller since running out of space
 			currentFontSize = 18;
-			g.setFont (GVar.setFont(GVar.defaultFont, currentFontSize));
+			g.setFont (GVar.getFont(GVar.defaultFont, currentFontSize));
 			
 			//If Key Manual = Active, display controls and rectangle
 			if(GVar.getKeyManual()) {
 				//Draw rectangle behind since a bit hard to read font
-				g.setColor(Color.DARK_GRAY);
+				g.setColor(ColorManager.mapColors.get(EnumColor.OtherTan));
 				g.fillRect(GVar.KEY_MANUAL_RECT_X, GVar.KEY_MANUAL_RECT_Y, GVar.KEY_MANUAL_RECT_WIDTH, currentFontSize * (keyManager.getKeyManual().length + 2));
 				
 				//If Key Manual Mode = Active, print Controls

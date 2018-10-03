@@ -25,12 +25,19 @@ public class ColorManager {
 	public void populateHashMap() {
 
 		//Holds all Colors
-		mapColors.put(EnumColor.BrightOrange,		new Color(214, 139,  19));
+		mapColors.put(EnumColor.LightGreen, 		new Color(177, 247, 240));
+		mapColors.put(EnumColor.LightPurple, 		new Color(163, 127, 239));
+
+		mapColors.put(EnumColor.BrightOrange,		new Color(255, 148,   0));
 		mapColors.put(EnumColor.BrightGreen, 		new Color(116, 244,  66));
 		mapColors.put(EnumColor.BrightPurple, 		new Color(147,  33, 239));
+		
 		mapColors.put(EnumColor.PrimaryRed, 		new Color(229,  45,  25));
 		mapColors.put(EnumColor.PrimaryWhite, 		new Color(255, 255, 255));
 		mapColors.put(EnumColor.PrimaryBlack, 		new Color(  0,   0,   0));
+		
+		mapColors.put(EnumColor.OtherTan, 			new Color(247, 218, 178));
+		mapColors.put(EnumColor.OtherDarkGrey, 		new Color( 45,  45,  45));
 	}
 	
 }

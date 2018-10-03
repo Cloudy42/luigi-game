@@ -110,7 +110,7 @@ public class Header {
 
 		//sets current Font & size
 		currentFontSize = 20;
-		g.setFont (GVar.setFont(GVar.defaultFont, currentFontSize));
+		g.setFont (GVar.getFont(GVar.defaultFont, currentFontSize));
 
 		//Only Display the title screen, player select, and high score if in MenuState
 		if(StateManager.getCurrentStateName() == "MenuState") {

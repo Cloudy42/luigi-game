@@ -5,12 +5,16 @@ package dev.lepauley.luigi.utilities;
  */
 
 public enum EnumColor {
-	 BrightGreen	("Bright Green")
+	 LightGreen		("Light Green")
+	,LightPurple	("Light Purple")
+	,BrightGreen	("Bright Green")
 	,BrightOrange	("Bright Orange")
 	,BrightPurple	("Bright Purple")
 	,PrimaryRed		("Primary Red")
 	,PrimaryWhite	("Primary White")
-	,PrimaryBlack	("Primary Black");
+	,PrimaryBlack	("Primary Black")
+	,OtherTan		("Other Tan")
+	,OtherDarkGrey	("Other Dark Grey");
 	
 	//Pulled below from: https://stackoverflow.com/questions/3978654/best-way-to-create-enum-of-strings
 	private final String text;
