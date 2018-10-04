@@ -104,22 +104,26 @@ public class GVar {
 	//      a lot of moving parts involved from various classes, so need to be smart about it.
 	public static void setFPS(int newFPS) {
 
-		//sets FPS equal to the new value then we're gonna run some checks on it
+		//sets FPS equal to the new value then we're going run some checks on it
 		FPS = newFPS;
 		
-		//Only Print this if FPS is greater than the minimum or is less than the maximum
+		//Only Print this if FPS is greater than the minimum or is less than the maximum (between range)
+		//Note: We're setting FPS then doing this check which means the first time it gets to the min and max, it will print
+		//      but after that it won't. Clever girl...
 		if(FPS >= FPS_MIN && FPS <= FPS_MAX)
 
-			//Displays FPS if in Debug Mode and game NOT paused!
+			//Displays FPS if in Debug Mode and game is NOT paused!
         	if(GVar.getDebug()) 
         		System.out.println("FPS: " + FPS);
 		
-		//If Pause Message = "STOP" and THEN you increase speed, it will resume (don't have to push pause)
+		//If Pause Message = "STOP" and THEN you increase speed, it will resume (don't have to push pause to get out)
 		if(pauseMsg.equals(EnumPause.STOP.toString()) && FPS > FPS_MIN)
 			togglePause(EnumPause.RESUME.toString());
 		
 		//If you decrease FPS BELOW the min, it will "STOP" the game
 		if(FPS < FPS_MIN) {
+
+			//Set FPS to Min since cannot go below it
 			FPS = FPS_MIN;
 			
 			//This check makes it so it will only print STOPPED to console once
@@ -129,24 +133,27 @@ public class GVar {
 	        	if(GVar.getDebug())
 	        		System.out.println("FPS: STOPPED!");
 
+        		//Put game in "STOP" mode
 	        	togglePause(EnumPause.STOP.toString());
 			}
 
-		//If increase FPS ABOVE the max, it will lock at the max
+		//If you increase FPS ABOVE the max, it will Set FPS to max since cannot go above it
 		} else if(FPS > FPS_MAX) {
 			FPS = FPS_MAX;	
 		}
 	}
 	
+	//Gets Game Multiplier (used for scaling and speed and such)
 	public static int getMultiplier() {
 		return multiplier;
 	}
 
+	//Sets the Game Multiplier
 	public static void setMultiplier(int multiplier) {
 		GVar.multiplier = multiplier;
 	}
 
-	//Increments Multipler by x amount
+	//Increases Multipler by x amount (decreases (if you use a negative value))
 	public static void incrementMultiplier(int x) {
 		multiplier += x;
 	}
@@ -163,7 +170,7 @@ public class GVar {
 	}
 
 	//Gets length of message used in pause screen
-	//Useful for quickly centering with game screen
+	//Useful for quickly centering with game screen (even if that's currently off :P )
 	public static int getPauseMsgLen() {
 		return pauseMsgLen;
 	}
@@ -176,6 +183,11 @@ public class GVar {
 	//Sets how many players are currently selected
 	public static void setPlayerSelectCount(int no){
 		playerSelectCount = no;
+		
+		//Plays character switch audio.
+		//Note: So I was just like "this is NOT the place for this" but then I looked at code
+		//      in MenuState and realized I'd have to write extra logic there or paste duplicate code
+		//      so turns out that this is 100% the place for this. Who knew (me a few weeks ago, that's who :P )
 		Game.gameAudio.pauseAudioStagingArea("SFX");
 		Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.Bump.toString());
 	}
@@ -185,10 +197,14 @@ public class GVar {
 		return debugToggle;
 	}
 
-	//Sets whether debug mode is currently enabled or not
+	//Toggles whether debug mode is currently enabled or not
 	public static void toggleDebug() {
+
+		// If currently enabled, disable
 		if(debugToggle) 
 			debugToggle = false;
+
+		// If currently disabled, enable
 		else
 			debugToggle = true;
 	}
@@ -198,10 +214,14 @@ public class GVar {
 		return scrollToggle;
 	}
 
-	//Sets whether debug mode is currently enabled or not
+	//Toggles whether debug mode is currently enabled or not
 	public static void toggleScroll() {
+
+		// If currently enabled, disable
 		if(scrollToggle) 
 			scrollToggle = false;
+
+		//If currently disabled, enable
 		else
 			scrollToggle = true;
 	}
@@ -212,7 +232,7 @@ public class GVar {
 		return pauseToggle;
 	}
 	
-	//Sets whether game is currently Paused or not
+	//Toggles whether game is currently Paused or not
 	//Note: Time "Stopped" also qualifies
 	public static void togglePause(String msg) {
 
@@ -228,7 +248,7 @@ public class GVar {
 				pauseToggle = true;
 			}
 
-		//If Pause Message == RESUME, then unpause game
+		//If Pause Message == RESUME AND game is paused and in game state, then unpause game 
 		} else if(msg.equals(EnumPause.RESUME.toString())){
 			if(pauseToggle && StateManager.getCurrentStateName() == "GameState") {
 
@@ -242,16 +262,30 @@ public class GVar {
 
 			//if Game is paused and you're not dead, unpause and resume audio
 			if(pauseToggle && !Game.gameHeader.getDead()) { 
+
+				//Unpauses game
 				pauseToggle = false;
+
+				//Pauses all audio
 				Game.gameAudio.pauseAudioStagingArea("ALL");
+
+				//Plays "UNPAUSE" SFX
 				Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.Pause.toString());
+
+				//resumes song that was previously playing before pausing game
 				Game.gameAudio.resumeAudio("MUSIC");
 			}
 			
 			//Else pause game (Note: Game should already be paused if dead, so that check doesn't matter)
 			else {
+
+				//Pause game
 				pauseToggle = true;
+
+				//Pauses all audio
 				Game.gameAudio.pauseAudioStagingArea("ALL");
+				
+				//Plays "PAUSE" SFX
 				Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.Pause.toString());
 			}
 		}
@@ -262,10 +296,14 @@ public class GVar {
 		return keyManualToggle;
 	}
 
-	//Sets whether controls are displayed to Player or not
+	//Toggles whether controls are displayed to Player or not
 	public static void toggleKeyManual() {
+
+		// If currently enabled, disable		
 		if(keyManualToggle) 
 			keyManualToggle = false;
+
+		//If currently disabled, enable
 		else
 			keyManualToggle = true;
 	}
