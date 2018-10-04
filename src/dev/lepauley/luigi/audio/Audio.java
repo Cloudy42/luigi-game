@@ -1,5 +1,7 @@
 package dev.lepauley.luigi.audio;
 
+import static dev.lepauley.luigi.utilities.Utilities.print;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,6 +16,7 @@ import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import dev.lepauley.luigi.general.GVar;
+import dev.lepauley.luigi.general.Game;
 import dev.lepauley.luigi.utilities.EnumMusic;
 import dev.lepauley.luigi.utilities.EnumSFX;
 
@@ -135,7 +138,7 @@ public class Audio {
         	stream = AudioSystem.getAudioInputStream(mapMusic.get(targetAudio));
         } else {
         	stream = null;
-	    	 System.out.println("Error! AudioType doesn't match in playAudio!");
+	    	 print("Error! AudioType doesn't match in playAudio!");
         } 
             
         //Music-related code (from online)
@@ -192,7 +195,7 @@ public class Audio {
 
         	//Displays current SFX played if in Debug Mode AND it's a new SFX
         	if(GVar.getDebug() && newAudio)
-        		System.out.println("currentSFX: " + currentSFX); 			
+        		print("currentSFX: " + currentSFX); 			
         }
 
         //Creates thread so all processing isn't waiting for this and halting all other code
@@ -223,7 +226,7 @@ public class Audio {
 			
         	//Displays current Music played if in Debug Mode AND it's a new Song
         	if(GVar.getDebug() && newAudio)
-        		System.out.println("currentMusic: " + currentMusic); 			
+        		print("currentMusic: " + currentMusic); 			
         }
 	 }
 
@@ -265,7 +268,7 @@ public class Audio {
 	    	 audioManipulation.setVolume(currentVolumeMusic);
 	     }else {
 	    	 audioManipulation.setVolume(0F);
-	    	 System.out.println("Error! AudioType doesn't match in runAudioManipulation!");
+	    	 print("Error! AudioType doesn't match in runAudioManipulation!");
 	     }
 
 	     audioManipulation.setChordPitch(emulateChordPitch);
@@ -429,37 +432,41 @@ public class Audio {
 	//    This one only meant as a quick and dirty solution.
 	public void nextSong() {
 		
-		//Resets Song Time Elapsed to 0 since changing song.
-		secondsToSkip = 0;
+		//If player is NOT dead, allow them to change song
+		if(!Game.gameHeader.getDead()) {
 
-		//Pauses Song (if playing)
-		pauseAudioStagingArea("MUSIC");
-
-		//A series of checks that cycle through songs and loop to start at the end
-		if(currentMusic.equals(EnumMusic.RunningAround.toString())) {
-			playAudioStagingArea("MUSIC", EnumMusic.Underground.toString());
-		} else if(currentMusic.equals(EnumMusic.RunningAround_Hurry.toString())) {
-			playAudioStagingArea("MUSIC", EnumMusic.Underground_Hurry.toString());
-		} else if(currentMusic.equals(EnumMusic.Underground.toString())) {
-			playAudioStagingArea("MUSIC", EnumMusic.SwimmingAround.toString());
-		} else if(currentMusic.equals(EnumMusic.Underground_Hurry.toString())) {
-			playAudioStagingArea("MUSIC", EnumMusic.SwimmingAround_Hurry.toString());
-		} else if(currentMusic.equals(EnumMusic.SwimmingAround.toString())) {
-			playAudioStagingArea("MUSIC", EnumMusic.BowserCastle.toString());
-		} else if(currentMusic.equals(EnumMusic.SwimmingAround_Hurry.toString())) {
-			playAudioStagingArea("MUSIC", EnumMusic.BowserCastle_Hurry.toString());
-		} else if(currentMusic.equals(EnumMusic.BowserCastle.toString())) {
-			playAudioStagingArea("MUSIC", EnumMusic.Invincible.toString());
-		} else if(currentMusic.equals(EnumMusic.BowserCastle_Hurry.toString())) {
-			playAudioStagingArea("MUSIC", EnumMusic.Invincible_Hurry.toString());
-		} else if(currentMusic.equals(EnumMusic.Invincible.toString())) {
-			playAudioStagingArea("MUSIC", EnumMusic.IntoThePipe.toString());
-		} else if(currentMusic.equals(EnumMusic.Invincible_Hurry.toString())) {
-			playAudioStagingArea("MUSIC", EnumMusic.IntoThePipe_Hurry.toString());
-		} else if(currentMusic.equals(EnumMusic.IntoThePipe.toString())) {
-			playAudioStagingArea("MUSIC", EnumMusic.RunningAround.toString());
-		} else if(currentMusic.equals(EnumMusic.IntoThePipe_Hurry.toString())) {
-			playAudioStagingArea("MUSIC", EnumMusic.RunningAround_Hurry.toString());
+			//Resets Song Time Elapsed to 0 since changing song.
+			secondsToSkip = 0;
+	
+			//Pauses Song (if playing)
+			pauseAudioStagingArea("MUSIC");
+	
+			//A series of checks that cycle through songs and loop to start at the end
+			if(currentMusic.equals(EnumMusic.RunningAround.toString())) {
+				playAudioStagingArea("MUSIC", EnumMusic.Underground.toString());
+			} else if(currentMusic.equals(EnumMusic.RunningAround_Hurry.toString())) {
+				playAudioStagingArea("MUSIC", EnumMusic.Underground_Hurry.toString());
+			} else if(currentMusic.equals(EnumMusic.Underground.toString())) {
+				playAudioStagingArea("MUSIC", EnumMusic.SwimmingAround.toString());
+			} else if(currentMusic.equals(EnumMusic.Underground_Hurry.toString())) {
+				playAudioStagingArea("MUSIC", EnumMusic.SwimmingAround_Hurry.toString());
+			} else if(currentMusic.equals(EnumMusic.SwimmingAround.toString())) {
+				playAudioStagingArea("MUSIC", EnumMusic.BowserCastle.toString());
+			} else if(currentMusic.equals(EnumMusic.SwimmingAround_Hurry.toString())) {
+				playAudioStagingArea("MUSIC", EnumMusic.BowserCastle_Hurry.toString());
+			} else if(currentMusic.equals(EnumMusic.BowserCastle.toString())) {
+				playAudioStagingArea("MUSIC", EnumMusic.Invincible.toString());
+			} else if(currentMusic.equals(EnumMusic.BowserCastle_Hurry.toString())) {
+				playAudioStagingArea("MUSIC", EnumMusic.Invincible_Hurry.toString());
+			} else if(currentMusic.equals(EnumMusic.Invincible.toString())) {
+				playAudioStagingArea("MUSIC", EnumMusic.IntoThePipe.toString());
+			} else if(currentMusic.equals(EnumMusic.Invincible_Hurry.toString())) {
+				playAudioStagingArea("MUSIC", EnumMusic.IntoThePipe_Hurry.toString());
+			} else if(currentMusic.equals(EnumMusic.IntoThePipe.toString())) {
+				playAudioStagingArea("MUSIC", EnumMusic.RunningAround.toString());
+			} else if(currentMusic.equals(EnumMusic.IntoThePipe_Hurry.toString())) {
+				playAudioStagingArea("MUSIC", EnumMusic.RunningAround_Hurry.toString());
+			}
 		}
 	}
 
@@ -538,7 +545,7 @@ public class Audio {
 		}else if(audioType.equals("ALL")) {
 			adjust += currentVolumeSFX;
 		}else {
-			System.out.println("Error! AudioType doesn't match in setCurrentVolume!");
+			print("Error! AudioType doesn't match in setCurrentVolume!");
 		}
 		
 		//Then checks if adjustment is within the range
@@ -567,7 +574,7 @@ public class Audio {
 		}else if(audioType.equals("MUSIC")) {
 			return currentVolumeMusic;
 		}else {
-			System.out.println("Error! AudioType doesn't match in setCurrentVolume!");
+			print("Error! AudioType doesn't match in setCurrentVolume!");
 			return 0f;
 		}		
 	}

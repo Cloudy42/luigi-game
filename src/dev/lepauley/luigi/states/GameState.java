@@ -93,17 +93,17 @@ public class GameState extends State {
 		     *  here are results from below:
 
 			 *  if(GVar.getDebug()) {
-				System.out.println("//////////////////////////////////////");
-				System.out.println("GVar.GAME_WIDTH/2: " + GVar.GAME_WIDTH/2);
-				System.out.println("pauseMsgLen/2: " + GVar.getPauseMsgLen()/2);
-				System.out.println("currentFontSize: " + currentFontSize);
-				System.out.println("pauseMsgLen/2 * currentFontSize: " + GVar.getPauseMsgLen()/2 * currentFontSize);
-				System.out.println("GVar.GAME_WIDTH/2 - pauseMsgLen/2 * currentFontSize: " + (GVar.GAME_WIDTH/2 - GVar.getPauseMsgLen()/2 * currentFontSize));
-				System.out.println("------------------------------------");
-				System.out.println("GVar.GAME_HEIGHT/2: " + GVar.GAME_HEIGHT/2);
-				System.out.println("currentFontSize/2: " + currentFontSize/2);
-				System.out.println("GVar.GAME_HEIGHT/2 - currentFontSize/2: " + (GVar.GAME_HEIGHT/2 - currentFontSize/2));
-			 *  System.out.println("//////////////////////////////////////");
+				print("//////////////////////////////////////");
+				print("GVar.GAME_WIDTH/2: " + GVar.GAME_WIDTH/2);
+				print("pauseMsgLen/2: " + GVar.getPauseMsgLen()/2);
+				print("currentFontSize: " + currentFontSize);
+				print("pauseMsgLen/2 * currentFontSize: " + GVar.getPauseMsgLen()/2 * currentFontSize);
+				print("GVar.GAME_WIDTH/2 - pauseMsgLen/2 * currentFontSize: " + (GVar.GAME_WIDTH/2 - GVar.getPauseMsgLen()/2 * currentFontSize));
+				print("------------------------------------");
+				print("GVar.GAME_HEIGHT/2: " + GVar.GAME_HEIGHT/2);
+				print("currentFontSize/2: " + currentFontSize/2);
+				print("GVar.GAME_HEIGHT/2 - currentFontSize/2: " + (GVar.GAME_HEIGHT/2 - currentFontSize/2));
+			 *  print("//////////////////////////////////////");
 			 
 			 * //////////////////////////////////////
 				GVar.GAME_WIDTH/2: 525

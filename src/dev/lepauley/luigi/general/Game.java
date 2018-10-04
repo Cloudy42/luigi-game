@@ -1,6 +1,5 @@
 package dev.lepauley.luigi.general;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
@@ -19,6 +18,7 @@ import dev.lepauley.luigi.utilities.EnumMusic;
 import dev.lepauley.luigi.utilities.EnumPause;
 import dev.lepauley.luigi.utilities.FontManager;
 import dev.lepauley.luigi.utilities.Utilities;
+import static dev.lepauley.luigi.utilities.Utilities.*;
 
 /*
  * Main class for game - holds all base code: 
@@ -164,10 +164,11 @@ public class Game implements Runnable {
 
 			//Displays current Volume if in Debug Mode
         	if(GVar.getDebug())
-        		System.out.println("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
+        		print("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
 			
-			//plays quieter song due to speed adjust above
-        	gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
+			//plays quieter song due to speed adjust above (but only if not dead)
+        	if(!gameHeader.getDead())
+        		gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}
 		
 		//Increase Volume
@@ -178,10 +179,11 @@ public class Game implements Runnable {
 
 			//Displays current Volume if in Debug Mode
         	if(GVar.getDebug())
-    			System.out.println("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
+    			print("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
 
-			//plays louder song due to speed adjust above
-        	gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
+			//plays louder song due to speed adjust above (but only if not dead)
+        	if(!gameHeader.getDead())
+        		gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}		
 
 		//If a state exists (not null), then tick state

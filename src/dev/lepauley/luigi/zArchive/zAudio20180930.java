@@ -17,6 +17,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 import dev.lepauley.luigi.audio.AudioManipulationGitHelper;
 import dev.lepauley.luigi.utilities.EnumMusic;
+import static dev.lepauley.luigi.utilities.Utilities.*;
 
 
 /*
@@ -83,15 +84,15 @@ public class zAudio20180930 {
 	        clipMusic.open(audioMusic);
         }        
         catch (IOException ex){
-            System.out.println("Sorry but there has been a problem reading your file.");
+            print("Sorry but there has been a problem reading your file.");
             ex.printStackTrace();
         }
         catch (UnsupportedAudioFileException ex1){
-            System.out.println("Sorry but the audio file format you are using is not supported.");
+            print("Sorry but the audio file format you are using is not supported.");
             ex1.printStackTrace();
         }
         catch (LineUnavailableException ex2){
-            System.out.println("Sorry but there are audio line problems.");
+            print("Sorry but there are audio line problems.");
             ex2.printStackTrace();
         } 
 	}
@@ -132,15 +133,15 @@ public class zAudio20180930 {
 				}
 	        }        
 	        catch (IOException ex){
-	            System.out.println("Sorry but there has been a problem reading your file.");
+	            print("Sorry but there has been a problem reading your file.");
 	            ex.printStackTrace();
 	        }
 	        catch (UnsupportedAudioFileException ex1){
-	            System.out.println("Sorry but the audio file format you are using is not supported.");
+	            print("Sorry but the audio file format you are using is not supported.");
 	            ex1.printStackTrace();
 	        }
 	        catch (LineUnavailableException ex2){
-	            System.out.println("Sorry but there are audio line problems.");
+	            print("Sorry but there are audio line problems.");
 	            ex2.printStackTrace();
 	        }
 			//adjustVolume("all",0F);
@@ -196,7 +197,7 @@ public class zAudio20180930 {
 
 			//Only Print this is greater than the minimum or is less than the maximum
 			if(gain >= MIN_VOLUME && gain <= MAX_VOLUME)
-				System.out.println("Current Volume [SFX: " + currentVolumeSFX + "|Music: " + currentVolumeMusic + "]");
+				print("Current Volume [SFX: " + currentVolumeSFX + "|Music: " + currentVolumeMusic + "]");
 
 			//Add volume and check caps
 		        if(gain > MAX_VOLUME)
@@ -260,11 +261,11 @@ public class zAudio20180930 {
 					      } else if(gain > 0) {
 					    	  format = new AudioFormat((int)(formatIn.getSampleRate()*gain), formatIn.getSampleSizeInBits(), formatIn.getChannels(), true, formatIn.isBigEndian());
 					      } else {
-					    	System.out.println("Go back to normal audio");
+					    	print("Go back to normal audio");
 					    	format = new AudioFormat((int)(formatIn.getSampleRate()), formatIn.getSampleSizeInBits(), formatIn.getChannels(), true, formatIn.isBigEndian());
 					      }
-					          System.out.println(formatIn.toString());
-					          System.out.println(format.toString());
+					          print(formatIn.toString());
+					          print(format.toString());
 					      byte[] data=new byte[1024];
 					      DataLine.Info dinfo=new DataLine.Info(SourceDataLine.class, format);
 					      SourceDataLine line=(SourceDataLine)AudioSystem.getLine(dinfo);
@@ -284,7 +285,7 @@ public class zAudio20180930 {
 			    }
 			};
 			currentSpeedMusic = gain;
-			System.out.println("currentSpeedMusic: " +  currentSpeedMusic + " | gain: " + gain);
+			print("currentSpeedMusic: " +  currentSpeedMusic + " | gain: " + gain);
 			musicThread.start();
 			musicThreadRunning = true;
 		  }

@@ -38,6 +38,9 @@ public class ColorManager {
 		
 		mapColors.put(EnumColor.OtherTan, 			new Color(247, 218, 178));
 		mapColors.put(EnumColor.OtherDarkGrey, 		new Color( 45,  45,  45));
+
+		//Sets the Default Color (uses one of the above).
+		mapColors.put(EnumColor.DefaultColor, 		mapColors.get(EnumColor.PrimaryWhite));
 	}
 	
 }

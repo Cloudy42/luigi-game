@@ -14,7 +14,8 @@ public enum EnumColor {
 	,PrimaryWhite	("Primary White")
 	,PrimaryBlack	("Primary Black")
 	,OtherTan		("Other Tan")
-	,OtherDarkGrey	("Other Dark Grey");
+	,OtherDarkGrey	("Other Dark Grey")
+	,DefaultColor 	("Default Color");
 	
 	//Pulled below from: https://stackoverflow.com/questions/3978654/best-way-to-create-enum-of-strings
 	private final String text;

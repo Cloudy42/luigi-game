@@ -7,6 +7,7 @@ import dev.lepauley.luigi.utilities.EnumFont;
 import dev.lepauley.luigi.utilities.EnumPause;
 import dev.lepauley.luigi.utilities.EnumSFX;
 import dev.lepauley.luigi.utilities.FontManager;
+import static dev.lepauley.luigi.utilities.Utilities.*;
 
 /*
  * Class of global variables to use throughout code:
@@ -114,7 +115,7 @@ public class GVar {
 
 			//Displays FPS if in Debug Mode and game is NOT paused!
         	if(GVar.getDebug()) 
-        		System.out.println("FPS: " + FPS);
+        		print("FPS: " + FPS);
 		
 		//If Pause Message = "STOP" and THEN you increase speed, it will resume (don't have to push pause to get out)
 		if(pauseMsg.equals(EnumPause.STOP.toString()) && FPS > FPS_MIN)
@@ -131,7 +132,7 @@ public class GVar {
 
 				//Displays current Volume if in Debug Mode
 	        	if(GVar.getDebug())
-	        		System.out.println("FPS: STOPPED!");
+	        		print("FPS: STOPPED!");
 
         		//Put game in "STOP" mode
 	        	togglePause(EnumPause.STOP.toString());

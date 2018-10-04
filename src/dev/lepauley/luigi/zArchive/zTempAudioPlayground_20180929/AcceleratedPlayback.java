@@ -6,17 +6,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.ByteArrayInputStream;
 import java.util.Date;
+import static dev.lepauley.luigi.utilities.Utilities.*;
+
 //https://stackoverflow.com/questions/5760128/increase-playback-speed-of-sound-file-in-java
 public class AcceleratedPlayback {
 
     public static void main(String[] args) throws Exception {
         int playBackSpeed = 2;
-        System.out.println("Playback Rate: " + playBackSpeed);
+        print("Playback Rate: " + playBackSpeed);
 
         //URL url = new URL("http://www.talkingwav.com/wp-content/uploads/2017/10/mario_01.wav");
         //File url = new File("res/audio/music/05 - Swimming Around.wav");
         File url = new File("res/audio/sfx/smb_powerup.wav");
-        System.out.println("URL: " + url);
+        print("URL: " + url);
         AudioInputStream ais = AudioSystem.getAudioInputStream(url);
         AudioFormat af = ais.getFormat();
 
@@ -31,7 +33,7 @@ public class AcceleratedPlayback {
                 baos.write(b, 0, read);
             }
         }
-        System.out.println("End entire: \t" + new Date());
+        print("End entire: \t" + new Date());
         byte[] b1 = baos.toByteArray();
         byte[] b2 = new byte[b1.length/frameSize];
         /*
@@ -41,17 +43,17 @@ public class AcceleratedPlayback {
             }
         }
 */
-        System.out.println("End sub-sample: \t" + new Date());
-        System.out.println("b2.length: " + b2.length);
-        System.out.println("frameSize: " + frameSize);
-        System.out.println("b2.length/frameSize: " + b2.length/frameSize);
-        System.out.println("21811 * 10905 = " + 21811 * 10905);
+        print("End sub-sample: \t" + new Date());
+        print("b2.length: " + b2.length);
+        print("frameSize: " + frameSize);
+        print("b2.length/frameSize: " + b2.length/frameSize);
+        print("21811 * 10905 = " + 21811 * 10905);
 
         for (int x=0; x<b2.length/frameSize; x++) {
             for (int y=0; y<frameSize; y++) {
                 for (int z=0; z<2; z++) {
-	         //       System.out.println("x: " + x + " | frameSize: " + frameSize + " | y: " + y + " | (x*frameSize)+y: " + (x*frameSize)+y);
-	         //       System.out.println("x: " + x + " | frameSize: " + frameSize + " | playBackSpeed: " + playBackSpeed + " | y: " + y + " | (x*frameSize*playBackSpeed)+y: " + (x*frameSize*playBackSpeed)+y);
+	         //       print("x: " + x + " | frameSize: " + frameSize + " | y: " + y + " | (x*frameSize)+y: " + (x*frameSize)+y);
+	         //       print("x: " + x + " | frameSize: " + frameSize + " | playBackSpeed: " + playBackSpeed + " | y: " + y + " | (x*frameSize*playBackSpeed)+y: " + (x*frameSize*playBackSpeed)+y);
 	                b2[(x*frameSize)+y] = b1[(x*frameSize*playBackSpeed)+y];
                 }
             }
