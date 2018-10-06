@@ -14,7 +14,7 @@ import static dev.lepauley.luigi.utilities.Utilities.*;
  */
 
 public class GVar {
-
+sd
 	//Manages how small/large entities can scale to
 	public static final int MIN_SCALE = 1;
 	public static final int MAX_SCALE = 5;
