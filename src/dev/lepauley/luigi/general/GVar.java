@@ -14,7 +14,7 @@ import static dev.lepauley.luigi.utilities.Utilities.*;
  */
 
 public class GVar {
-sd
+
 	//Manages how small/large entities can scale to
 	public static final int MIN_SCALE = 1;
 	public static final int MAX_SCALE = 5;
@@ -118,11 +118,18 @@ sd
         		print("FPS: " + FPS);
 		
 		//If Pause Message = "STOP" and THEN you increase speed, it will resume (don't have to push pause to get out)
-		if(pauseMsg.equals(EnumPause.STOP.toString()) && FPS > FPS_MIN)
+		if(pauseMsg.equals(EnumPause.STOP.toString()) && FPS > FPS_MIN) {
 			togglePause(EnumPause.RESUME.toString());
+			
+			//Sets audio speed back to the standard threshold
+			Game.gameAudio.setCurrentSpeed(Game.gameAudio.STOP_SPEED_ADJUST);
+		}
 		
 		//If you decrease FPS BELOW the min, it will "STOP" the game
 		if(FPS < FPS_MIN) {
+			
+			//Decreases audio speed considerably due to "Stop" mode
+			Game.gameAudio.setCurrentSpeed(-Game.gameAudio.STOP_SPEED_ADJUST);
 
 			//Set FPS to Min since cannot go below it
 			FPS = FPS_MIN;

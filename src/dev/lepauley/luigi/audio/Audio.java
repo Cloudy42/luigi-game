@@ -37,12 +37,15 @@ public class Audio {
 
 	//Sets Min and Max volume
 	//Note: 0 = muted | negative volumes seem to not matter and are treated like positive? I didn't have min and it was crazy before.
-	private final float MIN_VOLUME = 0.0f  
+	public final float MIN_VOLUME = 0.0f  
 					  , MAX_VOLUME = 4.0f;
 	
 	//Sets Min and Max audio speed (How fast/slow the song/SFX can play):
-	private final float MIN_SPEED = -4.0f  
-					  , MAX_SPEED =  4.0f;
+	//STOP_SPEED_ADJUST = How much speed is gained/lost with "Stop" Mode
+	public final float MIN_SPEED = -4.0f  
+					  , MAX_SPEED =  4.0f
+					  , STOP_SPEED_ADJUST = 0.25f;
+	
 	
 	//Threads for individual audio channels
 	//Needed for simultaneous audio using audio manipulation because it takes a lot of processing to simultaneously read & write audio.
@@ -496,7 +499,10 @@ public class Audio {
 	public void setCurrentSpeed(float f) {
 		
 		//Uses FPS cap check since we want this to be linked with FPS. ONLY adjust speed if can still change FPS
-		if(GVar.FPS > GVar.FPS_MIN && GVar.FPS < GVar.FPS_MAX)
+		//OR if less than and not paused which implies we're entering "Stop" mode, so will be
+		//decreasing audio speed considerably.
+		if((GVar.FPS > GVar.FPS_MIN && GVar.FPS < GVar.FPS_MAX) ||
+		   (GVar.FPS < GVar.FPS_MIN) && !GVar.getPause())
 			currentSpeed += f;
 
 		//Only change if within the MAX/MIN range for allowable speed values 
