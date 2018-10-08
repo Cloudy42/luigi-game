@@ -4,7 +4,6 @@ import java.awt.Font;
 
 import dev.lepauley.luigi.states.StateManager;
 import dev.lepauley.luigi.utilities.EnumFont;
-import dev.lepauley.luigi.utilities.EnumPause;
 import dev.lepauley.luigi.utilities.EnumSFX;
 import dev.lepauley.luigi.utilities.FontManager;
 import static dev.lepauley.luigi.utilities.Utilities.*;
@@ -65,6 +64,9 @@ public class GVar {
 	//Denotes whether game is paused or not
 	private static boolean pauseToggle;
 
+	//Denotes whether player is in "Stop" Mode or not
+	private static boolean stopToggle;
+
 	//Denotes whether key manual is active or not
 	private static boolean keyManualToggle;
 
@@ -76,6 +78,7 @@ public class GVar {
 		debugToggle = true;
 		scrollToggle = true;
 		pauseToggle = false;		
+		stopToggle = false;		
 		keyManualToggle = false;
 		pauseMsg = "PAUSED";
 		pauseMsgLen = pauseMsg.length();
@@ -105,44 +108,51 @@ public class GVar {
 	//      a lot of moving parts involved from various classes, so need to be smart about it.
 	public static void setFPS(int newFPS) {
 
+		int oldFPS = FPS;
+		
 		//sets FPS equal to the new value then we're going run some checks on it
 		FPS = newFPS;
 		
 		//Only Print this if FPS is greater than the minimum or is less than the maximum (between range)
 		//Note: We're setting FPS then doing this check which means the first time it gets to the min and max, it will print
 		//      but after that it won't. Clever girl...
-		if(FPS >= FPS_MIN && FPS <= FPS_MAX)
+		if(FPS >= FPS_MIN && FPS <= FPS_MAX) {
 
+			//If currently in "Stop" Mode and THEN you increase speed, it will exit "Stop" mode
+			if(getStop() && FPS > FPS_MIN) {
+				//Special adjustment for coming out of "Stop" mode since both "Stop" mode and the slowest setting share 10 FPS.
+				FPS = oldFPS;
+
+				//Exits "Stop" mode
+				toggleStop();
+
+				//Sets audio speed back to the standard threshold
+				Game.gameAudio.setCurrentSpeed(Game.gameAudio.STOP_SPEED_ADJUST);
+			}
+			
 			//Displays FPS if in Debug Mode and game is NOT paused!
         	if(GVar.getDebug()) 
-        		print("FPS: " + FPS);
-		
-		//If Pause Message = "STOP" and THEN you increase speed, it will resume (don't have to push pause to get out)
-		if(pauseMsg.equals(EnumPause.STOP.toString()) && FPS > FPS_MIN) {
-			togglePause(EnumPause.RESUME.toString());
-			
-			//Sets audio speed back to the standard threshold
-			Game.gameAudio.setCurrentSpeed(Game.gameAudio.STOP_SPEED_ADJUST);
+        		print("FPS: " + FPS);		
 		}
 		
 		//If you decrease FPS BELOW the min, it will "STOP" the game
 		if(FPS < FPS_MIN) {
 			
-			//Decreases audio speed considerably due to "Stop" mode
-			Game.gameAudio.setCurrentSpeed(-Game.gameAudio.STOP_SPEED_ADJUST);
-
-			//Set FPS to Min since cannot go below it
+			//Set FPS to Min since cannot go below it			
 			FPS = FPS_MIN;
 			
 			//This check makes it so it will only print STOPPED to console once
-			if(!getPause()) {
+			if(!getStop()) {
 
 				//Displays current Volume if in Debug Mode
 	        	if(GVar.getDebug())
 	        		print("FPS: STOPPED!");
 
-        		//Put game in "STOP" mode
-	        	togglePause(EnumPause.STOP.toString());
+				//Decreases audio speed considerably due to "Stop" mode
+				Game.gameAudio.setCurrentSpeed(-Game.gameAudio.STOP_SPEED_ADJUST);
+
+				//Put game in "STOP" mode
+	        	toggleStop();
 			}
 
 		//If you increase FPS ABOVE the max, it will Set FPS to max since cannot go above it
@@ -241,64 +251,63 @@ public class GVar {
 	}
 	
 	//Toggles whether game is currently Paused or not
-	//Note: Time "Stopped" also qualifies
 	public static void togglePause(String msg) {
 
 		//Sets the pause message
 		setPauseMsg(msg);
 
-		//if Pause Message == STOP, stop time (if not currently paused)
-		if(msg.equals(EnumPause.STOP.toString())){
-			if(!pauseToggle && StateManager.getCurrentStateName() == "GameState") {
-				
-				//Clears message and "pauses" game
-				setPauseMsg("");
-				pauseToggle = true;
-			}
+		//if Game is paused and you're not dead, unpause and resume audio
+		if(pauseToggle && !Game.gameHeader.getDead()) { 
 
-		//If Pause Message == RESUME AND game is paused and in game state, then unpause game 
-		} else if(msg.equals(EnumPause.RESUME.toString())){
-			if(pauseToggle && StateManager.getCurrentStateName() == "GameState") {
+			//Unpauses game
+			pauseToggle = false;
 
-				//Clears message and "unpauses" game
-				setPauseMsg("");
-				pauseToggle = false;
-			}
+			//Pauses all audio
+			Game.gameAudio.pauseAudioStagingArea("ALL");
 
-		//Otherwise do normal pause rules:
-		} else if(!msg.equals(EnumPause.STOP.toString())) {
+			//Plays "UNPAUSE" SFX
+			Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.Pause.toString());
 
-			//if Game is paused and you're not dead, unpause and resume audio
-			if(pauseToggle && !Game.gameHeader.getDead()) { 
+			//resumes song that was previously playing before pausing game
+			Game.gameAudio.resumeAudio("MUSIC");
+		}
+		
+		//Else pause game (Note: Game should already be paused if dead, so that check doesn't matter)
+		else {
 
-				//Unpauses game
-				pauseToggle = false;
+			//Pause game
+			pauseToggle = true;
 
-				//Pauses all audio
-				Game.gameAudio.pauseAudioStagingArea("ALL");
-
-				//Plays "UNPAUSE" SFX
-				Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.Pause.toString());
-
-				//resumes song that was previously playing before pausing game
-				Game.gameAudio.resumeAudio("MUSIC");
-			}
+			//Pauses all audio
+			Game.gameAudio.pauseAudioStagingArea("ALL");
 			
-			//Else pause game (Note: Game should already be paused if dead, so that check doesn't matter)
-			else {
-
-				//Pause game
-				pauseToggle = true;
-
-				//Pauses all audio
-				Game.gameAudio.pauseAudioStagingArea("ALL");
-				
-				//Plays "PAUSE" SFX
-				Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.Pause.toString());
-			}
+			//Plays "PAUSE" SFX
+			Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.Pause.toString());
 		}
 	}	
 	
+	//Gets whether game is currently in "Stop" mode or not
+	public static boolean getStop() {
+		return stopToggle;
+	}
+	
+	//Toggles whether game is currently in "Stop" mode or not
+	public static void toggleStop() {
+	
+		//if NOT "Stop" Mode and in GameState, stop time
+		if(!getStop() && StateManager.getCurrentStateName() == "GameState") {
+				
+			//Stops Game
+			stopToggle = true;
+
+		//If "Stop" Mode and in gameState, then resume time 
+		} else if(getStop() && StateManager.getCurrentStateName() == "GameState") {
+
+			//Resumes Game
+			stopToggle = false;
+		}
+	}
+
 	//Gets whether controls are displayed to Player or not
 	public static boolean getKeyManual() {
 		return keyManualToggle;

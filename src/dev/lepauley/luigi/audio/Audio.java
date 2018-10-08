@@ -502,14 +502,19 @@ public class Audio {
 		//OR if less than and not paused which implies we're entering "Stop" mode, so will be
 		//decreasing audio speed considerably.
 		if((GVar.FPS > GVar.FPS_MIN && GVar.FPS < GVar.FPS_MAX) ||
-		   (GVar.FPS < GVar.FPS_MIN) && !GVar.getPause())
+		   (GVar.FPS <= GVar.FPS_MIN && !GVar.getStop()))
 			currentSpeed += f;
 
 		//Only change if within the MAX/MIN range for allowable speed values 
 		if(currentSpeed > MAX_SPEED)
 			currentSpeed = MAX_SPEED;
-		if(currentSpeed < MIN_SPEED)
+		//Only reset this IF in "Stop" Mode
+		if(currentSpeed < MIN_SPEED && GVar.getStop())
 			currentSpeed = MIN_SPEED;
+		
+		//Prints Current Audio Speed IF in Debug mode
+		if(GVar.getDebug())
+			print("Current Audio Speed: " + currentSpeed);
 	}
 	
 	//Gets current Audio Speed

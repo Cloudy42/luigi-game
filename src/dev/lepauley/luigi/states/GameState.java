@@ -42,8 +42,8 @@ public class GameState extends State {
 	@Override
 	public void tick() {
 		
-		//Toggles Pause On/Off (only if not dead) AND not in "STOP" mode
-		if(Game.keyManager.pauseToggle && !Game.gameHeader.getDead() && !GVar.getPauseMsg().equals(EnumPause.STOP.toString()))
+		//Toggles Pause On/Off (only if not dead)
+		if(Game.keyManager.pauseToggle && !Game.gameHeader.getDead())
 			GVar.togglePause(EnumPause.PAUSED.toString());
 
 		//If Game = UnPaused, tick
@@ -52,7 +52,11 @@ public class GameState extends State {
 			level.tick();
 			player.tick();
 		}
-	}
+		//If Game = "Stop" mode, tick player only (if not dead)
+		else if(GVar.getStop() && !Game.gameHeader.getDead()) {
+			player.tick();
+		}
+}
 
 	//Draws Level, header, player, and pause Message to screen
 	@Override

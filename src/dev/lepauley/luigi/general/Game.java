@@ -127,10 +127,8 @@ public class Game implements Runnable {
 		if(keyManager.timeUp && StateManager.getCurrentState() == gameState)
 			gameHeader.adjustTime(1);
 		
-		//Note: I have a special check for whether game is stopped since they should be able to increase/decrease FPS to get out of that mode
-		//      but may be worthwhile to make these separate processes so that stopped doesn't toggle Pause but something else that does something similar.
-		//Decrease FPS (only in GameState when game is NOT paused)
-		if((keyManager.fpsDown && StateManager.getCurrentState() == gameState) && (!GVar.getPause() || GVar.getPauseMsg().equals(EnumPause.STOP.toString()))) {
+		//Decrease FPS (only in GameState when game is NOT paused and NOT in "Stop" mode)
+		if((keyManager.fpsDown && StateManager.getCurrentState() == gameState) && !GVar.getPause() && !GVar.getStop()) {
 
 			//Decreases FPS
 			GVar.setFPS(GVar.FPS - 10);
@@ -143,14 +141,15 @@ public class Game implements Runnable {
 		}
 		
 		//Increase FPS (only in GameState when game is NOT paused)
-		if((keyManager.fpsUp && StateManager.getCurrentState() == gameState) && (!GVar.getPause() || GVar.getPauseMsg().equals(EnumPause.STOP.toString()))) {
+		if((keyManager.fpsUp && StateManager.getCurrentState() == gameState) && !GVar.getPause()) {
 
+			//Increases speed to coincide with higher FPS ONLY if NOT in "Stop" mode and FPS < Max
+			if(!GVar.getStop() && GVar.FPS < GVar.FPS_MAX)
+				gameAudio.setCurrentSpeed(0.08f);
+			
 			//Increases FPS
 			GVar.setFPS(GVar.FPS + 10);
 
-			//Increases speed to coincide with higher FPS
-			gameAudio.setCurrentSpeed(0.08f);
-			
 			//plays faster song due to speed adjust above
 			gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}
@@ -166,8 +165,8 @@ public class Game implements Runnable {
         	if(GVar.getDebug())
         		print("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
 			
-			//plays quieter song due to speed adjust above (but only if not dead)
-        	if(!gameHeader.getDead())
+			//plays quieter song due to speed adjust above (but only if not dead and IN gameState)
+        	if(!gameHeader.getDead() && StateManager.getCurrentState() == gameState)
         		gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}
 		
@@ -181,8 +180,8 @@ public class Game implements Runnable {
         	if(GVar.getDebug())
     			print("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
 
-			//plays louder song due to speed adjust above (but only if not dead)
-        	if(!gameHeader.getDead())
+			//plays louder song due to speed adjust above (but only if not dead and IN gameState)
+        	if(!gameHeader.getDead() && StateManager.getCurrentState() == gameState)
         		gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}		
 

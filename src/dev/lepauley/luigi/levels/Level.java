@@ -37,8 +37,8 @@ public class Level {
 	
 	public void tick() {
 
-		//If player is NOT dead and scroll Toggle is enabled
-		if(!Game.gameHeader.getDead() && GVar.getScroll()) {
+		//If player is NOT dead and scroll Toggle is enabled and NOT in "Stop" Mode
+		if(!Game.gameHeader.getDead() && GVar.getScroll() && !GVar.getStop()) {
 
 			//Used to test scrolling level, IF scrolling is toggled
 			scrollLevel+=scrollConst;
