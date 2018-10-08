@@ -22,6 +22,8 @@ public class KeyManager implements KeyListener {
 						, fpsDown, fpsUp
 						, timeDown, timeUp
 						, volumeDown, volumeUp
+						, pitchDown, pitchUp
+						, rateDown, rateUp
 						, scaleDown, scaleUp
 				   /*CYCLE SELECTIONS*/
 						, changePlayer, nextSong
@@ -44,6 +46,8 @@ public class KeyManager implements KeyListener {
 			                     ,"[1/2] FPS--/++"
 			                     ,"[3/4] Time--/++"
 			                     ,"[5/6] Volume--/++"
+			                     ,"[7/8] Pitch--/++"
+			                     ,"[9/0] Rate--/++"
 			                     ,"[</>] Scale--/++"
 			                     ,"[C] Change Player"
 			                    };
@@ -69,16 +73,25 @@ public class KeyManager implements KeyListener {
 		
 		//*DECREMENT/INCREMENT*/
 		//Decreases and Increases game FPS
+		//Note: We're adjusting game audio speed in tandem with this
 		fpsDown = keys[KeyEvent.VK_1];
 		fpsUp = keys[KeyEvent.VK_2];		
 		
-		//Decreases and Increases game Time
+		//Decreases and Increases game header Time
 		timeDown = keys[KeyEvent.VK_3];
 		timeUp = keys[KeyEvent.VK_4];		
 		
-		//Decreases and Increases game Volume
+		//Decreases and Increases game audio Volume
 		volumeDown = keys[KeyEvent.VK_5];
 		volumeUp = keys[KeyEvent.VK_6];		
+		
+		//Decreases and Increases game audio Pitch
+		pitchDown = keys[KeyEvent.VK_7];
+		pitchUp = keys[KeyEvent.VK_8];		
+				
+		//Decreases and Increases game audio Rate
+		rateDown = keys[KeyEvent.VK_9];
+		rateUp = keys[KeyEvent.VK_0];		
 		
 		//Decreases and Increases game Scale (Entities, Tiles, etc.)
 		scaleDown = keys[KeyEvent.VK_COMMA];

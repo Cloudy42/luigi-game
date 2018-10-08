@@ -185,6 +185,67 @@ public class Game implements Runnable {
         		gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
 		}		
 
+
+		//Decrease Game Audio Pitch
+		if(keyManager.pitchDown && !GVar.getPause()) {
+
+			//Decrease game audio pitch
+			gameAudio.setCurrentPitch(-0.1f);
+
+			//Displays current Pitch if in Debug Mode
+        	if(GVar.getDebug())
+        		print("CurrentPitch: " + gameAudio.getCurrentPitch());
+			
+			//plays new rate due to adjustment above (but only if not dead and IN gameState)
+        	if(!gameHeader.getDead() && StateManager.getCurrentState() == gameState)
+        		gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
+		}
+		
+		//Increase Game Audio Pitch
+		if(keyManager.pitchUp && !GVar.getPause()) {
+
+			//Decrease game audio pitch
+			gameAudio.setCurrentPitch(0.1f);
+
+			//Displays current Pitch if in Debug Mode
+        	if(GVar.getDebug())
+        		print("CurrentPitch: " + gameAudio.getCurrentPitch());
+			
+			//plays new rate due to adjustment above (but only if not dead and IN gameState)
+        	if(!gameHeader.getDead() && StateManager.getCurrentState() == gameState)
+        		gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
+		}
+
+		//Decrease Game Audio Rate
+		if(keyManager.rateDown && !GVar.getPause()) {
+
+			//Decrease game audio rate
+			gameAudio.setCurrentRate(-0.1f);
+
+			//Displays current Rate if in Debug Mode
+        	if(GVar.getDebug())
+        		print("CurrentRate: " + gameAudio.getCurrentRate());
+			
+			//plays new rate due to adjustment above (but only if not dead and IN gameState)
+        	if(!gameHeader.getDead() && StateManager.getCurrentState() == gameState)
+        		gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
+		}
+		
+		//Increase Game Audio Rate
+		if(keyManager.rateUp && !GVar.getPause()) {
+
+			//Decrease game audio rate
+			gameAudio.setCurrentRate(0.1f);
+
+			//Displays current Rate if in Debug Mode
+        	if(GVar.getDebug())
+        		print("CurrentRate: " + gameAudio.getCurrentRate());
+			
+			//plays new rate due to adjustment above (but only if not dead and IN gameState)
+        	if(!gameHeader.getDead() && StateManager.getCurrentState() == gameState)
+        		gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
+		}
+		
 		//If a state exists (not null), then tick state
 		if(StateManager.getCurrentState() != null)
 			StateManager.getCurrentState().tick();
@@ -303,15 +364,15 @@ public class Game implements Runnable {
 			if(GVar.getDebug())
 				Utilities.drawShadowString(g, ColorManager.mapColors.get(EnumColor.LightGreen), "FPS:" + lastTicks, 3, 23, GVar.getShadowFont(currentFontSize));
 			
-			//sets font and font a bit smaller since running out of space
-			currentFontSize = 18;
+			//sets font and font shadow a bit smaller for controls since running out of space
+			currentFontSize = 16;
 			g.setFont (GVar.getFont(GVar.defaultFont, currentFontSize));
 			
 			//If Key Manual = Active, display controls and rectangle
 			if(GVar.getKeyManual()) {
 				//Draw rectangle behind since a bit hard to read font
 				g.setColor(ColorManager.mapColors.get(EnumColor.OtherTan));
-				g.fillRect(GVar.KEY_MANUAL_RECT_X, GVar.KEY_MANUAL_RECT_Y, GVar.KEY_MANUAL_RECT_WIDTH, currentFontSize * (keyManager.getKeyManual().length + 2));
+				g.fillRect(GVar.KEY_MANUAL_RECT_X, GVar.KEY_MANUAL_RECT_Y, GVar.KEY_MANUAL_RECT_WIDTH, currentFontSize * (keyManager.getKeyManual().length + 5));
 				
 				//If Key Manual Mode = Active, print Controls
 				for(int i = 0; i < keyManager.getKeyManual().length; i++)

@@ -46,7 +46,14 @@ public class Audio {
 					  , MAX_SPEED =  4.0f
 					  , STOP_SPEED_ADJUST = 0.25f;
 	
-	
+	//Sets Min and Max audio pitch
+	public final float MIN_PITCH = 0.1f  
+					  , MAX_PITCH =  4.0f;
+
+	//Sets Min and Max audio rate
+	public final float MIN_RATE = 0.4f  
+					  , MAX_RATE =  4.0f;
+
 	//Threads for individual audio channels
 	//Needed for simultaneous audio using audio manipulation because it takes a lot of processing to simultaneously read & write audio.
 	private Thread sfxThread = null
@@ -522,9 +529,15 @@ public class Audio {
 		return currentSpeed;
 	}
 	
-	//Sets current Audio pitch (currently not using)
+	//Sets current Audio pitch
 	public void setCurrentPitch(float f) {
 		currentPitch += f;
+
+		//Then checks if adjustment is within the range
+		if(currentPitch < MIN_PITCH)
+			currentPitch = MIN_PITCH;
+		if(currentPitch > MAX_PITCH)
+			currentPitch = MAX_PITCH;			
 	}
 	
 	//Gets current Audio pitch (currently not using)
@@ -532,10 +545,16 @@ public class Audio {
 		return currentPitch;
 	}
 	
-	//Sets current Audio Rate (currently not using)
+	//Sets current Audio Rate
 	//Not sure of difference with Speed TBH
 	public void setCurrentRate(float f) {
 		currentRate += f;
+
+		//Then checks if adjustment is within the range
+		if(currentRate < MIN_RATE)
+			currentRate = MIN_RATE;
+		if(currentRate > MAX_RATE)
+			currentRate = MAX_RATE;			
 	}
 	
 	//Gets current Audio pitch (currently not using)
