@@ -15,7 +15,6 @@ import dev.lepauley.luigi.states.StateManager;
 import dev.lepauley.luigi.utilities.ColorManager;
 import dev.lepauley.luigi.utilities.EnumColor;
 import dev.lepauley.luigi.utilities.EnumMusic;
-import dev.lepauley.luigi.utilities.EnumPause;
 import dev.lepauley.luigi.utilities.FontManager;
 import dev.lepauley.luigi.utilities.Utilities;
 import static dev.lepauley.luigi.utilities.Utilities.*;
