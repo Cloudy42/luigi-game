@@ -19,6 +19,7 @@ import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.general.Game;
 import dev.lepauley.luigi.utilities.EnumMusic;
 import dev.lepauley.luigi.utilities.EnumSFX;
+import dev.lepauley.luigi.utilities.Utilities;
 
 
 /*
@@ -74,6 +75,13 @@ public class Audio {
                 , currentSpeed
                 , currentPitch
                 , currentRate;
+	
+	//Sets all default audio values
+	public final float DEFAULT_CURRENT_VOLUME_SFX = 1.0f
+			         , DEFAULT_CURRENT_VOLUME_MUSIC = 1.0f
+			         , DEFAULT_CURRENT_SPEED = 1.0f
+			         , DEFAULT_CURRENT_PITCH = 1.0f
+			         , DEFAULT_CURRENT_RATE = 1.0f; 
 	
 	//Tracks how many seconds (and subSeconds) have elapsed in song 
 	//(Needed for pausing and resuming, but more importantly, for transitioning between audio as we manipulate it, otherwise starts over every time):
@@ -134,6 +142,15 @@ public class Audio {
          //Tracks whether audio about to be played is new or not 
          //(used purely for debug purposes atm not wanting to keep displaying same song with all audio modifications)
          boolean newAudio = false;
+         
+         //Every time audio is adjusted, I have it update the settings file so that upon reloading, it's still saved
+         //Note: Surrounded with try-catch since this isn't initialized at the start of the game.
+         try {
+			Utilities.writeSettingsFile();
+		} catch (Exception e) {
+			//Commenting out since not initialized at beginning of game
+			//e.printStackTrace();
+		}
          
         //Pauses current Audio
         pauseAudioStagingArea(audioType);
@@ -673,11 +690,19 @@ public class Audio {
 	//Resets default values. Useful when creating Audio object at beginning as well as resetting game.
 	//Note that when we eventually save settings, we can't have volume in here since that can be set custom to other values.
 	public void resetDefaults() {
-		currentVolumeSFX = 1.0f;
-	    currentVolumeMusic = 1.0f;
-        currentSpeed = 1.0f;
-        currentPitch = 1.0f;
-        currentRate = 1.0f;
+		
+		//If no settings file exists, use these defaults
+		//if(!GVar.settingsExists()){
+			currentVolumeSFX = DEFAULT_CURRENT_VOLUME_SFX;
+		    currentVolumeMusic = DEFAULT_CURRENT_VOLUME_MUSIC;
+	        currentSpeed = DEFAULT_CURRENT_SPEED;
+	        currentPitch = DEFAULT_CURRENT_PITCH;
+	        currentRate = DEFAULT_CURRENT_RATE;
+		//}
+	    //Tempoary fix. WIP
+		//} else {
+			//GVar.loadSettings("res/files/settings.txt");
+		//}
         secondsToSkip = 0;
 	}
 	

@@ -1,11 +1,14 @@
 package dev.lepauley.luigi.general;
 
 import java.awt.Font;
+import java.io.File;
 
 import dev.lepauley.luigi.states.StateManager;
 import dev.lepauley.luigi.utilities.EnumFont;
 import dev.lepauley.luigi.utilities.EnumSFX;
 import dev.lepauley.luigi.utilities.FontManager;
+import dev.lepauley.luigi.utilities.Utilities;
+
 import static dev.lepauley.luigi.utilities.Utilities.*;
 
 /*
@@ -325,4 +328,50 @@ public class GVar {
 			keyManualToggle = true;
 	}
 
+	//Checks whether settings File Exists or not
+	public static boolean settingsExists() {
+		return new File("res/files/settings.txt").exists();
+	}
+
+	public static void loadSettings(String path) {
+		
+		//Holds txt level path
+		String file = Utilities.loadFileAsString(path);
+		
+		//Split all characters from input file using spaces ("\\s+")
+		String[] tokens = file.split("\\s+");
+		
+		//Using this to make incrementing (and reordering) easier for the future
+		int z = 0;
+		
+		//Current High Score
+		printnb(tokens[z]); z++;
+		printnb(tokens[z]); z++;
+		Game.gameHeader.setHighScore((int)(Utilities.parseFloat(tokens[z]))); z++;
+		print(Game.gameHeader.getHighScore());
+
+		//Current Volume (SFX)
+		printnb(tokens[z]); z++;
+		printnb(tokens[z]); z++;
+		Game.gameAudio.setCurrentVolume("SFX", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_SFX); z++;
+		print(Game.gameAudio.getCurrentVolume("SFX"));
+
+		//Current Volume (MUSIC)
+		printnb(tokens[z]); z++;
+		printnb(tokens[z]); z++;
+		Game.gameAudio.setCurrentVolume("MUSIC", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_MUSIC); z++;
+		print(Game.gameAudio.getCurrentVolume("MUSIC"));
+
+		//Current Rate
+		printnb(tokens[z]); z++;
+		printnb(tokens[z]); z++;
+		Game.gameAudio.setCurrentRate(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_RATE); z++;
+		print(Game.gameAudio.getCurrentRate());
+
+		//Current Pitch
+		printnb(tokens[z]); z++;
+		printnb(tokens[z]); z++;
+		Game.gameAudio.setCurrentPitch(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_PITCH); z++;
+		print(Game.gameAudio.getCurrentPitch());
+	}
 }

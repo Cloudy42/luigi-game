@@ -1,0 +1,5 @@
+HighScore : 498.0 
+CurrentVolume(SFX) : 1.0000001 
+CurrentVolume(MUSIC) : 1.0000001 
+CurrentRate : 2.5999997 
+CurrentPitch : 3.199999 

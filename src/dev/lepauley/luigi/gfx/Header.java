@@ -55,7 +55,7 @@ public class Header {
 		//Resets defaults to their...default values ;P 
 		resetDefaults();
 	}
-	
+
 	//Header tick() method updates various aspects of Header
 	public void tick(){
 		
@@ -99,8 +99,12 @@ public class Header {
 				Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.LuigiDie.toString());
 
 				//Sets HighScore if a new one was reached
-				if(currentScore > highScore)
+				if(currentScore > highScore) {
 					highScore = currentScore;
+					
+			        //If highscore is set, update the settings file so that upon reloading, it's still saved
+					Utilities.writeSettingsFile();
+				}
 			}
 		}
 	}
@@ -217,7 +221,11 @@ public class Header {
 		currentLevel = 1;
 		currentTime = 80;
 		timeSpacing = 0;
-		
+
+		//If no settings file exists, use this default
+		if(!GVar.settingsExists())
+			highScore = 0;
+
 		hurry = false;
 		dead = false;
 	}
@@ -258,6 +266,14 @@ public class Header {
 				Game.gameAudio.playAudioStagingArea("MUSIC", Game.gameAudio.getCurrentMusic().substring(0, tempSongLen - tempHurryLen));
 			}
 		}
+	}
+	
+	public int getHighScore() {
+		return highScore;
+	}
+		
+	public void setHighScore(int i) {
+		highScore = i;
 	}
 		
 }

@@ -106,6 +106,7 @@ public class Game implements Runnable {
 		
 		//Sets current state = "menuState", where we will start game (for now)
 		StateManager.setCurrentState(menuState);
+
 	}
 	
 	//Update everything for game
