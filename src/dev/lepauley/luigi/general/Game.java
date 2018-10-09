@@ -299,6 +299,10 @@ public class Game implements Runnable {
 		//If Key Manual button is pressed, toggle Key Manual Mode on/off
 		if(keyManager.keyManualToggle)
 			GVar.toggleKeyManual();
+		
+		//Incrementing SubSeconds to skip to supplement secondsToSkip (helps cover the remainder)
+		if(StateManager.getCurrentState() == gameState)
+			gameAudio.incrementSubSecondsToSkip();
 
 		//if timer > 1 second in nanotime, reset timer varaibles and do some time-sensitive ticking
 		if(timer >= 1000000000) {

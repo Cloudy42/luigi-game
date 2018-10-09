@@ -47,7 +47,7 @@ public class Audio {
 					  , STOP_SPEED_ADJUST = 0.25f;
 	
 	//Sets Min and Max audio pitch
-	public final float MIN_PITCH = 0.1f  
+	public final float MIN_PITCH = 0.3f  
 					  , MAX_PITCH =  4.0f;
 
 	//Sets Min and Max audio rate
@@ -75,9 +75,9 @@ public class Audio {
                 , currentPitch
                 , currentRate;
 	
-	//Tracks how many seconds have elapsed in song 
+	//Tracks how many seconds (and subSeconds) have elapsed in song 
 	//(Needed for pausing and resuming, but more importantly, for transitioning between audio as we manipulate it, otherwise starts over every time):
-	int secondsToSkip;
+	private int secondsToSkip, subSecondsToSkip;
 	
 	//Constructor to set defaults, get default audio loaded to hashmaps, and loads up audio to gets threads going
 	public Audio(){
@@ -158,9 +158,19 @@ public class Audio {
         SourceDataLine.Info info = new DataLine.Info(SourceDataLine.class, format,((int)stream.getFrameLength()*format.getFrameSize()));
         SourceDataLine line = (SourceDataLine)AudioSystem.getLine(info);
 
-	     // find out how many bytes you have to skip, this depends on bytes per frame (a.k.a. frameSize)
-	     long bytesToSkip = format.getFrameSize() * ((int)format.getFrameRate()) * secondsToSkip;
-
+	    //Find out how many bytes you have to skip, this depends on bytes per frame (a.k.a. frameSize). Seems to be working pretty good! Yay math!
+        //Note: I'm actually not sure how much it even matters/would come into play during the game and is likely just a debugging 
+        //      issue to get it "audio perfect" but alas, I decided to tackle it anyways. IF it's off right now (hard to
+        //      tell), then it's BARELY off so I'm happy with how it is. 
+        //Calculation: basically takes the base calculation times 1 = the amount it would increase each second
+        //             Then divides that by current FPS to get how much should change per frame
+        //             Then multiplies that value by however many subseconds (frames) have elapsed since last full second increase
+        long subSecondCalculation = (format.getFrameSize() * ((int)format.getFrameRate()) * 1) / GVar.FPS * subSecondsToSkip;
+    	long bytesToSkip = format.getFrameSize() * ((int)format.getFrameRate()) * secondsToSkip + subSecondCalculation;
+    	//Note: This is the original when I wasn't using subSeconds. Definitely can tell it sounds spottier
+    	//bytesToSkip = format.getFrameSize() * ((int)format.getFrameRate()) * secondsToSkip;
+        //print("bytesToSkip: " + bytesToSkip + " | SubSeconds: " + subSecondsToSkip + " | subSecondCalculation: " + subSecondCalculation);
+        
         //Checks if sfxThread is currently Running. If so, stop it:
         if(sfxThreadRunning && audioType.equals("SFX")) {
 			 sfxThread.stop();
@@ -628,20 +638,37 @@ public class Audio {
 		}		
 	}
 	
-	//Increments How many seconds have elapsed for current Song
+	//Increments How many seconds have elapsed for current Song (and resets subSeconds)
 	public void incrementSecondsToSkip() {
 		secondsToSkip++;
+		subSecondsToSkip = 0;
 	}
 
-	//Sets How many seconds have elapsed for current Song
+	//Sets How many seconds have elapsed for current Song (and resets subSeconds)
 	public void setSecondsToSkip(int i) {
 		secondsToSkip = i;
+		subSecondsToSkip = 0;
 	}
 
 	//Gets How many seconds have elapsed for current Song
 	public int getSecondsToSkip() {
 		return secondsToSkip;
 	}
+	
+	//Increments How many subSeconds have elapsed for current Song
+	public void incrementSubSecondsToSkip() {
+		subSecondsToSkip++;
+	}
+
+	//Sets How many subSeconds have elapsed for current Song
+	public void setSubsecondsToSkip(int i) {
+		subSecondsToSkip = i;
+	}
+
+	//Gets How many subSeconds have elapsed for current Song
+	public int getSubSecondsToSkip() {
+		return subSecondsToSkip;
+	}	
 	
 	//Resets default values. Useful when creating Audio object at beginning as well as resetting game.
 	//Note that when we eventually save settings, we can't have volume in here since that can be set custom to other values.
