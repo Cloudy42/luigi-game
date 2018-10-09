@@ -34,7 +34,7 @@ public class Audio {
 	//Tracks current SFX/Song
 	private String currentSFX
 	             , currentMusic;
-
+	
 	//Sets Min and Max volume
 	//Note: 0 = muted | negative volumes seem to not matter and are treated like positive? I didn't have min and it was crazy before.
 	public final float MIN_VOLUME = 0.0f  
@@ -128,13 +128,13 @@ public class Audio {
 	 @SuppressWarnings("deprecation")
 	public void playAudio(String audioType, String targetAudio) throws UnsupportedAudioFileException, IOException, LineUnavailableException, InterruptedException
 	 {
-		 boolean emulateChordPitch = false;
-         int quality = 0;
+		 boolean emulateChordPitch = true;
+         int quality = 10;
          
          //Tracks whether audio about to be played is new or not 
          //(used purely for debug purposes atm not wanting to keep displaying same song with all audio modifications)
          boolean newAudio = false;
-
+         
         //Pauses current Audio
         pauseAudioStagingArea(audioType);
         
@@ -184,7 +184,7 @@ public class Audio {
 			    public void run() {
 					try {
 						//Runs AudioManipulation Code
-					    runAudioManipulation(stream, line, emulateChordPitch, quality, sampleRate, numChannels, audioType,bytesToSkip,stream);
+					    runAudioManipulation(stream, line, emulateChordPitch, quality, sampleRate, numChannels, audioType, targetAudio, bytesToSkip, stream);
 						} catch(Exception ex) { ex.printStackTrace(); }
 				}
 			};
@@ -197,8 +197,9 @@ public class Audio {
 
         	//Checks if audioType = SFX and currentSFX audio is NOT equal to audio about to play, then this is a new SFX.
 	         //(used purely for debug purposes atm not wanting to keep displaying same song with all audio modifications)
-			if(audioType.equals("SFX") && !currentSFX.equals(targetAudio))
+			if(audioType.equals("SFX") && !currentSFX.equals(targetAudio)) {
         		newAudio = true;
+			}
 
         	//Sets current SFX
 			setCurrentSFX(targetAudio);
@@ -215,7 +216,7 @@ public class Audio {
 			    public void run() {
 					try {
 						//Runs AudioManipulation Code
-					    runAudioManipulation(stream, line, emulateChordPitch, quality, sampleRate, numChannels, audioType,bytesToSkip,stream);
+						runAudioManipulation(stream, line, emulateChordPitch, quality, sampleRate, numChannels, audioType, targetAudio, bytesToSkip, stream);
 						} catch(Exception ex) { ex.printStackTrace(); }
 				}
 			};
@@ -225,7 +226,6 @@ public class Audio {
 			
 			//Helper to let us know thread is running
 			musicThreadRunning = true;
-
         	//Checks if audioType = Music and currentMusic audio is NOT equal to audio about to play, then this is a new Music.
 	         //(used purely for debug purposes atm not wanting to keep displaying same song with all audio modifications)
 			if(audioType.equals("MUSIC") && !currentMusic.equals(targetAudio))
@@ -255,6 +255,7 @@ public class Audio {
 	     //audioType is needed to differentiate SFX vs. Music, and 
 	     //the other two needed to start audio x seconds into file
 	     ,String audioType
+	     ,String targetAudio
 	     ,long bytesToSkip
 	     ,AudioInputStream stream
 	     ) throws IOException
@@ -311,6 +312,24 @@ public class Audio {
             	 }
              } while(numWritten > 0);
 	     } while(numRead > 0);
+	     
+	     //Loop audio IF done reading audio (end of song) and audioType = "Music"
+	     if(numRead <= 0 && audioType.equals("MUSIC")) {
+
+	    	 //If we just play song again, the audio will resume where it last left off, which would be 
+	    	 //the end of the song in this case. So we reset secondstoSkip prior which will effectively restart song.
+        	 secondsToSkip = 0;
+
+        	 //Song is over, so set musicThreadRunning = false
+	    	 musicThreadRunning = false;
+
+	    	 //if debugMode = true, print loop
+	    	 if(GVar.getDebug())
+	    		 print("Loop Audio: " + targetAudio);
+
+	    	 //play audio again from the start
+	    	 playAudioStagingArea(audioType, targetAudio);
+	     }
  	}
 	 
 	//Resumes audio 
