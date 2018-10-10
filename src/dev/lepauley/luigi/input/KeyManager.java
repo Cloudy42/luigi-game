@@ -13,6 +13,12 @@ public class KeyManager implements KeyListener {
 	 //Location in array determined by key code of key (see getKeyCode method calls)
 	private boolean[] keys;
 	
+	//Check if key has literally just been pressed (remains true for a tick)
+	//   or if key cannot currently be pressed (meaning it has been pressed, but logic hasn't
+	//   registered that key was released, meaning it can't return true for being pressed again)
+	//See tick method for more
+	private boolean[] justPressed, cantPress;
+	
 	//Specific keys we're using
 	public boolean /*DIRECTIONS*/ 
 						up, down, left, right
@@ -53,12 +59,56 @@ public class KeyManager implements KeyListener {
 			                    };
 		
 	//Constructor that creates base key array
+	//And other arrays of same length, for controlling key press timing
 	public KeyManager() {
 		keys = new boolean[256];
+		justPressed = new boolean[keys.length];
+		cantPress = new boolean[keys.length];
+	}
+	
+	//Test method for new justPressed / cantPress code
+	public boolean keyJustPressed(int keyCode){
+		if(keyCode < 0 || keyCode >= keys.length)
+				return false;
+		return justPressed[keyCode];
 	}
 	
 	//Updates and gets key presses
 	public void tick() {
+		/*
+		 * 1) If cantPress, meaning key was held for at least one tick already, 
+		 * 		but it actually isn't currently being pressed, then it can be pressed 
+		 * 		again, so reset cantPress, so key can be pressed again
+		 * 
+		 * 2) Don't press again until key is released. And reset justPressed since 
+		 * 		it has already been pressed for one tick, thus no longer "Just" pressed
+		 * 
+		 * 3) If we ARE able to press a key and key is currently being pressed, 
+		 * 		i.e. just been pressed, then set justPressed to true
+		 */
+		
+		//Cycle through all keys
+		for(int i = 0; i < keys.length; i++) {
+			if(cantPress[i] && !keys[i]) {			//1
+				cantPress[i] = false;
+			}
+			else if(justPressed[i]) {				//2
+				cantPress[i] = true;
+				justPressed[i] = false;
+			}
+			if(!cantPress[i] && keys[i]) {			//3
+				justPressed[i] = true;
+			}
+		}
+		
+		//Test code for ensuring above code about key just being pressed
+		//Eventually tie to debug mode, ideally?
+		//Get print out of i to actually translate to actual key?
+		for(int i = 0; i < keys.length; i++) {
+			if(keyJustPressed(i))
+				System.out.println("Key code " + i + " pressed.");
+		}
+		
 		//*DIRECTION*/
 		//Navigate menus/ move player
 		up = keys[KeyEvent.VK_W];
@@ -124,6 +174,10 @@ public class KeyManager implements KeyListener {
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
+		//In case key pressed is index is -1 or higher than current index, 256, just return out
+		if(e.getKeyCode() < 0 || e.getKeyCode() > keys.length)
+			return;
+		
 		// Whenever key is pressed
 		keys[e.getKeyCode()] = true;		
 	}
