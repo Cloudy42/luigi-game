@@ -1,7 +1,11 @@
 package dev.lepauley.luigi.input;
 
+import static dev.lepauley.luigi.utilities.Utilities.print;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import dev.lepauley.luigi.general.GVar;
 
 /*
  * Handles keyboard input
@@ -34,30 +38,30 @@ public class KeyManager implements KeyListener {
 				   /*CYCLE SELECTIONS*/
 						, changePlayer, nextSong
 				   /*TOGGLE MODES*/
-						, debugToggle, scrollToggle, scrollDirection, pauseToggle, keyManualToggle;
+						, debugToggle, keyDebugToggle, scrollToggle, scrollDirection, keyManualToggle;
 
 	//Used for displaying controls in game in one easy to loop array
 	private String[] keyManual = {"[A] Left"
 			                     ,"[D] Right"
 			                     ,"[W] Up"
 			                     ,"[S] Down"
-			                     ,"[Enter] Start"
+			                     ,"[Enter] Start/Pause"
 			                     ,"[Esc] Exit"
-			                     ,"[P] Pause Toggle"
 			                     ,"[X] Scroll Toggle"
 			                     ,"[V] Scroll Direction"
-			                     ,"[D] Debug Toggle"
+			                     ,"[Z] Debug Toggle"
+			                     ,"[Q] Key Debug Toggle"
 			                     ,"[K] Control Toggle"
 			                     ,"[N] Next Song"
 			                     ,"[1/2] FPS--/++"
 			                     ,"[3/4] Time--/++"
 			                     ,"[5/6] Volume--/++"
-			                     ,"[7/8] Pitch--/++"
-			                     ,"[9/0] Rate--/++"
+			                     ,"[7/8] Rate--/++"
+			                     ,"[9/0] Pitch--/++"
 			                     ,"[</>] Scale--/++"
 			                     ,"[C] Change Player"
 			                    };
-		
+	
 	//Constructor that creates base key array
 	//And other arrays of same length, for controlling key press timing
 	public KeyManager() {
@@ -102,11 +106,12 @@ public class KeyManager implements KeyListener {
 		}
 		
 		//Test code for ensuring above code about key just being pressed
-		//Eventually tie to debug mode, ideally?
+		//Tie into key debug mode, separate from debug mode since a lot
+		//with all key presses when trying to debug and watch console for issues.
 		//Get print out of i to actually translate to actual key?
 		for(int i = 0; i < keys.length; i++) {
-			if(keyJustPressed(i))
-				System.out.println("Key code " + i + " pressed.");
+			if(keyJustPressed(i) && GVar.getKeyDebug())
+				print("Key code " + i + " pressed.");
 		}
 		
 		//*DIRECTION*/
@@ -117,7 +122,8 @@ public class KeyManager implements KeyListener {
 		right = keys[KeyEvent.VK_D];
 
 		//*STATE PROGRESSION*/
-		//Helps Enter/Exit States (Variable depennding on what state you're in)
+		//Helps Enter/Exit States (Variable depending on what state you're in)
+		//Start also pauses game in GameState
 		start = keys[KeyEvent.VK_ENTER];
 		exit = keys[KeyEvent.VK_ESCAPE];
 		
@@ -135,14 +141,14 @@ public class KeyManager implements KeyListener {
 		volumeDown = keys[KeyEvent.VK_5];
 		volumeUp = keys[KeyEvent.VK_6];		
 		
-		//Decreases and Increases game audio Pitch
-		pitchDown = keys[KeyEvent.VK_7];
-		pitchUp = keys[KeyEvent.VK_8];		
-				
 		//Decreases and Increases game audio Rate
-		rateDown = keys[KeyEvent.VK_9];
-		rateUp = keys[KeyEvent.VK_0];		
+		rateDown = keys[KeyEvent.VK_7];
+		rateUp = keys[KeyEvent.VK_8];		
 		
+		//Decreases and Increases game audio Pitch
+		pitchDown = keys[KeyEvent.VK_9];
+		pitchUp = keys[KeyEvent.VK_0];		
+				
 		//Decreases and Increases game Scale (Entities, Tiles, etc.)
 		scaleDown = keys[KeyEvent.VK_COMMA];
 		scaleUp = keys[KeyEvent.VK_PERIOD];		
@@ -158,15 +164,15 @@ public class KeyManager implements KeyListener {
 		//Toggles Debug Display
 		debugToggle = keys[KeyEvent.VK_Z];
 		
+		//Toggles Key Debug Display
+		keyDebugToggle = keys[KeyEvent.VK_Q];
+		
 		//Toggles Level Scrolling (temporary)
 		scrollToggle = keys[KeyEvent.VK_X];
 
 		//Toggles Level Scrolling Direction (temporary)
 		scrollDirection = keys[KeyEvent.VK_V];
 
-		//Toggles Pause (which should stop all ticking)
-		pauseToggle = keys[KeyEvent.VK_P];
-		
 		//Toggles Key Manual Display
 		keyManualToggle = keys[KeyEvent.VK_K];
 		

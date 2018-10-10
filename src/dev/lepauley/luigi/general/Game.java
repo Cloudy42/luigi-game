@@ -292,6 +292,10 @@ public class Game implements Runnable {
 		if(keyManager.debugToggle)
 			GVar.toggleDebug();
 
+		//If Key Debug button is pressed, toggle Key Debug Mode on/off
+		if(keyManager.keyDebugToggle)
+			GVar.toggleKeyDebug();
+
 		//If Scroll button is pressed, toggle Scroll Mode on/off
 		if(keyManager.scrollToggle)
 			GVar.toggleScroll();

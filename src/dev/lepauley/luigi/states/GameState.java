@@ -43,7 +43,7 @@ public class GameState extends State {
 	public void tick() {
 		
 		//Toggles Pause On/Off (only if not dead)
-		if(Game.keyManager.pauseToggle && !Game.gameHeader.getDead())
+		if(Game.keyManager.start && !Game.gameHeader.getDead())
 			GVar.togglePause(EnumPause.PAUSED.toString());
 
 		//If Game = UnPaused, tick
