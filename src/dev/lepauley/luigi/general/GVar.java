@@ -82,6 +82,7 @@ public class GVar {
 		multiplier = 1;
 		FPS = FPS_DEFAULT;
 		debugToggle = true;
+		keyDebugToggle = true;
 		scrollToggle = true;
 		pauseToggle = false;		
 		stopToggle = false;		
