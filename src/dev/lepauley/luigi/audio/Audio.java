@@ -145,12 +145,14 @@ public class Audio {
          
          //Every time audio is adjusted, I have it update the settings file so that upon reloading, it's still saved
          //Note: Surrounded with try-catch since this isn't initialized at the start of the game.
-         try {
-			Utilities.writeSettingsFile();
-		} catch (Exception e) {
-			//Commenting out since not initialized at beginning of game
-			//e.printStackTrace();
-		}
+         if(Game.getLoaded()) {
+	         try {
+				Utilities.writeSettingsFile();
+			} catch (Exception e) {
+				//Commenting out since not initialized at beginning of game
+				e.printStackTrace();
+			}
+         }
          
         //Pauses current Audio
         pauseAudioStagingArea(audioType);
@@ -691,18 +693,14 @@ public class Audio {
 	//Note that when we eventually save settings, we can't have volume in here since that can be set custom to other values.
 	public void resetDefaults() {
 		
-		//If no settings file exists, use these defaults
-		//if(!GVar.settingsExists()){
+		//If no settings file exists or game isn't loaded, use these defaults
+		if(!GVar.settingsExists() || !Game.getLoaded()){
 			currentVolumeSFX = DEFAULT_CURRENT_VOLUME_SFX;
 		    currentVolumeMusic = DEFAULT_CURRENT_VOLUME_MUSIC;
 	        currentSpeed = DEFAULT_CURRENT_SPEED;
 	        currentPitch = DEFAULT_CURRENT_PITCH;
 	        currentRate = DEFAULT_CURRENT_RATE;
-		//}
-	    //Tempoary fix. WIP
-		//} else {
-			//GVar.loadSettings("res/files/settings.txt");
-		//}
+		}
         secondsToSkip = 0;
 	}
 	

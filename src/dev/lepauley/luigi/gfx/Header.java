@@ -222,8 +222,8 @@ public class Header {
 		currentTime = 80;
 		timeSpacing = 0;
 
-		//If no settings file exists, use this default
-		if(!GVar.settingsExists())
+		//If no settings file exists or game is not loaded, use this default
+		if(!GVar.settingsExists() || !Game.getLoaded())
 			highScore = 0;
 
 		hurry = false;

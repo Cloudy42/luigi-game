@@ -14,7 +14,7 @@ public class Utilities {
 
 	//Combines various variables and writes to a file
 	public static void writeSettingsFile() {
-		
+
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter("res/files/settings.txt"));
 			

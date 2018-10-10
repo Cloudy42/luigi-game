@@ -80,7 +80,7 @@ public class GameState extends State {
 			g.setFont (GVar.getFont(GVar.defaultFont, currentFontSize));
 			
 			//Draws pause Message to screen with a shadow
-			Utilities.drawShadowString(g, GVar.getPauseMsg(), GVar.GAME_WIDTH/2 - GVar.getPauseMsgLen()/2 * currentFontSize, GVar.GAME_HEIGHT/2 - currentFontSize/2, GVar.getShadowFont(currentFontSize));
+			Utilities.drawShadowString(g, GVar.getPauseMsg(), GVar.GAME_WIDTH/2 - GVar.getPauseMsgLen() * (GVar.getPauseMsgLen()/2 -1)/GVar.getPauseMsgLen() * currentFontSize, GVar.GAME_HEIGHT/2 - currentFontSize/2+currentFontSize, GVar.getShadowFont(currentFontSize));
 
 			//The below is an audit I did when I realized pause message was not printing to screen in the center. Requires further research. 
 			/*

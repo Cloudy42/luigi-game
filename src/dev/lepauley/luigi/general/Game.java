@@ -55,6 +55,9 @@ public class Game implements Runnable {
 		
 	//While Running = true, game will loop
 	private boolean running = false;
+
+	//sets to true when game is loaded and ready for various things (settings file to name one)
+	private static boolean loaded = false;
 	
 	//Thread via Runnable
 	private Thread thread;
@@ -484,5 +487,19 @@ public class Game implements Runnable {
 	}
 	
 	/*************** GETTERS and SETTERS ***************/
+
+	//Gets whether game is loaded and ready to load settings and such
+	public static boolean getLoaded() {
+		return loaded;
+	}
+	
+	//Sets loaded (indicator that game is ready to load settings and such) to true
+	//(Then it loads settings :P )
+	public static void setLoaded(boolean tf) {
+
+		GVar.loadSettings("res/files/settings.txt");
+
+		loaded = tf;
+	}
 	
 }

@@ -333,6 +333,7 @@ public class GVar {
 		return new File("res/files/settings.txt").exists();
 	}
 
+	//Loads setting file and populates the variables accordingly
 	public static void loadSettings(String path) {
 		
 		//Holds txt level path
@@ -342,36 +343,31 @@ public class GVar {
 		String[] tokens = file.split("\\s+");
 		
 		//Using this to make incrementing (and reordering) easier for the future
-		int z = 0;
-		
-		//Current High Score
-		printnb(tokens[z]); z++;
-		printnb(tokens[z]); z++;
-		Game.gameHeader.setHighScore((int)(Utilities.parseFloat(tokens[z]))); z++;
-		print(Game.gameHeader.getHighScore());
+		int z = 2;
+		Game.gameHeader.setHighScore((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		Game.gameAudio.setCurrentVolume("SFX", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_SFX); z+=3;
+		Game.gameAudio.setCurrentVolume("MUSIC", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_MUSIC); z+=3;
+		Game.gameAudio.setCurrentRate(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_RATE); z+=3;
+		Game.gameAudio.setCurrentPitch(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_PITCH);
 
-		//Current Volume (SFX)
-		printnb(tokens[z]); z++;
-		printnb(tokens[z]); z++;
-		Game.gameAudio.setCurrentVolume("SFX", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_SFX); z++;
-		print(Game.gameAudio.getCurrentVolume("SFX"));
-
-		//Current Volume (MUSIC)
-		printnb(tokens[z]); z++;
-		printnb(tokens[z]); z++;
-		Game.gameAudio.setCurrentVolume("MUSIC", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_MUSIC); z++;
-		print(Game.gameAudio.getCurrentVolume("MUSIC"));
-
-		//Current Rate
-		printnb(tokens[z]); z++;
-		printnb(tokens[z]); z++;
-		Game.gameAudio.setCurrentRate(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_RATE); z++;
-		print(Game.gameAudio.getCurrentRate());
-
-		//Current Pitch
-		printnb(tokens[z]); z++;
-		printnb(tokens[z]); z++;
-		Game.gameAudio.setCurrentPitch(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_PITCH); z++;
-		print(Game.gameAudio.getCurrentPitch());
+		//Print the above saved variables to console IF in debug mode
+		z = 0;
+		if(GVar.getDebug()) {
+			//Current High Score
+				printnb(tokens[z] + tokens[z+1]); z+=3; //HighScore:
+				print(Game.gameHeader.getHighScore());
+			//Current Volume (SFX)
+				printnb(tokens[z] + tokens[z+1]); z+=3; //CurrentVolume(SFX):
+				print(Game.gameAudio.getCurrentVolume("SFX"));
+			//Current Volume (MUSIC)
+				printnb(tokens[z] + tokens[z+1]); z+=3; //CurrentVolume(MUSIC):
+				print(Game.gameAudio.getCurrentVolume("MUSIC"));	
+			//Current Rate
+				printnb(tokens[z] + tokens[z+1]); z+=3; //CurrentRate:
+				print(Game.gameAudio.getCurrentRate());	
+			//Current Pitch
+				printnb(tokens[z] + tokens[z+1]); z+=3; //CurrentPitch:
+				print(Game.gameAudio.getCurrentPitch());
+		}
 	}
 }

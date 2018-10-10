@@ -37,6 +37,8 @@ public class MenuState extends State {
 		//Just making Alan & Brian by default for menuScreen for funsies. I mean we DID make the game afterall ;P RESPECT!
 		player1.setCurrentPlayer(1);
 		player2.setCurrentPlayer(3);
+		
+		Game.setLoaded(true);
 	}
 	
 	//Updates Player and Level (if game is NOT paused)
