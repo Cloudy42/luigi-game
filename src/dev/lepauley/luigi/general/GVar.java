@@ -61,9 +61,6 @@ public class GVar {
 	//Denotes whether debug mode is active or not
 	private static boolean debugToggle;
 	
-	//Denotes whether key debug mode is active or not
-	private static boolean keyDebugToggle;
-	
 	//Denotes whether game is scrolling or not
 	private static boolean scrollToggle;
 
@@ -82,7 +79,6 @@ public class GVar {
 		multiplier = 1;
 		FPS = FPS_DEFAULT;
 		debugToggle = true;
-		keyDebugToggle = true;
 		scrollToggle = true;
 		pauseToggle = false;		
 		stopToggle = false;		
@@ -232,26 +228,6 @@ public class GVar {
 		// If currently disabled, enable
 		else
 			debugToggle = true;
-	}
-
-	//Gets whether Key Debug mode is currently enabled or not
-	public static boolean getKeyDebug() {
-		return keyDebugToggle;
-	}
-
-	//Toggles whether Key Debug mode is currently enabled or not
-	public static void toggleKeyDebug() {
-
-		// If currently enabled, disable
-		if(keyDebugToggle) { 
-			keyDebugToggle = false;
-			print("Key Debug Disabled");
-
-		// If currently disabled, enable
-		} else {
-			keyDebugToggle = true;
-			print("Key Debug Enabled");
-		}
 	}
 
 	//Gets whether scroll mode is currently enabled or not

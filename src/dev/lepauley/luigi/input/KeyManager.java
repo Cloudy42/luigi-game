@@ -1,11 +1,7 @@
 package dev.lepauley.luigi.input;
 
-import static dev.lepauley.luigi.utilities.Utilities.print;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
-import dev.lepauley.luigi.general.GVar;
 
 /*
  * Handles keyboard input
@@ -38,7 +34,7 @@ public class KeyManager implements KeyListener {
 				   /*CYCLE SELECTIONS*/
 						, changePlayer, nextSong
 				   /*TOGGLE MODES*/
-						, debugToggle, keyDebugToggle, scrollToggle, scrollDirection, keyManualToggle;
+						, debugToggle, scrollToggle, scrollDirection, keyManualToggle;
 
 	//Used for displaying controls in game in one easy to loop array
 	private String[] keyManual = {"[A] Left"
@@ -49,7 +45,6 @@ public class KeyManager implements KeyListener {
 			                     ,"[Esc] Exit"
 			                     ,"[X] Scroll Toggle"
 			                     ,"[V] Scroll Direction"
-			                     ,"[Z] Debug Toggle"
 			                     ,"[Q] Key Debug Toggle"
 			                     ,"[K] Control Toggle"
 			                     ,"[N] Next Song"
@@ -110,8 +105,8 @@ public class KeyManager implements KeyListener {
 		//with all key presses when trying to debug and watch console for issues.
 		//Get print out of i to actually translate to actual key?
 		for(int i = 0; i < keys.length; i++) {
-			if(keyJustPressed(i) && GVar.getKeyDebug())
-				print("Key code " + i + " pressed.");
+			//if(keyJustPressed(i))
+				//System.out.println("Key code " + i + " pressed.");
 		}
 		
 		//*DIRECTION*/
@@ -163,9 +158,6 @@ public class KeyManager implements KeyListener {
 		//*TOGGLE MODES*/
 		//Toggles Debug Display
 		debugToggle = keys[KeyEvent.VK_Z];
-		
-		//Toggles Key Debug Display
-		keyDebugToggle = keys[KeyEvent.VK_Q];
 		
 		//Toggles Level Scrolling (temporary)
 		scrollToggle = keys[KeyEvent.VK_X];
