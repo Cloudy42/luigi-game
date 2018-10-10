@@ -35,6 +35,7 @@ public class Tile {
 	
 		public static Tile rock002 = new Rock002(61);
 		public static Tile brick002 = new Brick002(63);
+		public static Tile stone002 = new Stone002(89);
 		
 		public static Tile flag001Top = new Flag001Top(225);	
 		

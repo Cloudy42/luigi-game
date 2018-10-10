@@ -261,7 +261,10 @@ public class Game implements Runnable {
 			gameAudio.pauseAudioStagingArea("ALL");
 			
 			//plays Level 1-1 song
-			gameAudio.playAudioStagingArea("MUSIC", EnumMusic.RunningAround.toString());
+			//gameAudio.playAudioStagingArea("MUSIC", EnumMusic.RunningAround.toString());
+			
+			//plays Level 1-2 song
+			gameAudio.playAudioStagingArea("MUSIC", EnumMusic.Underground.toString());
 
 			//Sets currentState to now be gameState
 			StateManager.setCurrentState(gameState);

@@ -32,7 +32,8 @@ public class GameState extends State {
 		this.game = game;
 		
 		//Creates new Level
-		level = new Level("res/levels/level 1-1.txt");
+		//level = new Level("res/levels/level 1-1.txt");
+		level = new Level("res/levels/level 1-2.txt");
 		
 		//Creates new Player
 		player = new Player(game, level.getSpawnX(), level.getSpawnY());
