@@ -34,7 +34,7 @@ public class KeyManager implements KeyListener {
 				   /*CYCLE SELECTIONS*/
 						, changePlayer, nextSong
 				   /*TOGGLE MODES*/
-						, debugToggle, scrollToggle, scrollDirection, keyManualToggle;
+						, debugToggle, levelToggle, scrollToggle, scrollDirection, controlToggle;
 
 	//Used for displaying controls in game in one easy to loop array
 	private String[] keyManual = {"[A] Left"
@@ -43,9 +43,10 @@ public class KeyManager implements KeyListener {
 			                     ,"[S] Down"
 			                     ,"[Enter] Start/Pause"
 			                     ,"[Esc] Exit"
+			                     ,"[Z] Debug Toggle"
+			                     ,"[X] Level Toggle"
 			                     ,"[X] Scroll Toggle"
 			                     ,"[V] Scroll Direction"
-			                     ,"[Q] Key Debug Toggle"
 			                     ,"[K] Control Toggle"
 			                     ,"[N] Next Song"
 			                     ,"[1/2] FPS--/++"
@@ -159,14 +160,17 @@ public class KeyManager implements KeyListener {
 		//Toggles Debug Display
 		debugToggle = keys[KeyEvent.VK_Z];
 		
+		//Toggles Currrent Level
+		levelToggle = keys[KeyEvent.VK_L];
+		
 		//Toggles Level Scrolling (temporary)
 		scrollToggle = keys[KeyEvent.VK_X];
 
 		//Toggles Level Scrolling Direction (temporary)
 		scrollDirection = keys[KeyEvent.VK_V];
 
-		//Toggles Key Manual Display
-		keyManualToggle = keys[KeyEvent.VK_K];
+		//Toggles Controls  Display
+		controlToggle = keys[KeyEvent.VK_K];
 		
 	}
 	

@@ -17,7 +17,11 @@ public class GameState extends State {
 
 	//Holds current Player and Level
 	private Player player;
-	private Level level;
+	private Level[] level = {new Level("res/levels/level 1-1.txt")
+			               , new Level("res/levels/level 1-2.txt")};
+	
+	//Tracks current Level
+	private int lvl = 0;
 
 	//Tracks Current Font Size
 	public int currentFontSize;
@@ -31,12 +35,8 @@ public class GameState extends State {
 		//sets game variables (in State) to current game
 		this.game = game;
 		
-		//Creates new Level
-		//level = new Level("res/levels/level 1-1.txt");
-		level = new Level("res/levels/level 1-2.txt");
-		
 		//Creates new Player
-		player = new Player(game, level.getSpawnX(), level.getSpawnY());
+		player = new Player(game, level[lvl].getSpawnX(), level[lvl].getSpawnY());
 	}
 	
 	//Updates Player and Level (if game is NOT paused)
@@ -50,13 +50,14 @@ public class GameState extends State {
 		//If Game = UnPaused, tick
 		//Note: Must tick level before player do to proper layer positioning
 		if(!GVar.getPause()) {
-			level.tick();
+			level[lvl].tick();
 			player.tick();
 		}
 		//If Game = "Stop" mode, tick player only (if not dead)
 		else if(GVar.getStop() && !Game.gameHeader.getDead()) {
 			player.tick();
 		}
+		
 }
 
 	//Draws Level, header, player, and pause Message to screen
@@ -65,7 +66,7 @@ public class GameState extends State {
 
 		//Shows BG Level
 		//Note: Must render level before player do to proper layer positioning
-		level.render(g);
+		level[lvl].render(g);
 
 		//Displays Header info
 		Game.gameHeader.render(g);
@@ -83,45 +84,6 @@ public class GameState extends State {
 			//Draws pause Message to screen with a shadow
 			Utilities.drawShadowString(g, GVar.getPauseMsg(), GVar.GAME_WIDTH/2 - GVar.getPauseMsgLen() * (GVar.getPauseMsgLen()/2 -1)/GVar.getPauseMsgLen() * currentFontSize, GVar.GAME_HEIGHT/2 - currentFontSize/2+currentFontSize, GVar.getShadowFont(currentFontSize));
 
-			//The below is an audit I did when I realized pause message was not printing to screen in the center. Requires further research. 
-			/*
-			 *  This seems like it SHOULD be writing it perfectly centered, but for some reason it's not. whyyyyyyy </3 
-			    50% of GVar.GAME_WIDTH = 1050; //525
-			    50% of GVar.GAME_HEIGHT = 470; //235
-			    50% of Font = 30 //15
-			    so makes sense (to me) that the X of font should start drawing at x = 435 because after you've written 3 letters (PAU)
-			        then you are at 3 * 30 = 90 = 525 (The 50% width mark)
-			        and when you do 50% of font subtracted from center = 235 - 15 = 220. 
-			    So why is it not drawing dead center? Brian? MATH! I need help! (/ToT)/
-			    I think Left and right it's fine, but vertically I think it's too high... :'( 
-			    I screenshotted and it's definitely off, but actually "works" because the bottom of the game is dirt, so it looks "normal"
-		     *  here are results from below:
-
-			 *  if(GVar.getDebug()) {
-				print("//////////////////////////////////////");
-				print("GVar.GAME_WIDTH/2: " + GVar.GAME_WIDTH/2);
-				print("pauseMsgLen/2: " + GVar.getPauseMsgLen()/2);
-				print("currentFontSize: " + currentFontSize);
-				print("pauseMsgLen/2 * currentFontSize: " + GVar.getPauseMsgLen()/2 * currentFontSize);
-				print("GVar.GAME_WIDTH/2 - pauseMsgLen/2 * currentFontSize: " + (GVar.GAME_WIDTH/2 - GVar.getPauseMsgLen()/2 * currentFontSize));
-				print("------------------------------------");
-				print("GVar.GAME_HEIGHT/2: " + GVar.GAME_HEIGHT/2);
-				print("currentFontSize/2: " + currentFontSize/2);
-				print("GVar.GAME_HEIGHT/2 - currentFontSize/2: " + (GVar.GAME_HEIGHT/2 - currentFontSize/2));
-			 *  print("//////////////////////////////////////");
-			 
-			 * //////////////////////////////////////
-				GVar.GAME_WIDTH/2: 525
-				pauseMsgLen/2: 3
-				currentFontSize: 30
-				pauseMsgLen/2 * currentFontSize: 90
-				GVar.GAME_WIDTH/2 - pauseMsgLen/2 * currentFontSize: 435
-				------------------------------------
-				GVar.GAME_HEIGHT/2: 235
-				currentFontSize/2: 15
-				GVar.GAME_HEIGHT/2 - currentFontSize/2: 220
-		     * //////////////////////////////////////
-			 */
 		}
 	}
 
@@ -129,8 +91,8 @@ public class GameState extends State {
 	public void resetPlayerDefaults() {
 		
 		//Resets Player's Position
-		player.setX((float)level.getSpawnX());
-		player.setY((float)level.getSpawnY());
+		player.setX((float)level[lvl].getSpawnX());
+		player.setY((float)level[lvl].getSpawnY());
 		
 		//Resets Player's Character selection skin
 		player.setCurrentPlayer(0);
@@ -143,16 +105,42 @@ public class GameState extends State {
 	public void resetLevelDefaults() {
 		
 		//Sets Default Scroll Level Values
-		level.setScrollLevelDefaults(0);
+		level[lvl].setScrollLevelDefaults(0);
 	}
 
 	/*************** GETTERS and SETTERS ***************/
 
 	//Gets Current Level
 	public Level getLevel() {
-		return level;
+		return level[lvl];
 	}
 
+	//Sets Current Level
+	public void setLevel(int lvl) {
+		this.lvl = lvl;
+		Game.gameAudio.setCurrentMusic(level[lvl].getLevelMusic());
+	}
+
+	//Toggles level (increases to next level. If hits cap, resets to first level)
+	public void toggleLevel() {
+		lvl++;
+		if(lvl == level.length)
+			lvl = 0;		
+
+		//Sets currentLevel
+		setLevel(lvl);
+		
+		//Resets defaults (EXCEPT header)
+		Game.gameAudio.resetDefaults();
+		//Game.gameHeader.resetDefaults();
+		resetLevelDefaults();
+		resetPlayerDefaults();
+		
+		//plays Level song
+		Game.gameAudio.playAudioStagingArea("MUSIC", Game.gameAudio.getCurrentMusic());
+
+	}
+	
 	//Gets Current Player
 	public Player getPlayer() {
 		return player;

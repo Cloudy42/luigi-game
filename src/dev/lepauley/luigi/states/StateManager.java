@@ -1,5 +1,7 @@
 package dev.lepauley.luigi.states;
 
+import dev.lepauley.luigi.general.Game;
+
 /*
  * Class to manage all states
  * Codenmore had this code contained in State class
@@ -26,8 +28,10 @@ public class StateManager {
 	//Set current state (e.g. actual method to switch between states)
 	public static void setCurrentState(State currentState) {
 		StateManager.currentState = currentState;
+		
+		//plays Level song
+		if(currentState.currentStateName == "GameState")
+			Game.gameAudio.playAudioStagingArea("MUSIC", Game.gameAudio.getCurrentMusic());
 	}
-	
-	
 	
 }

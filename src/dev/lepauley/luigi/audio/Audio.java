@@ -441,47 +441,47 @@ public class Audio {
 		//Note: we almost definitely want to split out between playerSFX vs. enemy SFX 
 		//      (and possibly game SFX like Pause? that one may be excessive since I don't think a lot)  
 		mapSFX.put("1-Up", new File("res/audio/sfx/smb_1-up.wav"));
-		mapSFX.put("Bowser Falls", new File("res/audio/sfx/smb_bowserfalls.wav"));
-		mapSFX.put("Bowser Fire", new File("res/audio/sfx/smb_bowserfire.wav"));
-		mapSFX.put("Break Block", new File("res/audio/sfx/smb_breakblock.wav"));
+		mapSFX.put("BowserFalls", new File("res/audio/sfx/smb_bowserfalls.wav"));
+		mapSFX.put("BowserFire", new File("res/audio/sfx/smb_bowserfire.wav"));
+		mapSFX.put("BreakBlock", new File("res/audio/sfx/smb_breakblock.wav"));
 		mapSFX.put("Bump", new File("res/audio/sfx/smb_bump.wav"));
 		mapSFX.put("Coin", new File("res/audio/sfx/smb_coin.wav"));
 		mapSFX.put("Fireball", new File("res/audio/sfx/smb_fireball.wav"));
 		mapSFX.put("Fireworks", new File("res/audio/sfx/smb_fireworks.wav"));
 		mapSFX.put("Flagpole", new File("res/audio/sfx/smb_flagpole.wav"));
-		mapSFX.put("Game Over", new File("res/audio/sfx/smb_gameover.wav"));
-		mapSFX.put("Jump (Small)", new File("res/audio/sfx/smb_jump-small.wav"));
-		mapSFX.put("Jump (Big)", new File("res/audio/sfx/smb_jump-super.wav"));
+		mapSFX.put("GameOver", new File("res/audio/sfx/smb_gameover.wav"));
+		mapSFX.put("Jump(Small)", new File("res/audio/sfx/smb_jump-small.wav"));
+		mapSFX.put("Jump(Big)", new File("res/audio/sfx/smb_jump-super.wav"));
 		mapSFX.put("Kick", new File("res/audio/sfx/smb_kick.wav"));
-		mapSFX.put("Luigi Die", new File("res/audio/sfx/smb_mariodie.wav"));
+		mapSFX.put("LuigiDie", new File("res/audio/sfx/smb_mariodie.wav"));
 		mapSFX.put("Pause", new File("res/audio/sfx/smb_pause.wav"));
 		mapSFX.put("Pipe", new File("res/audio/sfx/smb_pipe.wav"));
-		mapSFX.put("Power Up", new File("res/audio/sfx/smb_powerup.wav"));
-		mapSFX.put("Stage Clear", new File("res/audio/sfx/smb_stage_clear.wav"));
+		mapSFX.put("PowerUp", new File("res/audio/sfx/smb_powerup.wav"));
+		mapSFX.put("StageClear", new File("res/audio/sfx/smb_stage_clear.wav"));
 		mapSFX.put("Stomp", new File("res/audio/sfx/smb_stomp.wav"));
 		mapSFX.put("Vine", new File("res/audio/sfx/smb_vine.wav"));
 		mapSFX.put("Warning", new File("res/audio/sfx/smb_warning.wav"));
-		mapSFX.put("World Clear", new File("res/audio/sfx/smb_world_clear.wav"));
+		mapSFX.put("WorldClear", new File("res/audio/sfx/smb_world_clear.wav"));
 
 		//Holds all music
-		mapMusic.put("Running Around", new File("res/audio/music/01 - Running About.wav"));
-		mapMusic.put("Running Around (Hurry!)", new File("res/audio/music/02 - Running About (Hurry!).wav"));
+		mapMusic.put("RunningAround", new File("res/audio/music/01 - Running About.wav"));
+		mapMusic.put("RunningAround(Hurry!)", new File("res/audio/music/02 - Running About (Hurry!).wav"));
 		mapMusic.put("Underground", new File("res/audio/music/03 - Underground.wav"));
-		mapMusic.put("Underground (Hurry!)", new File("res/audio/music/04 - Underground (Hurry!).wav"));
-		mapMusic.put("Swimming Around", new File("res/audio/music/05 - Swimming Around.wav"));
-		mapMusic.put("Swimming Around (Hurry!)", new File("res/audio/music/06 - Swimming Around (Hurry!).wav"));
-		mapMusic.put("Bowser's Castle", new File("res/audio/music/07 - Bowser's Castle.wav"));
-		mapMusic.put("Bowser's Castle (Hurry!)", new File("res/audio/music/08 - Bowser's Castle (Hurry!).wav"));
+		mapMusic.put("Underground(Hurry!)", new File("res/audio/music/04 - Underground (Hurry!).wav"));
+		mapMusic.put("SwimmingAround", new File("res/audio/music/05 - Swimming Around.wav"));
+		mapMusic.put("SwimmingAround(Hurry!)", new File("res/audio/music/06 - Swimming Around (Hurry!).wav"));
+		mapMusic.put("Bowser'sCastle", new File("res/audio/music/07 - Bowser's Castle.wav"));
+		mapMusic.put("Bowser'sCastle(Hurry!)", new File("res/audio/music/08 - Bowser's Castle (Hurry!).wav"));
 		mapMusic.put("Invincible", new File("res/audio/music/09 - Invincible.wav"));
-		mapMusic.put("Invincible (Hurry!)", new File("res/audio/music/10 - Invincible (Hurry!).wav"));
-		mapMusic.put("Level Complete", new File("res/audio/music/11 - Level Complete-small.wav"));
-		mapMusic.put("Bowser's Castle Complete", new File("res/audio/music/12 - Bowser's Castle Complete.wav"));
-		mapMusic.put("You Have Died", new File("res/audio/music/13 - You Have Died.wav"));
-		mapMusic.put("Game Over", new File("res/audio/music/14 - Game Over.wav"));
-		mapMusic.put("Game Over (Alternative)", new File("res/audio/music/15 - Game Over (Alternative).wav"));
-		mapMusic.put("Into The Pipe", new File("res/audio/music/16 - Into The Pipe.wav"));
-		mapMusic.put("Into The Pipe (Hurry!)", new File("res/audio/music/17 - Into The Pipe (Hurry!).wav"));
-		mapMusic.put("Saved The Princess", new File("res/audio/music/18 - Saved The Princess.wav"));
+		mapMusic.put("Invincible(Hurry!)", new File("res/audio/music/10 - Invincible (Hurry!).wav"));
+		mapMusic.put("LevelComplete", new File("res/audio/music/11 - Level Complete-small.wav"));
+		mapMusic.put("Bowser'sCastleComplete", new File("res/audio/music/12 - Bowser's Castle Complete.wav"));
+		mapMusic.put("YouHaveDied", new File("res/audio/music/13 - You Have Died.wav"));
+		mapMusic.put("GameOver", new File("res/audio/music/14 - Game Over.wav"));
+		mapMusic.put("GameOver(Alternative)", new File("res/audio/music/15 - Game Over (Alternative).wav"));
+		mapMusic.put("IntoThePipe", new File("res/audio/music/16 - Into The Pipe.wav"));
+		mapMusic.put("IntoThePipe(Hurry!)", new File("res/audio/music/17 - Into The Pipe (Hurry!).wav"));
+		mapMusic.put("SavedThePrincess", new File("res/audio/music/18 - Saved The Princess.wav"));
 	}
 	
 	//Cycles through songs, just to shake it up when debugging. 
@@ -687,7 +687,7 @@ public class Audio {
 	//Gets How many subSeconds have elapsed for current Song
 	public int getSubSecondsToSkip() {
 		return subSecondsToSkip;
-	}	
+	}
 	
 	//Resets default values. Useful when creating Audio object at beginning as well as resetting game.
 	//Note that when we eventually save settings, we can't have volume in here since that can be set custom to other values.

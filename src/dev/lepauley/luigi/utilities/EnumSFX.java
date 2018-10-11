@@ -7,27 +7,27 @@ package dev.lepauley.luigi.utilities;
 
 public enum EnumSFX {
 	 OneUp("1-Up")
-    ,BowserFalls("Bowser Falls")
-	,BowserFire("Bowser Fire")
-	,BreakBlock("Break Block")
+    ,BowserFalls("BowserFalls")
+	,BowserFire("BowserFire")
+	,BreakBlock("BreakBlock")
 	,Bump("Bump")
 	,Coin("Coin")
 	,Fireball("Fireball")
 	,Fireworks("Fireworks")
 	,Flagpole("Flagpole")
-	,GameOver("Game Over")
-	,JumpSmall("Jump (Small)")
-	,JumpBig("Jump (Big)")
+	,GameOver("GameOver")
+	,JumpSmall("Jump(Small)")
+	,JumpBig("Jump(Big)")
 	,Kick("Kick")
-	,LuigiDie("Luigi Die")
+	,LuigiDie("LuigiDie")
 	,Pause("Pause")
 	,Pipe("Pipe")
-	,PowerUp("Power Up")
-	,StageClear("Stage Clear")
+	,PowerUp("PowerUp")
+	,StageClear("StageClear")
 	,Stomp("Stomp")
 	,Vine("Vine")
 	,Warning("Warning")
-	,WorldClear("World Clear");
+	,WorldClear("WorldClear");
 	
 	//Pulled below from: https://stackoverflow.com/questions/3978654/best-way-to-create-enum-of-strings
 	private final String text;

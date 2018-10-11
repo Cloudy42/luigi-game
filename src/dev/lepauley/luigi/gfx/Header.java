@@ -79,7 +79,7 @@ public class Header {
 				//Need to pause audio and set setSecondsToSkip = 0 so it plays hurry state song from the start
 				Game.gameAudio.pauseAudioStagingArea("MUSIC");
 				Game.gameAudio.setSecondsToSkip(0);
-				Game.gameAudio.playAudioStagingArea("MUSIC", Game.gameAudio.getCurrentMusic() + " (Hurry!)");
+				Game.gameAudio.playAudioStagingArea("MUSIC", Game.gameAudio.getCurrentMusic() + "(Hurry!)");
 			}
 
 			//If Current Time <=0, kill player (and various other related bookkeeping things)
@@ -232,6 +232,11 @@ public class Header {
 	
 	/*************** GETTERS and SETTERS ***************/
 	
+	//Gets whether game is in hurry state or not
+	public boolean getHurry() {
+		return hurry;
+	}
+	
 	//Gets whether player is dead or not
 	public boolean getDead() {
 		return dead;
@@ -253,7 +258,7 @@ public class Header {
 			currentTime += time;
 
 			//Get some song stats so we can "undo" the Hurry song if we add time and take it out of hurry mode 
-			String tempHurry = " (Hurry!)";
+			String tempHurry = "(Hurry!)";
 			int tempHurryLen = tempHurry.length();
 			int tempSongLen = Game.gameAudio.getCurrentMusic().length();
 			

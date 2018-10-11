@@ -14,7 +14,6 @@ import dev.lepauley.luigi.states.State;
 import dev.lepauley.luigi.states.StateManager;
 import dev.lepauley.luigi.utilities.ColorManager;
 import dev.lepauley.luigi.utilities.EnumColor;
-import dev.lepauley.luigi.utilities.EnumMusic;
 import dev.lepauley.luigi.utilities.FontManager;
 import dev.lepauley.luigi.utilities.Utilities;
 import static dev.lepauley.luigi.utilities.Utilities.*;
@@ -256,16 +255,9 @@ public class Game implements Runnable {
 		//If currentState = MenuState and enter is pressed, change to GameState
 		if(keyManager.start && StateManager.getCurrentState() == menuState) {
 
-			//Pauses all audio in preparation for changing states
-			//Note: (only SFX atm but just seems safer in case we add menu music)
-			gameAudio.pauseAudioStagingArea("ALL");
+			//Sets the current Level back to start
+			((GameState)gameState).setLevel(0);
 			
-			//plays Level 1-1 song
-			//gameAudio.playAudioStagingArea("MUSIC", EnumMusic.RunningAround.toString());
-			
-			//plays Level 1-2 song
-			gameAudio.playAudioStagingArea("MUSIC", EnumMusic.Underground.toString());
-
 			//Sets currentState to now be gameState
 			StateManager.setCurrentState(gameState);
 		}
@@ -295,6 +287,10 @@ public class Game implements Runnable {
 		if(keyManager.debugToggle)
 			GVar.toggleDebug();
 
+		//If currentState = GameState and levelToggle is pressed, change current Level
+		if(keyManager.levelToggle && StateManager.getCurrentState() == gameState)
+			((GameState)gameState).toggleLevel();
+			
 		//If Scroll button is pressed, toggle Scroll Mode on/off
 		if(keyManager.scrollToggle)
 			GVar.toggleScroll();
@@ -304,7 +300,7 @@ public class Game implements Runnable {
 			((GameState) gameState).getLevel().toggleScrollConst();
 
 		//If Key Manual button is pressed, toggle Key Manual Mode on/off
-		if(keyManager.keyManualToggle)
+		if(keyManager.controlToggle)
 			GVar.toggleKeyManual();
 		
 		//Incrementing SubSeconds to skip to supplement secondsToSkip (helps cover the remainder)

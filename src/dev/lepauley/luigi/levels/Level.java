@@ -20,6 +20,9 @@ public class Level {
 	//X and Y Position the player will spawn at
 	private int spawnX, spawnY;
 	
+	//level-specific song
+	private String levelMusic;
+	
 	//will store tile id's in a x by y multidimensional array
 	private int[][] tiles;
 	
@@ -135,6 +138,9 @@ public class Level {
 
 		//Player Spawn X Position
 		spawnY = Utilities.parseInt(tokens[3]);
+		
+		//Set Level Song
+		levelMusic = (tokens[4]);
 
 		//Creates tiles multidimensional array based on width and height
 		tiles = new int[width][height];
@@ -144,7 +150,7 @@ public class Level {
 			for(int x = 0; x < width; x++) {
 
 				//Need to do + 4 because we are setting first 4 variables above from level file, so skip those when doing tiles
-				tiles[x][y] = Utilities.parseInt(tokens[(x + y * width) + 4]);
+				tiles[x][y] = Utilities.parseInt(tokens[(x + y * width) + 5]);
 			}
 		}
 	}
@@ -159,6 +165,15 @@ public class Level {
 	//Gets Player Spawn Position - Y
 	public int getSpawnY() {
 		return spawnY;
+	}
+
+	//Gets Level Specific Music
+	public String getLevelMusic() {
+		if(Game.gameHeader.getHurry()) {
+			return levelMusic + "(Hurry!)";
+		} else {
+			return levelMusic;
+		}
 	}
 	
 	//Sets Default Scroll Level Values
