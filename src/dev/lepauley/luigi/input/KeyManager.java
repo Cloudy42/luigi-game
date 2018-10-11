@@ -44,7 +44,7 @@ public class KeyManager implements KeyListener {
 			                     ,"[Enter] Start/Pause"
 			                     ,"[Esc] Exit"
 			                     ,"[Z] Debug Toggle"
-			                     ,"[X] Level Toggle"
+			                     ,"[L] Level Toggle"
 			                     ,"[X] Scroll Toggle"
 			                     ,"[V] Scroll Direction"
 			                     ,"[K] Control Toggle"

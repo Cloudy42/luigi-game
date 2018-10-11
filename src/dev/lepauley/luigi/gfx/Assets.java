@@ -35,15 +35,23 @@ public class Assets {
 									, brick001, brick001CastleWall, brick001CastleRampartTransparent, brick001CastleRampartBrick
 									, brick002
 									, brick001CastleShadowLeft, brick001CastleShadowRight, brick001CastleShadowDoorBottom, brick001CastleShadowDoorTop
+									, brick003Glisten
+									, brick003GlistenPartial
 									, stone001
 									, stone002
 									, flag001Pole, flag001Top, flag001Flag
 									, cloud001TopLeft, cloud001Top, cloud001TopRight, cloud001BottomLeft, cloud001Bottom, cloud001BottomRight
 									, puzzleBlock001
+									, puzzleBlock003, puzzleBlock003Used
+									, axeLever003
+									, bridge003
+									, chain003
+									, tree001Bark, tree001LeavesLeft, tree001LeavesMid, tree001LeavesRight
 									, greenMountain001LeftIncline, greenMountain001Top, greenMountain001RightIncline, greenMountain001Base, greenMountain001DotsLeft, greenMountain001DotsRight
 									, greenYellowBush001Left, greenYellowBush001Middle, greenYellowBush001Right
 									, pipeGreen001BottomLeft, pipeGreen001TopLeft, pipeGreen001TopRight, pipeGreen001BottomRight
 									, pipeGreen001BottomLeftSideways, pipeGreen001TopLeftSideways, pipeGreen001TopRightSideways, pipeGreen001BottomRightSideways, pipeGreen001TopRightSidewaysConnector, pipeGreen001BottomRightSidewaysConnector
+									, lava001Waves, lava001Body
 									, missing;
 	
 	//Initializes Assets
@@ -96,6 +104,7 @@ public class Assets {
 		/*0014*/ brick001CastleShadowLeft = tileSheet.crop(width * 12, heightSmall * 0 + newPlayer * 0, width, heightSmall); 
 		/*0024*/ puzzleBlock001 = tileSheet.crop(width *  24, heightSmall * 0 + newPlayer * 0, width, heightSmall); 
 		/*0028*/ stone001 = tileSheet.crop(width *  0, heightSmall * 1 + newPlayer * 0, width, heightSmall); 
+		/*0033*/ tree001Bark = tileSheet.crop(width *  5, heightSmall * 1 + newPlayer * 0, width, heightSmall); 
 		/*0038*/ brick001CastleRampartBrick = tileSheet.crop(width * 11, heightSmall * 1 + newPlayer * 0, width, heightSmall); 
 		/*0039*/ brick001CastleShadowDoorTop = tileSheet.crop(width * 12, heightSmall * 1 + newPlayer * 0, width, heightSmall); 
 		/*0040*/ brick001CastleShadowDoorBottom = tileSheet.crop(width * 13, heightSmall * 1 + newPlayer * 0, width, heightSmall);
@@ -103,6 +112,14 @@ public class Assets {
 		/*0061*/ rock002 = tileSheet.crop(width *  0, heightSmall * 2 + newPlayer * 0, width, heightSmall); 
 		/*0063*/ brick002 = tileSheet.crop(width *  2, heightSmall * 2 + newPlayer * 0, width, heightSmall);
 		/*0089*/ stone002 = tileSheet.crop(width *  0, heightSmall * 3 + newPlayer * 0, width, heightSmall); 
+
+		/*0146*/ puzzleBlock003 = tileSheet.crop(width *  24, heightSmall * 4 + newPlayer * 0, width, heightSmall); 
+		/*0149*/ puzzleBlock003Used = tileSheet.crop(width *  27, heightSmall * 4 + newPlayer * 0, width, heightSmall); 
+		
+		/*0152*/ brick003Glisten = tileSheet.crop(width *  2, heightSmall * 5 + newPlayer * 0, width, heightSmall);
+		/*0152b*/ brick003GlistenPartial = tileSheet.crop(width *  2, heightSmall * 5 + newPlayer * 0, width/2, heightSmall);
+
+		/*0177*/ axeLever003 = tileSheet.crop(width *  27, heightSmall * 5 + newPlayer * 0, width, heightSmall);
 
 		/*0207*/ missing = tileSheet.crop(width *  24, heightSmall * 6 + newPlayer * 0, width, heightSmall); 
 		/*0225*/ flag001Top = tileSheet.crop(width *  14, heightSmall * 7 + newPlayer * 0, width, heightSmall); 
@@ -112,7 +129,11 @@ public class Assets {
 		/*0246*/ pipeGreen001TopLeftSideways = tileSheet.crop(width *  2, heightSmall * 8 + newPlayer * 0, width, heightSmall); 
 		/*0247*/ pipeGreen001TopRightSideways = tileSheet.crop(width *  3, heightSmall * 8 + newPlayer * 0, width, heightSmall); 
 		/*0248*/ pipeGreen001TopRightSidewaysConnector = tileSheet.crop(width *  4, heightSmall * 8 + newPlayer * 0, width, heightSmall); 
-		
+
+		/*0249*/ tree001LeavesLeft = tileSheet.crop(width *  5, heightSmall * 8 + newPlayer * 0, width, heightSmall); 
+		/*0250*/ tree001LeavesMid = tileSheet.crop(width *  6, heightSmall * 8 + newPlayer * 0, width, heightSmall); 
+		/*0251*/ tree001LeavesRight = tileSheet.crop(width *  7, heightSmall * 8 + newPlayer * 0, width, heightSmall); 
+
 		/*0252*/ greenMountain001LeftIncline = tileSheet.crop(width *  8, heightSmall * 8 + newPlayer * 0, width, heightSmall); 
 		/*0253*/ greenMountain001Top = tileSheet.crop(width *  9, heightSmall * 8 + newPlayer * 0, width, heightSmall); 
 		/*0254*/ greenMountain001RightIncline = tileSheet.crop(width *  10, heightSmall * 8 + newPlayer * 0, width, heightSmall);
@@ -133,6 +154,8 @@ public class Assets {
 		/*0286*/ flag001Pole = tileSheet.crop(width *  16, heightSmall * 9 + newPlayer * 0, width, heightSmall);
 		/*0288*/ flag001Flag = tileSheet.crop(width *  18, heightSmall * 9 + newPlayer * 0, width, heightSmall);
 		
+		/*0460*/ chain003 = tileSheet.crop(width *  12, heightSmall * 16 + newPlayer * 0, width, heightSmall);
+
 		/*0550*/ cloud001TopLeft = tileSheet.crop(width *  0, heightSmall * 20 + newPlayer * 0, width, heightSmall);
 		/*0551*/ cloud001Top = tileSheet.crop(width *  1, heightSmall * 20 + newPlayer * 0, width, heightSmall); 
 		/*0552*/ cloud001TopRight = tileSheet.crop(width *  2, heightSmall * 20 + newPlayer * 0, width, heightSmall); 
@@ -142,6 +165,12 @@ public class Assets {
 		
 		/*0569*/ bg001Sky = tileSheet.crop(width *  8, heightSmall * 21 + newPlayer * 0, width, heightSmall);
 		/*0570*/ bg002Sky = tileSheet.crop(width *  9, heightSmall * 21 + newPlayer * 0, width, heightSmall);
-	}
+
+		/*0593*/ lava001Waves = tileSheet.crop(width *  3, heightSmall * 24 + newPlayer * 0, width, heightSmall);
+		
+		/*0593*/ bridge003 = tileSheet.crop(width *  4, heightSmall * 24 + newPlayer * 0, width, heightSmall);
+		
+		/*0604*/ lava001Body = tileSheet.crop(width *  3, heightSmall * 25 + newPlayer * 0, width, heightSmall);
+}
 	
 }

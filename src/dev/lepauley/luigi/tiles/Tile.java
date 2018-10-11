@@ -29,6 +29,8 @@ public class Tile {
 	
 		public static Tile stone001 = new Stone001(28);
 		
+		public static Tile tree001Bark = new Tree001Bark(33);
+
 		public static Tile brick001CastleRampartBrick = new Brick001CastleRampartBrick(38);
 		public static Tile brick001CastleShadowDoorTop = new Brick001CastleShadowDoorTop(39);
 		public static Tile brick001CastleShadowDoorBottom = new Brick001CastleShadowDoorBottom(40);
@@ -37,6 +39,14 @@ public class Tile {
 		public static Tile brick002 = new Brick002(63);
 		public static Tile stone002 = new Stone002(89);
 		
+		public static Tile puzzleBlock003 = new PuzzleBlock003(146);	
+		public static Tile puzzleBlock003Used = new PuzzleBlock003Used(149);	
+
+		public static Tile brick003Glisten = new Brick003Glisten(152);	
+		public static Tile brick003GlistenPartial = new Brick003GlistenPartial(153);	
+
+		public static Tile axeLever003 = new AxeLever003(177);	
+
 		public static Tile flag001Top = new Flag001Top(225);	
 		
 		public static Tile pipeGreen001TopLeft = new PipeGreen001TopLeft(244);
@@ -44,6 +54,11 @@ public class Tile {
 		public static Tile pipeGreen001TopLeftSideways = new PipeGreen001TopLeftSideways(246);
 		public static Tile pipeGreen001TopRightSideways = new PipeGreen001TopRightSideways(247);
 		public static Tile pipeGreen001TopRightSidewaysConnector = new PipeGreen001TopRightSidewaysConnector(248);
+
+		public static Tile tree001LeavesLeft = new Tree001LeavesLeft(249);
+		public static Tile tree001LeavesMid = new Tree001LeavesMid(250);
+		public static Tile tree001LeavesRight = new Tree001LeavesRight(251);
+		
 		
 		public static Tile greenMountain001LeftIncline = new GreenMountain001LeftIncline(252);
 		public static Tile greenMountain001Top = new GreenMountain001Top(253);
@@ -66,6 +81,8 @@ public class Tile {
 		public static Tile flag001Pole = new Flag001Pole(286);	
 		public static Tile flag001Flag = new Flag001Flag(288);	
 		
+		public static Tile chain003 = new Chain003(460);	
+
 		public static Tile cloud001TopLeft = new Cloud001TopLeft(550);
 		public static Tile cloud001Top = new Cloud001Top(551);
 		public static Tile cloud001TopRight = new Cloud001TopRight(552);
@@ -76,6 +93,12 @@ public class Tile {
 		public static Tile bg001Sky = new BG001Sky(569);
 		public static Tile bg002Sky = new BG002Sky(570);
 	
+		public static Tile lava001Waves = new Lava001Waves(593);
+
+		public static Tile bridge003 = new Bridge003(594);
+
+		public static Tile lava001Body = new Lava001Body(604);
+
 		public static Tile missingTile = new MissingTile(998);
 	
 	/*************CLASS*****************/	
