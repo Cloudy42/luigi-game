@@ -20,6 +20,14 @@ public class GameState extends State {
 	private Level[] level = {new Level("res/levels/level 1-1.txt")
 			               , new Level("res/levels/level 1-2.txt")
     					   , new Level("res/levels/level 1-3.txt")
+    					   , new Level("res/levels/level 1-4.txt")
+    					   , new Level("res/levels/level 1-1.txt")
+			               , new Level("res/levels/level 1-2.txt")
+    					   , new Level("res/levels/level 1-3.txt")
+    					   , new Level("res/levels/level 1-4.txt")
+    					   , new Level("res/levels/level 1-1.txt")
+			               , new Level("res/levels/level 1-2.txt")
+    					   , new Level("res/levels/level 1-3.txt")
     					   , new Level("res/levels/level 1-4.txt")};	
 
 	//Tracks current Level
@@ -120,6 +128,12 @@ public class GameState extends State {
 	//Sets Current Level
 	public void setLevel(int lvl) {
 		this.lvl = lvl;
+
+		//Sets Current Level and World based on lvl
+		Game.gameHeader.setCurrentLevel(lvl % 4 + 1);
+		Game.gameHeader.setCurrentWorld(lvl / 4 + 1);
+
+		//Sets current Song for level
 		Game.gameAudio.setCurrentMusic(level[lvl].getLevelMusic());
 	}
 

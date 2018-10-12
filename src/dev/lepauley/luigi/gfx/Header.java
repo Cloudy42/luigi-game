@@ -273,12 +273,24 @@ public class Header {
 		}
 	}
 	
+	//Gets Current High Score
 	public int getHighScore() {
 		return highScore;
 	}
 		
+	//Sets Current High Score
 	public void setHighScore(int i) {
 		highScore = i;
 	}
+	
+	//Sets Current Level
+	public void setCurrentLevel(int i) {
+		currentLevel = i;
+	}	
+		
+	//Sets Current World
+	public void setCurrentWorld(int i) {
+		currentWorld = i;
+	}	
 		
 }
