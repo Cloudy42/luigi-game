@@ -21,14 +21,8 @@ public class GameState extends State {
 			               , new Level("res/levels/level 1-2.txt")
     					   , new Level("res/levels/level 1-3.txt")
     					   , new Level("res/levels/level 1-4.txt")
-    					   , new Level("res/levels/level 1-1.txt")
-			               , new Level("res/levels/level 1-2.txt")
-    					   , new Level("res/levels/level 1-3.txt")
-    					   , new Level("res/levels/level 1-4.txt")
-    					   , new Level("res/levels/level 1-1.txt")
-			               , new Level("res/levels/level 1-2.txt")
-    					   , new Level("res/levels/level 1-3.txt")
-    					   , new Level("res/levels/level 1-4.txt")};	
+    					   , new Level("res/levels/level 2-1.txt")
+			               , new Level("res/levels/level 2-2.txt")};	
 
 	//Tracks current Level
 	private int lvl = 0;

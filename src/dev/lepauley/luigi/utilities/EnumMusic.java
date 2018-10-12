@@ -6,8 +6,8 @@ package dev.lepauley.luigi.utilities;
 
 
 public enum EnumMusic {
-     RunningAround("RunningAround")
-	,RunningAround_Hurry("RunningAround(Hurry!)")
+     RunningAbout("RunningAbout")
+	,RunningAbout_Hurry("RunningAbout(Hurry!)")
 	,Underground("Underground")
 	,Underground_Hurry("Underground(Hurry!)")
 	,SwimmingAround("SwimmingAround")

@@ -98,11 +98,11 @@ public class Audio {
 
 		//Sets default audio for each audioType (just to get audio loaded to start Threads)
 		currentSFX = EnumSFX.Coin.toString();
-		currentMusic = EnumMusic.RunningAround.toString();
+		currentMusic = EnumMusic.RunningAbout.toString();
 
 		//Starts up some audio to get the ball rolling
 		playAudioStagingArea("SFX", EnumSFX.Coin.toString());
-		playAudioStagingArea("MUSIC", EnumMusic.RunningAround.toString());
+		playAudioStagingArea("MUSIC", EnumMusic.RunningAbout.toString());
 
 		//Pauses audio threads that were just created (doesn't destroy them)
 		//Note: Only pausing "MUSIC" since I like the "boot up" coin sound in "SFX". Reminds me of the chime from some old games when booting up.
@@ -464,8 +464,8 @@ public class Audio {
 		mapSFX.put("WorldClear", new File("res/audio/sfx/smb_world_clear.wav"));
 
 		//Holds all music
-		mapMusic.put("RunningAround", new File("res/audio/music/01 - Running About.wav"));
-		mapMusic.put("RunningAround(Hurry!)", new File("res/audio/music/02 - Running About (Hurry!).wav"));
+		mapMusic.put("RunningAbout", new File("res/audio/music/01 - Running About.wav"));
+		mapMusic.put("RunningAbout(Hurry!)", new File("res/audio/music/02 - Running About (Hurry!).wav"));
 		mapMusic.put("Underground", new File("res/audio/music/03 - Underground.wav"));
 		mapMusic.put("Underground(Hurry!)", new File("res/audio/music/04 - Underground (Hurry!).wav"));
 		mapMusic.put("SwimmingAround", new File("res/audio/music/05 - Swimming Around.wav"));
@@ -485,7 +485,7 @@ public class Audio {
 	}
 	
 	//Cycles through songs, just to shake it up when debugging. 
-	//We shouldn't need this for the full game, which is good sicne the try catches make it gross.
+	//We shouldn't need this for the full game, which is good since the try catches make it gross.
 	//IFF we decided we needed this long term, I'd probably opt for us putting in an array so we could just do x + 1 rather than all of these checks.
 	//    This one only meant as a quick and dirty solution.
 	public void nextSong() {
@@ -500,9 +500,9 @@ public class Audio {
 			pauseAudioStagingArea("MUSIC");
 	
 			//A series of checks that cycle through songs and loop to start at the end
-			if(currentMusic.equals(EnumMusic.RunningAround.toString())) {
+			if(currentMusic.equals(EnumMusic.RunningAbout.toString())) {
 				playAudioStagingArea("MUSIC", EnumMusic.Underground.toString());
-			} else if(currentMusic.equals(EnumMusic.RunningAround_Hurry.toString())) {
+			} else if(currentMusic.equals(EnumMusic.RunningAbout_Hurry.toString())) {
 				playAudioStagingArea("MUSIC", EnumMusic.Underground_Hurry.toString());
 			} else if(currentMusic.equals(EnumMusic.Underground.toString())) {
 				playAudioStagingArea("MUSIC", EnumMusic.SwimmingAround.toString());
@@ -521,9 +521,9 @@ public class Audio {
 			} else if(currentMusic.equals(EnumMusic.Invincible_Hurry.toString())) {
 				playAudioStagingArea("MUSIC", EnumMusic.IntoThePipe_Hurry.toString());
 			} else if(currentMusic.equals(EnumMusic.IntoThePipe.toString())) {
-				playAudioStagingArea("MUSIC", EnumMusic.RunningAround.toString());
+				playAudioStagingArea("MUSIC", EnumMusic.RunningAbout.toString());
 			} else if(currentMusic.equals(EnumMusic.IntoThePipe_Hurry.toString())) {
-				playAudioStagingArea("MUSIC", EnumMusic.RunningAround_Hurry.toString());
+				playAudioStagingArea("MUSIC", EnumMusic.RunningAbout_Hurry.toString());
 			}
 		}
 	}

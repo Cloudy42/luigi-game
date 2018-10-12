@@ -461,8 +461,8 @@ public class zAudio20180930 {
 	//Cycles through songs, just to shake it up when debugging
 	public void nextSong() {
 		pauseAudio("music");
-		if(currentMusic.equals(EnumMusic.RunningAround.toString())) playAudio("music", EnumMusic.Underground.toString());
-		else if(currentMusic.equals(EnumMusic.RunningAround_Hurry.toString())) playAudio("music", EnumMusic.Underground_Hurry.toString());
+		if(currentMusic.equals(EnumMusic.RunningAbout.toString())) playAudio("music", EnumMusic.Underground.toString());
+		else if(currentMusic.equals(EnumMusic.RunningAbout_Hurry.toString())) playAudio("music", EnumMusic.Underground_Hurry.toString());
 		else if(currentMusic.equals(EnumMusic.Underground.toString())) playAudio("music", EnumMusic.SwimmingAround.toString());
 		else if(currentMusic.equals(EnumMusic.Underground_Hurry.toString())) playAudio("music", EnumMusic.SwimmingAround_Hurry.toString());
 		else if(currentMusic.equals(EnumMusic.SwimmingAround.toString())) playAudio("music", EnumMusic.BowserCastle.toString());
@@ -471,8 +471,8 @@ public class zAudio20180930 {
 		else if(currentMusic.equals(EnumMusic.BowserCastle_Hurry.toString())) playAudio("music", EnumMusic.Invincible_Hurry.toString());
 		else if(currentMusic.equals(EnumMusic.Invincible.toString())) playAudio("music", EnumMusic.IntoThePipe.toString());
 		else if(currentMusic.equals(EnumMusic.Invincible_Hurry.toString())) playAudio("music", EnumMusic.IntoThePipe_Hurry.toString());
-		else if(currentMusic.equals(EnumMusic.IntoThePipe.toString())) playAudio("music", EnumMusic.RunningAround.toString());
-		else if(currentMusic.equals(EnumMusic.IntoThePipe_Hurry.toString())) playAudio("music", EnumMusic.RunningAround_Hurry.toString());
+		else if(currentMusic.equals(EnumMusic.IntoThePipe.toString())) playAudio("music", EnumMusic.RunningAbout.toString());
+		else if(currentMusic.equals(EnumMusic.IntoThePipe_Hurry.toString())) playAudio("music", EnumMusic.RunningAbout_Hurry.toString());
 	}
 
 	/*************** GETTERS and SETTERS ***************/
