@@ -143,17 +143,6 @@ public class Audio {
          //(used purely for debug purposes atm not wanting to keep displaying same song with all audio modifications)
          boolean newAudio = false;
          
-         //Every time audio is adjusted, I have it update the settings file so that upon reloading, it's still saved
-         //Note: Surrounded with try-catch since this isn't initialized at the start of the game.
-         if(Game.getLoaded()) {
-	         try {
-				Utilities.writeSettingsFile();
-			} catch (Exception e) {
-				//Commenting out since not initialized at beginning of game
-				e.printStackTrace();
-			}
-         }
-         
         //Pauses current Audio
         pauseAudioStagingArea(audioType);
         
@@ -267,6 +256,18 @@ public class Audio {
         	if(GVar.getDebug() && newAudio)
         		print("currentMusic: " + currentMusic); 			
         }
+
+        //Every time audio is adjusted, I have it update the settings file so that upon reloading, it's still saved
+        //Note: Surrounded with try-catch since this isn't initialized at the start of the game.
+        if(Game.getLoaded()) {
+	         try {
+				Utilities.writeSettingsFile();
+			} catch (Exception e) {
+				//Commenting out since not initialized at beginning of game
+				e.printStackTrace();
+			}
+        }
+        
 	 }
 
 	//Run sonic: Audio manipulation

@@ -1,7 +1,10 @@
-HighScore : 1337.0 
-CurrentVolume(SFX) : 1.5000001 
-CurrentVolume(MUSIC) : 1.5000001 
-CurrentRate : 1.8000002 
-CurrentPitch : 1.7000002 
-CurrentWorld : 2.0 
-CurrentLevel : 2.0 
+HighScore : 1337 
+CurrentVolume(SFX) : 1.3000001 
+CurrentVolume(MUSIC) : 1.3000001 
+CurrentRate : 1.6000001 
+CurrentPitch : 1.3000001 
+SavedGame : 1 
+CurrentWorld : 2 
+CurrentLevel : 2 
+CurrentMusic : SwimmingAround(Hurry!) 
+CurrentTime : 36 

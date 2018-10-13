@@ -39,7 +39,7 @@ public class Header {
 		
 	//Default Hurry time
 	//once time dips below default time, audio will change to "Hurry" version
-	private final int HURRY_TIME = 60;
+	public final int HURRY_TIME = 60;
 
 	//Adjusts spacing if minutes = 0 AND/OR tens of seconds < 10
 	//Example:				              WITH       vs       WITHOUT
@@ -244,14 +244,19 @@ public class Header {
 			currentWorld = 1;
 			currentLevel = 1;
 		}
-		currentTime = 80;
 		timeSpacing = 0;
 
-		//If no settings file exists or game is not loaded, use this default
-		if(!GVar.settingsExists() || !Game.getLoaded())
+		//If no settings file exists or game is not loaded OR starting a new game (not continuing), use this default
+		if((!GVar.settingsExists() || !Game.getLoaded()) || !GVar.getContinueGame()) {
 			highScore = 0;
+			currentTime = 80;
+		}
 
-		hurry = false;
+		//If currentTime > HURRY_TIME, reset hurry to false, otherwise keep it
+		//Note: This is important for continuing games
+		if(currentTime > HURRY_TIME)
+			hurry = false;
+
 		dead = false;
 	}
 	
@@ -260,6 +265,11 @@ public class Header {
 	//Gets whether game is in hurry state or not
 	public boolean getHurry() {
 		return hurry;
+	}
+	
+	//Sets whether game is in hurry state or not
+	public void setHurry(boolean tf) {
+		hurry = tf;
 	}
 	
 	//Gets whether player is dead or not
@@ -322,10 +332,20 @@ public class Header {
 	public int getCurrentWorld() {
 		return currentWorld;
 	}	
-		
+
 	//Sets Current World
 	public void setCurrentWorld(int i) {
 		currentWorld = i;
 	}	
-		
+
+	//Gets Current Time
+	public int getCurrentTime() {
+		return currentTime;
+	}	
+
+	//Sets Current Time
+	public void setCurrentTime(int i) {
+		currentTime = i;
+	}	
+
 }

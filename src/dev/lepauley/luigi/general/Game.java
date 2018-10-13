@@ -275,8 +275,17 @@ public class Game implements Runnable {
 				//Sets the current Level back to start if One or Two Player is selected
 				//Note: Setting level sets both the world and the level
 				if(MenuManager.mapMenus.get(((MenuState)menuState).getCurrentSelection()) == EnumMenu.OnePlayer
-			     ||MenuManager.mapMenus.get(((MenuState)menuState).getCurrentSelection()) == EnumMenu.TwoPlayer) 
+			     ||MenuManager.mapMenus.get(((MenuState)menuState).getCurrentSelection()) == EnumMenu.TwoPlayer) {
+
+					//Sets Continue Game to False (needed before resetting defaults)
+					GVar.setContinueGame(false);
+					
+					//Resets Defaults across the board
+					resetDefaults();
+
+					//Sets level to 1-1
 					((GameState)gameState).setLevel(0);
+				}
 				
 				//Sets currentState to now be gameState
 				StateManager.setCurrentState(gameState);
@@ -293,16 +302,11 @@ public class Game implements Runnable {
 			if(!Game.gameHeader.getDead())
 				GVar.setContinueGame(true);
 
-			//Reset Defaults:
-			gameHeader.resetDefaults();
-			GVar.resetGVarDefaults();
-			gameAudio.resetDefaults();
+			//Write Settings File
+			Utilities.writeSettingsFile();
 			
-			//Resets Players Position & selection (need to cast since gameState is a State object)
-			((GameState)gameState).resetPlayerDefaults();
-
-			//Resets Level Tile Position (need to cast since gameState is a State object)
-			((GameState)gameState).resetLevelDefaults();
+			//Resets Defaults across the board
+			resetDefaults();
 			
 			//Sets currentState to "Menu State"
 			StateManager.setCurrentState(menuState);
@@ -509,6 +513,19 @@ public class Game implements Runnable {
 			}
 		}
 	}
+
+	//Resets Defaults across the board
+	public void resetDefaults() {
+		gameHeader.resetDefaults();
+		GVar.resetGVarDefaults();
+		gameAudio.resetDefaults();
+		
+		//Resets Players Position & selection (need to cast since gameState is a State object)
+		((GameState)gameState).resetPlayerDefaults();
+	
+		//Resets Level Tile Position (need to cast since gameState is a State object)
+		((GameState)gameState).resetLevelDefaults();
+	}		
 	
 	/*************** GETTERS and SETTERS ***************/
 

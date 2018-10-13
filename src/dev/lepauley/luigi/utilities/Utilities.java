@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.io.*;
 
+import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.general.Game;
 
 /*
@@ -28,16 +29,18 @@ public class Utilities {
 			bw = appendBufferedWriter(bw, "CurrentPitch", Game.gameAudio.getCurrentPitch());
 			
 			//Add current progress
+			bw = appendBufferedWriter(bw, "SavedGame", convertBoolToInt(GVar.getContinueGame()));
 			bw = appendBufferedWriter(bw, "CurrentWorld", Game.gameHeader.getCurrentWorld());
 			bw = appendBufferedWriter(bw, "CurrentLevel", Game.gameHeader.getCurrentLevel());
+			bw = appendBufferedWriter(bw, "CurrentMusic", Game.gameAudio.getCurrentMusic());
 			
+			bw = appendBufferedWriter(bw, "CurrentTime", Game.gameHeader.getCurrentTime());
 			//Add:
 			/*
 			 * CurrentScore
 			 * CurrentCoins
 			 * CurrentPositionX
 			 * CurrentPositionY
-			 * CurrentTime
 			 * CurrentFPS
 			 * CurrentCharacter
 			 * CurrentPlayerCount
@@ -51,6 +54,25 @@ public class Utilities {
 		}
 	}
 
+	public static BufferedWriter appendBufferedWriter(BufferedWriter bw, String field, String value) throws IOException {
+
+		//Writes field and value and a new Line to separate/help with readability
+		bw.write(field + " : " + value + " \n"); 
+		
+		return bw;
+	}
+	
+	public static BufferedWriter appendBufferedWriter(BufferedWriter bw, String field, int valueI) throws IOException {
+
+		//Converts int > string
+		String valueS = Integer.toString(valueI);
+
+		//Writes field and value and a new Line to separate/help with readability
+		bw.write(field + " : " + valueS + " \n"); 
+		
+		return bw;
+	}
+	
 	public static BufferedWriter appendBufferedWriter(BufferedWriter bw, String field, float valueF) throws IOException {
 
 		//Converts Float > string
@@ -158,5 +180,19 @@ public class Utilities {
 	public static void printnb(Object obj) {
 		System.out.print(obj);
 	}
-	
+
+	//Converts boolean to int
+	public static int convertBoolToInt(boolean tf) {
+		if(tf)
+			return 1;
+		return 0;
+	}
+
+	//Converts int to boolean
+	public static boolean convertIntToBool(int i) {
+		if(i == 1)
+			return true;
+		return false;
+	}
+
 }

@@ -130,8 +130,9 @@ public class GameState extends State {
 		//Updates Player
 		player = new Player(game, level[lvl].getSpawnX(), level[lvl].getSpawnY());
 
-		//Sets current Song for level
-		Game.gameAudio.setCurrentMusic(level[lvl].getLevelMusic());
+		//Sets current Song for level IF do not select continue
+		if(!GVar.getContinueGame())
+			Game.gameAudio.setCurrentMusic(level[lvl].getLevelMusic());
 	}
 
 	//Toggles level (increases to next level. If hits cap, resets to first level)

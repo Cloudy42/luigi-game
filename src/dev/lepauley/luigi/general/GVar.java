@@ -334,7 +334,7 @@ public class GVar {
 	public static void setContinueGame(boolean tf) {
 		continueGame = tf;
 	}
-
+	
 	//Checks whether settings File Exists or not
 	public static boolean settingsExists() {
 		return new File("res/files/settings.txt").exists();
@@ -356,15 +356,19 @@ public class GVar {
 		Game.gameAudio.setCurrentVolume("MUSIC", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_MUSIC); z+=3;
 		Game.gameAudio.setCurrentRate(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_RATE); z+=3;
 		Game.gameAudio.setCurrentPitch(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_PITCH); z+=3;
+		GVar.setContinueGame(Utilities.convertIntToBool((int)(Utilities.parseFloat(tokens[z])))); z+=3;
 		Game.gameHeader.setCurrentWorld((int)(Utilities.parseFloat(tokens[z]))); z+=3;
-		Game.gameHeader.setCurrentLevel((int)(Utilities.parseFloat(tokens[z])));
+		Game.gameHeader.setCurrentLevel((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		print("token: " + tokens[z]);
+		Game.gameAudio.setCurrentMusic(tokens[z]); z+=3;
+		Game.gameHeader.setCurrentTime((int)(Utilities.parseFloat(tokens[z])));
 
-		//Sets Continue Game boolean as true if world or level > 1
-		if(Game.gameHeader.getCurrentWorld() > 1 || Game.gameHeader.getCurrentLevel() > 1)
-			GVar.setContinueGame(true);
-		
 		//Do special math to load the actual level now:
 		((GameState)Game.getGameState()).setLevel((Game.gameHeader.getCurrentWorld()-1) * 4 + Game.gameHeader.getCurrentLevel() - 1);
+		
+		//If currentTime < HURRY_TIME, set hurry = true
+		if(Game.gameHeader.getCurrentTime() < Game.gameHeader.HURRY_TIME)
+			Game.gameHeader.setHurry(true);
 		
 		//Print the above saved variables to console IF in debug mode
 		z = 0;
@@ -373,26 +377,35 @@ public class GVar {
 			print("Settings File Loaded:");
 			print("---------------------");
 			//Current High Score
-				printnb(tokens[z] + tokens[z+1]); z+=3; //HighScore:
+				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameHeader.getHighScore());
 			//Current Volume (SFX)
-				printnb(tokens[z] + tokens[z+1]); z+=3; //CurrentVolume(SFX):
+				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameAudio.getCurrentVolume("SFX"));
 			//Current Volume (MUSIC)
-				printnb(tokens[z] + tokens[z+1]); z+=3; //CurrentVolume(MUSIC):
+				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameAudio.getCurrentVolume("MUSIC"));	
 			//Current Rate
-				printnb(tokens[z] + tokens[z+1]); z+=3; //CurrentRate:
+				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameAudio.getCurrentRate());	
 			//Current Pitch
-				printnb(tokens[z] + tokens[z+1]); z+=3; //CurrentPitch:
+				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameAudio.getCurrentPitch());
+			//Saved Game
+				printnb(tokens[z] + tokens[z+1]); z+=3;
+				print(GVar.getContinueGame());
 			//Current World
-				printnb(tokens[z] + tokens[z+1]); z+=3; //CurrentWorld:
+				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameHeader.getCurrentWorld());
 			//Current Level
-				printnb(tokens[z] + tokens[z+1]); z+=3; //CurrentLevel:
+				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameHeader.getCurrentLevel());
+			//Current Music
+				printnb(tokens[z] + tokens[z+1]); z+=3;
+				print(Game.gameAudio.getCurrentMusic());
+			//Current Time
+				printnb(tokens[z] + tokens[z+1]); z+=3;
+				print(Game.gameHeader.getCurrentTime());
 				print("---------------------");
 		}
 	}
