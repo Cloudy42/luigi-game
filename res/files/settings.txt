@@ -6,5 +6,5 @@ CurrentPitch : 1.3000001
 SavedGame : 1 
 CurrentWorld : 2 
 CurrentLevel : 2 
-CurrentMusic : SwimmingAround(Hurry!) 
-CurrentTime : 36 
+CurrentMusic : SwimmingAround 
+CurrentTime : 99 

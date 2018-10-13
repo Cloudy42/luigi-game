@@ -3,6 +3,8 @@ package dev.lepauley.luigi.general;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import dev.lepauley.luigi.utilities.Utilities;
+
 /*
  * Responsible for starting game
  */
@@ -20,5 +22,16 @@ public class Launcher {
 		
 		//Start game! Run, initialize, game loop
 		game.start();
+		
+		//Tracks if player abruptly closes window without safely exiting and saves settings file
+		//Note: code pulled from here: https://stackoverflow.com/questions/5731893/detecting-when-a-java-application-closes
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+		    @Override
+		    public void run() {
+		    	
+		    	//Writes settings file
+		        Utilities.writeSettingsFile();
+		    }
+		});
 	}
 }
