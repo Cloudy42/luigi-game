@@ -6,6 +6,7 @@ import dev.lepauley.luigi.entities.creatures.Player;
 import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.general.Game;
 import dev.lepauley.luigi.levels.Level;
+import dev.lepauley.luigi.utilities.EnumSFX;
 
 /*
  * Menu/starting screen (before game begins)
@@ -16,6 +17,9 @@ public class MenuState extends State {
 	//Note: (May consider creating a unique menu level. if so, don't need to load level)
 	private Level level;
 	private Player player1, player2;
+	
+	//Tracks currentSelection
+	private int currentSelection;
 	
 	//Menu Constructor
 	public MenuState(Game game) {
@@ -38,18 +42,55 @@ public class MenuState extends State {
 		player1.setCurrentPlayer(1);
 		player2.setCurrentPlayer(3);
 		
+		//Sets current selection at the top
+		currentSelection = 0;
+		
 		Game.setLoaded(true);
 	}
 	
 	//Updates Player and Level (if game is NOT paused)
 	@Override
 	public void tick() {
-		//Selects # of players 
-		//Note: if we had multiple characters or options and other settings and such, likely a better way to implement would be
-		//      using index and incrementing with down and decrementing with up and looping at the caps. If we ever need, do that.
-		if(GVar.getPlayerSelectCount() == 1 && Game.keyManager.down)
+
+		//Changes menu selection down 
+		if(Game.keyManager.down) {
+			currentSelection++;
+			
+			//If at bottom of list and press down it goes back to the top of list
+			if(currentSelection == Game.menuManager.getSize())
+				currentSelection = 0;
+			
+			//If Cannot continue game, account for that option missing from menu
+			if(!GVar.getContinueGame() && currentSelection == Game.menuManager.getSize()-1)
+				currentSelection = 0;			
+
+			//Plays menu selection audio
+			playMenuSelectionAudio();
+		}
+
+		//Changes menu selection up 
+		if(Game.keyManager.up) {
+			currentSelection--;
+
+			//Note: Below order is very important. Cannot swap
+			//If Cannot continue game, account for that option missing from menu
+			if(!GVar.getContinueGame() && currentSelection < 0)
+				currentSelection = Game.menuManager.getSize() - 2;			
+
+			//If at top of list and press up it goes back to the bottom of list
+			if(currentSelection < 0)
+				currentSelection = Game.menuManager.getSize() - 1;
+
+			//Plays menu selection audio
+			playMenuSelectionAudio();
+		}
+		
+		//Sets player count based on selection
+		//Note: If a player goes from top and cycles down, they may be in option menu as a 1 player game
+		//      and vice versa
+		if(currentSelection == 1)
 			GVar.setPlayerSelectCount(2);
-		if(GVar.getPlayerSelectCount() == 2 && Game.keyManager.up)
+		if(currentSelection == 0)
 			GVar.setPlayerSelectCount(1);
 	}
 
@@ -71,6 +112,25 @@ public class MenuState extends State {
 		//Note, I did >1 rather than == 2. Allows for more freedom if we add more players.
 		if(GVar.getPlayerSelectCount() > 1)
 			player2.render(g);
+	}
+	
+	//Plays character switch audio.
+	public void playMenuSelectionAudio() {
+		Game.gameAudio.pauseAudioStagingArea("SFX");
+		Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.Bump.toString());
+	}
+
+	
+	/*************** GETTERS and SETTERS ***************/
+	
+	//Gets currentSelection
+	public int getCurrentSelection() {
+		return currentSelection;
+	}
+
+	//Sets currentSelection
+	public void setCurrentSelection(int i) {
+		currentSelection = i;
 	}
 
 }

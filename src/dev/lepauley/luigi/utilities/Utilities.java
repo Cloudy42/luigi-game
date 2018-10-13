@@ -26,7 +26,23 @@ public class Utilities {
 			bw = appendBufferedWriter(bw, "CurrentVolume(MUSIC)", Game.gameAudio.getCurrentVolume("MUSIC"));
 			bw = appendBufferedWriter(bw, "CurrentRate", Game.gameAudio.getCurrentRate());
 			bw = appendBufferedWriter(bw, "CurrentPitch", Game.gameAudio.getCurrentPitch());
-
+			
+			//Add current progress
+			bw = appendBufferedWriter(bw, "CurrentWorld", Game.gameHeader.getCurrentWorld());
+			bw = appendBufferedWriter(bw, "CurrentLevel", Game.gameHeader.getCurrentLevel());
+			
+			//Add:
+			/*
+			 * CurrentScore
+			 * CurrentCoins
+			 * CurrentPositionX
+			 * CurrentPositionY
+			 * CurrentTime
+			 * CurrentFPS
+			 * CurrentCharacter
+			 * CurrentPlayerCount
+			 */
+			
 			//Close BufferedWriter
 			bw.close();
 		} catch (IOException e) {

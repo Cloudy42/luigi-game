@@ -7,6 +7,7 @@ import java.awt.Graphics;
 
 import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.general.Game;
+import dev.lepauley.luigi.states.MenuState;
 import dev.lepauley.luigi.states.StateManager;
 import dev.lepauley.luigi.utilities.ColorManager;
 import dev.lepauley.luigi.utilities.EnumColor;
@@ -19,13 +20,19 @@ public class Header {
 	//Tracks Current Font Size
 	private int currentFontSize;
 	
-	//tracks "current" Variables for Header
-	private int currentScore;
-	private int currentCoins;
-	private int currentWorld;
-	private int currentLevel;
-	private int currentTime;
+	//Default values to display in menu State
+	private final int DEFAULT_WORLD = 1, DEFAULT_LEVEL =1;
 
+	//tracks "current" Variables for Header
+	private int currentScore
+              , currentCoins
+              , currentWorld
+              , currentLevel
+              , currentTime;
+
+	//used for dynamic menuState (namely Continue being visible or not. Let's us do spacing for Options accordingly.
+	private float menuSpacing = 0.0f, menuSpacingConstant = 1.5f;
+	
 	//Holds High Score
 	//(we'll need to figure out a way to save this between play throughs. Setting to 0 until then)
 	private int highScore = 0;
@@ -89,6 +96,7 @@ public class Header {
 				//for a hot second before switching to TIME UP! Just seems safer to do this first.
 				dead = true;
 				currentTime = 0;
+				GVar.setContinueGame(false);
 
 				//Sets pauseMessage = "TIME UP"
 				GVar.togglePause(EnumPause.TIMESUP.toString());
@@ -112,6 +120,9 @@ public class Header {
 	//Draws Header assets to display
 	public void render(Graphics g) {
 
+		//Reset menuSpacing with each pass
+		menuSpacing = 0.0f;
+		
 		//sets current Font & size
 		currentFontSize = 20;
 		g.setFont (GVar.getFont(GVar.defaultFont, currentFontSize));
@@ -122,13 +133,17 @@ public class Header {
 			//Menu
 			g.drawImage(Assets.menu,215,50,625,185,null);
 	
-			//Player Select (with toad icon as selector)
-			g.drawImage(Assets.toad,380,(int)(260 + (GVar.getPlayerSelectCount() - 1) * currentFontSize * 1.5),null);
-			Utilities.drawShadowString(g, "1 PLAYER GAME",	400, 275, GVar.getShadowFont(currentFontSize));
-			Utilities.drawShadowString(g, "2 PLAYER GAME",	400, (int)(275 + currentFontSize * 1.5), GVar.getShadowFont(currentFontSize));
+			//Menu Select (with toad icon as selector)
+			g.drawImage(Assets.toad,380,(int)(260 + (((MenuState)StateManager.getCurrentState()).getCurrentSelection()) * currentFontSize * 1.5),null);
+			Utilities.drawShadowString(g, "1 PLAYER GAME",	400, (int)(275 + currentFontSize * menuSpacing), GVar.getShadowFont(currentFontSize)); menuSpacing += menuSpacingConstant; 
+			Utilities.drawShadowString(g, "2 PLAYER GAME",	400, (int)(275 + currentFontSize * menuSpacing), GVar.getShadowFont(currentFontSize)); menuSpacing += menuSpacingConstant;
+			if(GVar.getContinueGame()) {
+				Utilities.drawShadowString(g, "CONTINUE (" + currentWorld + "-" + currentLevel + ")",	400, (int)(275 + currentFontSize * menuSpacing), GVar.getShadowFont(currentFontSize)); menuSpacing += menuSpacingConstant;
+			}
+			Utilities.drawShadowString(g, "OPTIONS",	400, (int)(275 + currentFontSize * menuSpacing), GVar.getShadowFont(currentFontSize)); menuSpacing += menuSpacingConstant;
 	
 			//High Score
-			Utilities.drawShadowString(g, "TOP - " + zeroPrefixToString(5, highScore),	400 + currentFontSize * 1, (int)(275 + currentFontSize * 3), GVar.getShadowFont(currentFontSize));
+			Utilities.drawShadowString(g, "TOP - " + zeroPrefixToString(5, highScore),	400 + currentFontSize * 1, (int)(275 + currentFontSize * 6.0), GVar.getShadowFont(currentFontSize));
 		}
 	
 		//Header Info
@@ -142,7 +157,13 @@ public class Header {
 	
 		//Current World-Level
 		Utilities.drawShadowString(g, "WORLD", 	585, 20, GVar.getShadowFont(currentFontSize));
-		Utilities.drawShadowString(g, currentWorld + "-" + currentLevel,   	585  + currentFontSize * 1, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
+		
+		//If in menuState, display default values, otherwise display actual
+		if(StateManager.getCurrentStateName() == "MenuState") {
+			Utilities.drawShadowString(g, DEFAULT_WORLD + "-" + DEFAULT_LEVEL,   	585  + currentFontSize * 1, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
+		} else {
+			Utilities.drawShadowString(g, currentWorld + "-" + currentLevel,   	585  + currentFontSize * 1, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
+		}
 	
 		//Current Time (Minutes:seconds)
 		Utilities.drawShadowString(g, "TIME", 	785, 20, GVar.getShadowFont(currentFontSize));
@@ -217,8 +238,12 @@ public class Header {
 	public void resetDefaults() {
 		currentScore = 0;
 		currentCoins = 0;
-		currentWorld = 1;
-		currentLevel = 1;
+		
+		//Only reset to 1-1 IF player died
+		if(dead) {
+			currentWorld = 1;
+			currentLevel = 1;
+		}
 		currentTime = 80;
 		timeSpacing = 0;
 
@@ -283,9 +308,19 @@ public class Header {
 		highScore = i;
 	}
 	
+	//Gets Current Level
+	public int getCurrentLevel() {
+		return currentLevel;
+	}	
+		
 	//Sets Current Level
 	public void setCurrentLevel(int i) {
 		currentLevel = i;
+	}	
+
+	//Gets Current World
+	public int getCurrentWorld() {
+		return currentWorld;
 	}	
 		
 	//Sets Current World

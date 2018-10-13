@@ -1,5 +1,7 @@
 package dev.lepauley.luigi.general;
 
+import static dev.lepauley.luigi.utilities.Utilities.print;
+
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
@@ -14,9 +16,10 @@ import dev.lepauley.luigi.states.State;
 import dev.lepauley.luigi.states.StateManager;
 import dev.lepauley.luigi.utilities.ColorManager;
 import dev.lepauley.luigi.utilities.EnumColor;
+import dev.lepauley.luigi.utilities.EnumMenu;
 import dev.lepauley.luigi.utilities.FontManager;
+import dev.lepauley.luigi.utilities.MenuManager;
 import dev.lepauley.luigi.utilities.Utilities;
-import static dev.lepauley.luigi.utilities.Utilities.*;
 
 /*
  * Main class for game - holds all base code: 
@@ -49,6 +52,9 @@ public class Game implements Runnable {
 	//Used to access all colors
 	public static ColorManager colorManager = new ColorManager();
 	
+	//Used to access all menu selections
+	public static MenuManager menuManager = new MenuManager();
+	
 	//Used to access all fonts
 	public static FontManager fontManager = new FontManager();
 		
@@ -76,7 +82,7 @@ public class Game implements Runnable {
 	private Graphics g;
 	
 	//State objects
-	private State gameState, menuState;
+	private static State gameState, menuState;
 	
 	//Constructor
 	public Game(String title, int width, int height) {
@@ -255,11 +261,26 @@ public class Game implements Runnable {
 		//If currentState = MenuState and enter is pressed, change to GameState
 		if(keyManager.start && StateManager.getCurrentState() == menuState) {
 
-			//Sets the current Level back to start
-			((GameState)gameState).setLevel(0);
-			
-			//Sets currentState to now be gameState
-			StateManager.setCurrentState(gameState);
+			//If Options is selected, just print for now
+			//Note: I do a second check that says if you cannot continue game, then to check Continue option, since index is off
+			//      There likely is a better way to account for Continue being gone, but I haven't thought of it. Pretty sure
+			//      We cannot update Enums on the fly. :\ 
+			if(MenuManager.mapMenus.get(((MenuState)menuState).getCurrentSelection()) == EnumMenu.Options 
+		   || (!GVar.getContinueGame() && MenuManager.mapMenus.get(((MenuState)menuState).getCurrentSelection()) == EnumMenu.Continue)) {
+				print("Menu: Option Menu Selected");
+
+			//Other do normal menuState things (namely, starting the game :P )
+			} else {
+
+				//Sets the current Level back to start if One or Two Player is selected
+				//Note: Setting level sets both the world and the level
+				if(MenuManager.mapMenus.get(((MenuState)menuState).getCurrentSelection()) == EnumMenu.OnePlayer
+			     ||MenuManager.mapMenus.get(((MenuState)menuState).getCurrentSelection()) == EnumMenu.TwoPlayer) 
+					((GameState)gameState).setLevel(0);
+				
+				//Sets currentState to now be gameState
+				StateManager.setCurrentState(gameState);
+			}
 		}
 
 		//If currentState = GameState and esc is pressed, change to MenuState
@@ -267,6 +288,10 @@ public class Game implements Runnable {
 
 			//Pauses all audio in preparation for changing states
 			gameAudio.pauseAudioStagingArea("ALL");
+			
+			//Set ContinueGame = true (if not dead)
+			if(!Game.gameHeader.getDead())
+				GVar.setContinueGame(true);
 
 			//Reset Defaults:
 			gameHeader.resetDefaults();
@@ -496,9 +521,21 @@ public class Game implements Runnable {
 	//(Then it loads settings :P )
 	public static void setLoaded(boolean tf) {
 
-		GVar.loadSettings("res/files/settings.txt");
+		//Only load file if it exists
+		if(GVar.settingsExists())
+			GVar.loadSettings("res/files/settings.txt");
 
 		loaded = tf;
+	}
+	
+	//Gets gameState
+	public static State getGameState() {
+		return gameState;
+	}
+
+	//Gets menuState
+	public static State getMenuState() {
+		return menuState;
 	}
 	
 }

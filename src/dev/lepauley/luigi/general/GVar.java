@@ -3,6 +3,7 @@ package dev.lepauley.luigi.general;
 import java.awt.Font;
 import java.io.File;
 
+import dev.lepauley.luigi.states.GameState;
 import dev.lepauley.luigi.states.StateManager;
 import dev.lepauley.luigi.utilities.EnumFont;
 import dev.lepauley.luigi.utilities.EnumSFX;
@@ -52,6 +53,9 @@ public class GVar {
 	private static String pauseMsg; 
 	private static int pauseMsgLen;	
 
+	//Tracks whether player is allowed to continue game or died and needs to start over
+	private static boolean continueGame = false;
+	
 	//# of Players Selected
 	private static int playerSelectCount;
 	
@@ -204,13 +208,6 @@ public class GVar {
 	//Sets how many players are currently selected
 	public static void setPlayerSelectCount(int no){
 		playerSelectCount = no;
-		
-		//Plays character switch audio.
-		//Note: So I was just like "this is NOT the place for this" but then I looked at code
-		//      in MenuState and realized I'd have to write extra logic there or paste duplicate code
-		//      so turns out that this is 100% the place for this. Who knew (me a few weeks ago, that's who :P )
-		Game.gameAudio.pauseAudioStagingArea("SFX");
-		Game.gameAudio.playAudioStagingArea("SFX", EnumSFX.Bump.toString());
 	}
 	
 	//Gets whether debug mode is currently enabled or not
@@ -327,6 +324,16 @@ public class GVar {
 		else
 			keyManualToggle = true;
 	}
+	
+	//Gets whether player can continue game or not
+	public static boolean getContinueGame() {
+		return continueGame;
+	}
+
+	//Sets whether player can continue game or not
+	public static void setContinueGame(boolean tf) {
+		continueGame = tf;
+	}
 
 	//Checks whether settings File Exists or not
 	public static boolean settingsExists() {
@@ -348,11 +355,23 @@ public class GVar {
 		Game.gameAudio.setCurrentVolume("SFX", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_SFX); z+=3;
 		Game.gameAudio.setCurrentVolume("MUSIC", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_MUSIC); z+=3;
 		Game.gameAudio.setCurrentRate(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_RATE); z+=3;
-		Game.gameAudio.setCurrentPitch(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_PITCH);
+		Game.gameAudio.setCurrentPitch(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_PITCH); z+=3;
+		Game.gameHeader.setCurrentWorld((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		Game.gameHeader.setCurrentLevel((int)(Utilities.parseFloat(tokens[z])));
 
+		//Sets Continue Game boolean as true if world or level > 1
+		if(Game.gameHeader.getCurrentWorld() > 1 || Game.gameHeader.getCurrentLevel() > 1)
+			GVar.setContinueGame(true);
+		
+		//Do special math to load the actual level now:
+		((GameState)Game.getGameState()).setLevel((Game.gameHeader.getCurrentWorld()-1) * 4 + Game.gameHeader.getCurrentLevel() - 1);
+		
 		//Print the above saved variables to console IF in debug mode
 		z = 0;
 		if(GVar.getDebug()) {
+			print("---------------------");
+			print("Settings File Loaded:");
+			print("---------------------");
 			//Current High Score
 				printnb(tokens[z] + tokens[z+1]); z+=3; //HighScore:
 				print(Game.gameHeader.getHighScore());
@@ -368,6 +387,13 @@ public class GVar {
 			//Current Pitch
 				printnb(tokens[z] + tokens[z+1]); z+=3; //CurrentPitch:
 				print(Game.gameAudio.getCurrentPitch());
+			//Current World
+				printnb(tokens[z] + tokens[z+1]); z+=3; //CurrentWorld:
+				print(Game.gameHeader.getCurrentWorld());
+			//Current Level
+				printnb(tokens[z] + tokens[z+1]); z+=3; //CurrentLevel:
+				print(Game.gameHeader.getCurrentLevel());
+				print("---------------------");
 		}
 	}
 }

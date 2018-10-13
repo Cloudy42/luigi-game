@@ -123,9 +123,12 @@ public class GameState extends State {
 	public void setLevel(int lvl) {
 		this.lvl = lvl;
 
-		//Sets Current Level and World based on lvl
-		Game.gameHeader.setCurrentLevel(lvl % 4 + 1);
+		//Sets Current World and Level based on lvl
 		Game.gameHeader.setCurrentWorld(lvl / 4 + 1);
+		Game.gameHeader.setCurrentLevel(lvl % 4 + 1);
+
+		//Updates Player
+		player = new Player(game, level[lvl].getSpawnX(), level[lvl].getSpawnY());
 
 		//Sets current Song for level
 		Game.gameAudio.setCurrentMusic(level[lvl].getLevelMusic());

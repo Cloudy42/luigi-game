@@ -1,5 +1,7 @@
 HighScore : 1337.0 
-CurrentVolume(SFX) : 1.0 
-CurrentVolume(MUSIC) : 1.0 
-CurrentRate : 1.0 
-CurrentPitch : 1.0 
+CurrentVolume(SFX) : 1.5000001 
+CurrentVolume(MUSIC) : 1.5000001 
+CurrentRate : 1.8000002 
+CurrentPitch : 1.7000002 
+CurrentWorld : 2.0 
+CurrentLevel : 2.0 
