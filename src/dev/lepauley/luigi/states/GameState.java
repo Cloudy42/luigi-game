@@ -98,8 +98,9 @@ public class GameState extends State {
 		player.setX((float)level[lvl].getSpawnX());
 		player.setY((float)level[lvl].getSpawnY());
 		
-		//Resets Player's Character selection skin
-		player.setCurrentPlayer(0);
+		//Resets Player's Character selection skin If starting new game
+		if(!GVar.getContinueGame())
+			player.setCurrentPlayer(0);
 		
 		//Resets Player's Height (since death = small Mario)
 		player.setHeight(Creature.DEFAULT_CREATURE_HEIGHT_BIG);

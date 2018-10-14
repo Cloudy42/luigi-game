@@ -279,7 +279,11 @@ public class Game implements Runnable {
 
 					//Sets Continue Game to False (needed before resetting defaults)
 					GVar.setContinueGame(false);
-					
+
+					//Sets Player Count
+					GVar.setPlayerSelectCount((((MenuState)menuState).getCurrentSelection() + 1));
+					print("Game: Player Count:" + GVar.getPlayerSelectCount());
+
 					//Resets Defaults across the board
 					resetDefaults();
 

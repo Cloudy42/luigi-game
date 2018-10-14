@@ -21,7 +21,7 @@ public class Header {
 	private int currentFontSize;
 	
 	//Default values to display in menu State
-	private final int DEFAULT_WORLD = 1, DEFAULT_LEVEL =1;
+	private final int DEFAULT_WORLD = 1, DEFAULT_LEVEL =1, DEFAULT_SCORE =0, DEFAULT_COINS =0;
 
 	//tracks "current" Variables for Header
 	private int currentScore
@@ -146,27 +146,34 @@ public class Header {
 			Utilities.drawShadowString(g, "TOP - " + zeroPrefixToString(5, highScore),	400 + currentFontSize * 1, (int)(275 + currentFontSize * 6.0), GVar.getShadowFont(currentFontSize));
 		}
 	
-		//Header Info
-		//Current Score
-		Utilities.drawShadowString(g, "MARIO",	215, 20, GVar.getShadowFont(currentFontSize));
-		Utilities.drawShadowString(g, zeroPrefixToString(5, currentScore),	215, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
-	
-		//Current Coins (with Coin icon) - should be animated in future
-		g.drawImage(Assets.coin,410,25,null);
-		Utilities.drawShadowString(g, "x" + zeroPrefixToString(2, currentCoins),	425, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
-	
-		//Current World-Level
-		Utilities.drawShadowString(g, "WORLD", 	585, 20, GVar.getShadowFont(currentFontSize));
+		/********** HEADER INFO **********/
 		
-		//If in menuState, display default values, otherwise display actual
+		//Current World-Level header
+		Utilities.drawShadowString(g, "WORLD", 	585, 20, GVar.getShadowFont(currentFontSize));
+
+		//Current Score header
+		Utilities.drawShadowString(g, "MARIO",	215, 20, GVar.getShadowFont(currentFontSize));
+
+		//Current Coins (Coin icon) - should be animated in future
+		g.drawImage(Assets.coin,410,25,null);
+		
+		//Current Time header
+		Utilities.drawShadowString(g, "TIME", 	785, 20, GVar.getShadowFont(currentFontSize));
+
+		//If in menuState, display default values
 		if(StateManager.getCurrentStateName() == "MenuState") {
-			Utilities.drawShadowString(g, DEFAULT_WORLD + "-" + DEFAULT_LEVEL,   	585  + currentFontSize * 1, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
+			/*DEFAULT WORLD-LEVEL*/ Utilities.drawShadowString(g, DEFAULT_WORLD + "-" + DEFAULT_LEVEL,   	585  + currentFontSize * 1, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
+			/*DEFAULT SCORE*/ 		Utilities.drawShadowString(g, zeroPrefixToString(5, DEFAULT_SCORE),	215, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
+			/*DEFAULT COINS*/ 		Utilities.drawShadowString(g, "x" + zeroPrefixToString(2, DEFAULT_COINS),	425, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
+
+		//otherwise display actual
 		} else {
-			Utilities.drawShadowString(g, currentWorld + "-" + currentLevel,   	585  + currentFontSize * 1, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
+			/*CURRENT WORLD-LEVEL*/ Utilities.drawShadowString(g, currentWorld + "-" + currentLevel,   	585  + currentFontSize * 1, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
+			/*CURRENT SCORE*/ 		Utilities.drawShadowString(g, zeroPrefixToString(5, currentScore),	215, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
+			/*CURRENT COINS*/ 		Utilities.drawShadowString(g, "x" + zeroPrefixToString(2, currentCoins),	425, 20 + currentFontSize, GVar.getShadowFont(currentFontSize));
 		}
 	
-		//Current Time (Minutes:seconds)
-		Utilities.drawShadowString(g, "TIME", 	785, 20, GVar.getShadowFont(currentFontSize));
+		//Time Calculations (Time format: Minutes:seconds) 
 
 		//If in "Hurry" Mode, display time in different color
 		if(StateManager.getCurrentStateName() == "GameState") {
@@ -236,8 +243,6 @@ public class Header {
 	
 	//Resets defaults for Header
 	public void resetDefaults() {
-		currentScore = 0;
-		currentCoins = 0;
 		
 		//Only reset to 1-1 IF player died
 		if(dead) {
@@ -250,6 +255,8 @@ public class Header {
 		if((!GVar.settingsExists() || !Game.getLoaded()) || !GVar.getContinueGame()) {
 			highScore = 0;
 			currentTime = 80;
+			currentScore = 0;
+			currentCoins = 0;
 		}
 
 		//If currentTime > HURRY_TIME, reset hurry to false, otherwise keep it
@@ -318,7 +325,27 @@ public class Header {
 		highScore = i;
 	}
 	
-	//Gets Current Level
+	//Gets Current Score
+	public int getCurrentScore() {
+		return currentScore;
+	}
+		
+	//Sets Current Score
+	public void setCurrentScore(int i) {
+		currentScore = i;
+	}
+	
+	//Gets Current Coins
+	public int getCurrentCoins() {
+		return currentCoins;
+	}
+		
+	//Sets Current Coins
+	public void setCurrentCoins(int i) {
+		currentCoins = i;
+	}
+    
+    //Gets Current Level
 	public int getCurrentLevel() {
 		return currentLevel;
 	}	

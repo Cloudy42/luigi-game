@@ -36,8 +36,9 @@ public class Player extends Creature{
 		//Not currently used
 		//this.game = game;
 
-		//Sets currentPlayer = index 0 (used for array)
-		currentPlayer = 0;
+		//Sets currentPlayer = index 0 (used for array) if starting new game
+		if(GVar.getContinueGame())
+			currentPlayer = GVar.getPlayer1CurrentCharacter();
 	}
 
 	@Override

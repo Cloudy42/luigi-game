@@ -46,6 +46,13 @@ public class MenuState extends State {
 		currentSelection = 0;
 		
 		Game.setLoaded(true);
+
+		//If ContinueGame = true, then set current Selection = Continue so there by default
+		//Wouldn't want someone to accidentally start over game if continue was an option.
+		//It may be early but I can't think of a prettier way to tell it "Continue" rather than #2. I may need 
+		//a helper method for this.
+		if(GVar.getContinueGame())
+			currentSelection = 2;
 	}
 	
 	//Updates Player and Level (if game is NOT paused)
@@ -88,10 +95,10 @@ public class MenuState extends State {
 		//Sets player count based on selection
 		//Note: If a player goes from top and cycles down, they may be in option menu as a 1 player game
 		//      and vice versa
-		if(currentSelection == 1)
-			GVar.setPlayerSelectCount(2);
 		if(currentSelection == 0)
 			GVar.setPlayerSelectCount(1);
+		if(currentSelection == 1)
+			GVar.setPlayerSelectCount(2);
 	}
 
 	//Draws Level, header, player, and player2 IF 2 player mode selected

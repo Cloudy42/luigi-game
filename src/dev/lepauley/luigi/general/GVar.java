@@ -1,5 +1,8 @@
 package dev.lepauley.luigi.general;
 
+import static dev.lepauley.luigi.utilities.Utilities.print;
+import static dev.lepauley.luigi.utilities.Utilities.printnb;
+
 import java.awt.Font;
 import java.io.File;
 
@@ -9,8 +12,6 @@ import dev.lepauley.luigi.utilities.EnumFont;
 import dev.lepauley.luigi.utilities.EnumSFX;
 import dev.lepauley.luigi.utilities.FontManager;
 import dev.lepauley.luigi.utilities.Utilities;
-
-import static dev.lepauley.luigi.utilities.Utilities.*;
 
 /*
  * Class of global variables to use throughout code:
@@ -59,6 +60,9 @@ public class GVar {
 	//# of Players Selected
 	private static int playerSelectCount;
 	
+	//Player 1-x current Character
+	private static int player1CurrentCharacter;
+	
 	//Multiplier for speed/scale/etc.
 	private static int multiplier;
 
@@ -79,9 +83,7 @@ public class GVar {
 
 	//Resets GVar variables to their default Values
 	public static void resetGVarDefaults() {
-		playerSelectCount = 1;
 		multiplier = 1;
-		FPS = FPS_DEFAULT;
 		debugToggle = true;
 		scrollToggle = true;
 		pauseToggle = false;		
@@ -90,6 +92,11 @@ public class GVar {
 		pauseMsg = "PAUSED";
 		pauseMsgLen = pauseMsg.length();
 		defaultFont = FontManager.mapFonts.get(EnumFont.LucidaSansUnicode);
+
+		if(!continueGame) {
+			FPS = FPS_DEFAULT;
+		}
+
 	}
 	
 	/*************** GETTERS and SETTERS ***************/
@@ -208,6 +215,16 @@ public class GVar {
 	//Sets how many players are currently selected
 	public static void setPlayerSelectCount(int no){
 		playerSelectCount = no;
+	}
+	
+	//Gets player 1 current Character
+	public static int getPlayer1CurrentCharacter() {
+		return player1CurrentCharacter;
+	}
+	
+	//Sets player 1 current Character
+	public static void setPlayer1CurrentCharacter(int i) {
+		player1CurrentCharacter = i;
 	}
 	
 	//Gets whether debug mode is currently enabled or not
@@ -351,18 +368,23 @@ public class GVar {
 		
 		//Using this to make incrementing (and reordering) easier for the future
 		int z = 2;
-		Game.gameHeader.setHighScore((int)(Utilities.parseFloat(tokens[z]))); z+=3;
-		Game.gameAudio.setCurrentVolume("SFX", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_SFX); z+=3;
-		Game.gameAudio.setCurrentVolume("MUSIC", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_MUSIC); z+=3;
-		Game.gameAudio.setCurrentRate(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_RATE); z+=3;
-		Game.gameAudio.setCurrentPitch(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_PITCH); z+=3;
-		GVar.setContinueGame(Utilities.convertIntToBool((int)(Utilities.parseFloat(tokens[z])))); z+=3;
-		Game.gameHeader.setCurrentWorld((int)(Utilities.parseFloat(tokens[z]))); z+=3;
-		Game.gameHeader.setCurrentLevel((int)(Utilities.parseFloat(tokens[z]))); z+=3;
-		print("token: " + tokens[z]);
-		Game.gameAudio.setCurrentMusic(tokens[z]); z+=3;
-		Game.gameHeader.setCurrentTime((int)(Utilities.parseFloat(tokens[z])));
 
+		/*Sets HighScore*/ 				Game.gameHeader.setHighScore((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current Volume (SFX)*/ 	Game.gameAudio.setCurrentVolume("SFX", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_SFX); z+=3;
+		/*Sets Current Volume (Music)*/ Game.gameAudio.setCurrentVolume("MUSIC", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_MUSIC); z+=3;
+		/*Sets Current Rate (Audio)*/ 	Game.gameAudio.setCurrentRate(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_RATE); z+=3;
+		/*Sets Current Pitch (Audio)*/ 	Game.gameAudio.setCurrentPitch(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_PITCH); z+=3;
+		/*Sets Continue Game Boolean*/ 	GVar.setContinueGame(Utilities.convertIntToBool((int)(Utilities.parseFloat(tokens[z])))); z+=3;
+		/*Sets Current World*/ 			Game.gameHeader.setCurrentWorld((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current Level*/ 			Game.gameHeader.setCurrentLevel((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current Song*/ 			Game.gameAudio.setCurrentMusic(tokens[z]); z+=3;
+		/*Sets Current Time*/ 			Game.gameHeader.setCurrentTime((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current Score*/ 			Game.gameHeader.setCurrentScore((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current Coins*/ 			Game.gameHeader.setCurrentCoins((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current FPS*/ 			GVar.setFPS((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current Character*/ 		player1CurrentCharacter = ((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current PlayerCount*/ 	GVar.setPlayerSelectCount((int)(Utilities.parseFloat(tokens[z])));
+		
 		//Do special math to load the actual level now:
 		((GameState)Game.getGameState()).setLevel((Game.gameHeader.getCurrentWorld()-1) * 4 + Game.gameHeader.getCurrentLevel() - 1);
 		
@@ -376,37 +398,52 @@ public class GVar {
 			print("---------------------");
 			print("Settings File Loaded:");
 			print("---------------------");
-			//Current High Score
+			//Print Current High Score
 				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameHeader.getHighScore());
-			//Current Volume (SFX)
+			//Print Current Volume (SFX)
 				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameAudio.getCurrentVolume("SFX"));
-			//Current Volume (MUSIC)
+			//Print Current Volume (MUSIC)
 				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameAudio.getCurrentVolume("MUSIC"));	
-			//Current Rate
+			//Print Current Rate
 				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameAudio.getCurrentRate());	
-			//Current Pitch
+			//Print Current Pitch
 				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameAudio.getCurrentPitch());
-			//Saved Game
+			//Print Saved Game
 				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(GVar.getContinueGame());
-			//Current World
+			//Print Current World
 				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameHeader.getCurrentWorld());
-			//Current Level
+			//Print Current Level
 				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameHeader.getCurrentLevel());
-			//Current Music
+			//Print Current Music
 				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameAudio.getCurrentMusic());
-			//Current Time
+			//Print Current Time
 				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(Game.gameHeader.getCurrentTime());
-				print("---------------------");
+			//Print Current Score
+				printnb(tokens[z] + tokens[z+1]); z+=3;
+				print(Game.gameHeader.getCurrentScore());
+			//Print Current Coins
+				printnb(tokens[z] + tokens[z+1]); z+=3;
+				print(Game.gameHeader.getCurrentCoins());
+			//Print Current FPS
+				printnb(tokens[z] + tokens[z+1]); z+=3;
+				print(GVar.FPS);
+			//Print Current Character
+				printnb(tokens[z] + tokens[z+1]); z+=3;
+				print(((GameState)Game.getGameState()).getPlayer().getCurrentPlayer());
+			//Print Current Player Count
+				printnb(tokens[z] + tokens[z+1]); z+=3;
+				print(GVar.getPlayerSelectCount());
+			print("---------------------");
 		}
 	}
 }

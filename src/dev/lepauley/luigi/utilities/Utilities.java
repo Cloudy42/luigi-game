@@ -2,10 +2,15 @@ package dev.lepauley.luigi.utilities;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.general.Game;
+import dev.lepauley.luigi.states.GameState;
 
 /*
  * Contains helper functions that assist us anywhere in game
@@ -29,21 +34,24 @@ public class Utilities {
 			bw = appendBufferedWriter(bw, "CurrentPitch", Game.gameAudio.getCurrentPitch());
 			
 			//Add current progress
+			//Set ContinueGame to yes ALWAYS at this point if not already (cause duh)
+			GVar.setContinueGame(true);
 			bw = appendBufferedWriter(bw, "SavedGame", convertBoolToInt(GVar.getContinueGame()));
+						
 			bw = appendBufferedWriter(bw, "CurrentWorld", Game.gameHeader.getCurrentWorld());
 			bw = appendBufferedWriter(bw, "CurrentLevel", Game.gameHeader.getCurrentLevel());
 			bw = appendBufferedWriter(bw, "CurrentMusic", Game.gameAudio.getCurrentMusic());
-			
 			bw = appendBufferedWriter(bw, "CurrentTime", Game.gameHeader.getCurrentTime());
+			bw = appendBufferedWriter(bw, "CurrentScore", Game.gameHeader.getCurrentScore());
+			bw = appendBufferedWriter(bw, "CurrentCoins", Game.gameHeader.getCurrentCoins());
+
+			bw = appendBufferedWriter(bw, "CurrentFPS", GVar.FPS);
+			bw = appendBufferedWriter(bw, "CurrentCharacter", ((GameState)Game.getGameState()).getPlayer().getCurrentPlayer());
+			bw = appendBufferedWriter(bw, "CurrentPlayerCount", GVar.getPlayerSelectCount());
 			//Add:
 			/*
-			 * CurrentScore
-			 * CurrentCoins
 			 * CurrentPositionX
 			 * CurrentPositionY
-			 * CurrentFPS
-			 * CurrentCharacter
-			 * CurrentPlayerCount
 			 */
 			
 			//Close BufferedWriter
