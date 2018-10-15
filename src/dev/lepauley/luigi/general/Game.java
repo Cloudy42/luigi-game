@@ -289,6 +289,14 @@ public class Game implements Runnable {
 
 					//Sets level to 1-1
 					((GameState)gameState).setLevel(0);
+
+				}
+				
+				//If continuing game, retain scroll position and const from settings file
+				if(GVar.getContinueGame()) {
+					((GameState)gameState).getLevel().setScrollLevelDefaults();
+					((GameState)gameState).getPlayer().setX((float)GVar.getPlayerPositionX());
+					((GameState)gameState).getPlayer().setY((float)GVar.getPlayerPositionY());
 				}
 				
 				//Sets currentState to now be gameState

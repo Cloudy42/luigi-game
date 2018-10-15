@@ -95,8 +95,10 @@ public class GameState extends State {
 	public void resetPlayerDefaults() {
 		
 		//Resets Player's Position
-		player.setX((float)level[lvl].getSpawnX());
-		player.setY((float)level[lvl].getSpawnY());
+		if(!GVar.getContinueGame()) {
+			player.setX((float)level[lvl].getSpawnX());
+			player.setY((float)level[lvl].getSpawnY());
+		}
 		
 		//Resets Player's Character selection skin If starting new game
 		if(!GVar.getContinueGame())
@@ -110,7 +112,7 @@ public class GameState extends State {
 	public void resetLevelDefaults() {
 		
 		//Sets Default Scroll Level Values
-		level[lvl].setScrollLevelDefaults(0);
+		level[lvl].setScrollLevelDefaults();
 	}
 
 	/*************** GETTERS and SETTERS ***************/
@@ -134,10 +136,15 @@ public class GameState extends State {
 		//Sets current Song for level IF do not select continue
 		if(!GVar.getContinueGame())
 			Game.gameAudio.setCurrentMusic(level[lvl].getLevelMusic());
+			
 	}
 
 	//Toggles level (increases to next level. If hits cap, resets to first level)
 	public void toggleLevel() {
+
+		//Set to false so we can reset values
+		GVar.setContinueGame(false);
+
 		lvl++;
 		if(lvl == level.length)
 			lvl = 0;		
@@ -153,7 +160,6 @@ public class GameState extends State {
 		
 		//plays Level song
 		Game.gameAudio.playAudioStagingArea("MUSIC", Game.gameAudio.getCurrentMusic());
-
 	}
 	
 	//Gets Current Player

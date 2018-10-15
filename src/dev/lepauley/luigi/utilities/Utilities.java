@@ -11,6 +11,7 @@ import java.io.IOException;
 import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.general.Game;
 import dev.lepauley.luigi.states.GameState;
+import dev.lepauley.luigi.states.StateManager;
 
 /*
  * Contains helper functions that assist us anywhere in game
@@ -33,26 +34,35 @@ public class Utilities {
 			bw = appendBufferedWriter(bw, "CurrentRate", Game.gameAudio.getCurrentRate());
 			bw = appendBufferedWriter(bw, "CurrentPitch", Game.gameAudio.getCurrentPitch());
 			
-			//Add current progress
 			//Set ContinueGame to yes ALWAYS at this point if not already (cause duh)
 			GVar.setContinueGame(true);
 			bw = appendBufferedWriter(bw, "SavedGame", convertBoolToInt(GVar.getContinueGame()));
 						
+			//Add current progress
 			bw = appendBufferedWriter(bw, "CurrentWorld", Game.gameHeader.getCurrentWorld());
 			bw = appendBufferedWriter(bw, "CurrentLevel", Game.gameHeader.getCurrentLevel());
 			bw = appendBufferedWriter(bw, "CurrentMusic", Game.gameAudio.getCurrentMusic());
 			bw = appendBufferedWriter(bw, "CurrentTime", Game.gameHeader.getCurrentTime());
 			bw = appendBufferedWriter(bw, "CurrentScore", Game.gameHeader.getCurrentScore());
 			bw = appendBufferedWriter(bw, "CurrentCoins", Game.gameHeader.getCurrentCoins());
-
 			bw = appendBufferedWriter(bw, "CurrentFPS", GVar.FPS);
 			bw = appendBufferedWriter(bw, "CurrentCharacter", ((GameState)Game.getGameState()).getPlayer().getCurrentPlayer());
 			bw = appendBufferedWriter(bw, "CurrentPlayerCount", GVar.getPlayerSelectCount());
-			//Add:
-			/*
-			 * CurrentPositionX
-			 * CurrentPositionY
-			 */
+
+			//Need to update GVar variable as well, so doing that first
+			//but only update this if we're in the gameState
+			if(StateManager.getCurrentState() == Game.getGameState()) {
+				GVar.setScrollPosition(((GameState)Game.getGameState()).getLevel().getScrollPosition());
+				GVar.setScrollConst(((GameState)Game.getGameState()).getLevel().getScrollConst());			
+				GVar.setPlayerPositionX(((GameState)Game.getGameState()).getPlayer().getX());
+				GVar.setPlayerPositionY(((GameState)Game.getGameState()).getPlayer().getY());
+			}
+			
+			//Now update with GVar variables
+			bw = appendBufferedWriter(bw, "CurrentScrollPosition", GVar.getScrollPosition());
+			bw = appendBufferedWriter(bw, "CurrentScrollConst", GVar.getScrollConst());
+			bw = appendBufferedWriter(bw, "CurrentPlayerPositionX", GVar.getPlayerPositionX());
+			bw = appendBufferedWriter(bw, "CurrentPlayerPositionY", GVar.getPlayerPositionY());
 			
 			//Close BufferedWriter
 			bw.close();

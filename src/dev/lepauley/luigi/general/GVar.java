@@ -63,6 +63,10 @@ public class GVar {
 	//Player 1-x current Character
 	private static int player1CurrentCharacter;
 	
+	//Tracks player current Position for settings file
+	private static float currentPlayerPositionX = 0
+	          		   , currentPlayerPositionY = 0; 
+
 	//Multiplier for speed/scale/etc.
 	private static int multiplier;
 
@@ -71,6 +75,10 @@ public class GVar {
 	
 	//Denotes whether game is scrolling or not
 	private static boolean scrollToggle;
+	
+	//Tracks ScrollPosition and Const from settings file
+	private static int currentScrollPosition = 0
+	          		 , currentScrollConst = 0; 
 
 	//Denotes whether game is paused or not
 	private static boolean pauseToggle;
@@ -95,8 +103,15 @@ public class GVar {
 
 		if(!continueGame) {
 			FPS = FPS_DEFAULT;
+			currentScrollPosition = 0;
+			currentScrollConst = 4;
+			
+			//If game is loaded, use these values, otherwise use defaults
+			if(Game.getLoaded()) {
+				currentPlayerPositionX = ((GameState)Game.getGameState()).getLevel().getSpawnX();
+				currentPlayerPositionY = ((GameState)Game.getGameState()).getLevel().getSpawnY();
+			}
 		}
-
 	}
 	
 	/*************** GETTERS and SETTERS ***************/
@@ -227,6 +242,26 @@ public class GVar {
 		player1CurrentCharacter = i;
 	}
 	
+	//Gets current Player Position X
+	public static float getPlayerPositionX() {
+		return currentPlayerPositionX;
+	}
+	
+	//Sets current Player Position X
+	public static void setPlayerPositionX(float f) {
+		currentPlayerPositionX = f;
+	}
+	
+	//Gets current Player Position Y
+	public static float getPlayerPositionY() {
+		return currentPlayerPositionY;
+	}
+	
+	//Sets current Player Position Y
+	public static void setPlayerPositionY(float f) {
+		currentPlayerPositionY = f;
+	}
+	
 	//Gets whether debug mode is currently enabled or not
 	public static boolean getDebug() {
 		return debugToggle;
@@ -259,6 +294,26 @@ public class GVar {
 		//If currently disabled, enable
 		else
 			scrollToggle = true;
+	}
+	
+	//Gets currentScrollPosition (for currentLevel Only)
+	public static int getScrollPosition() {
+		return currentScrollPosition;
+	}
+
+	//Sets currentScrollPosition (for currentLevel Only)
+	public static void setScrollPosition(int i) {
+		currentScrollPosition = i;
+	}
+
+	//Gets currentScrollConst (for currentLevel Only)
+	public static int getScrollConst() {
+		return currentScrollConst;
+	}
+
+	//Sets currentScrollConst (for currentLevel Only)
+	public static void setScrollConst(int i) {
+		currentScrollConst = i;
 	}
 
 	//Gets whether game is currently Paused or not
@@ -369,22 +424,26 @@ public class GVar {
 		//Using this to make incrementing (and reordering) easier for the future
 		int z = 2;
 
-		/*Sets HighScore*/ 				Game.gameHeader.setHighScore((int)(Utilities.parseFloat(tokens[z]))); z+=3;
-		/*Sets Current Volume (SFX)*/ 	Game.gameAudio.setCurrentVolume("SFX", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_SFX); z+=3;
-		/*Sets Current Volume (Music)*/ Game.gameAudio.setCurrentVolume("MUSIC", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_MUSIC); z+=3;
-		/*Sets Current Rate (Audio)*/ 	Game.gameAudio.setCurrentRate(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_RATE); z+=3;
-		/*Sets Current Pitch (Audio)*/ 	Game.gameAudio.setCurrentPitch(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_PITCH); z+=3;
-		/*Sets Continue Game Boolean*/ 	GVar.setContinueGame(Utilities.convertIntToBool((int)(Utilities.parseFloat(tokens[z])))); z+=3;
-		/*Sets Current World*/ 			Game.gameHeader.setCurrentWorld((int)(Utilities.parseFloat(tokens[z]))); z+=3;
-		/*Sets Current Level*/ 			Game.gameHeader.setCurrentLevel((int)(Utilities.parseFloat(tokens[z]))); z+=3;
-		/*Sets Current Song*/ 			Game.gameAudio.setCurrentMusic(tokens[z]); z+=3;
-		/*Sets Current Time*/ 			Game.gameHeader.setCurrentTime((int)(Utilities.parseFloat(tokens[z]))); z+=3;
-		/*Sets Current Score*/ 			Game.gameHeader.setCurrentScore((int)(Utilities.parseFloat(tokens[z]))); z+=3;
-		/*Sets Current Coins*/ 			Game.gameHeader.setCurrentCoins((int)(Utilities.parseFloat(tokens[z]))); z+=3;
-		/*Sets Current FPS*/ 			GVar.setFPS((int)(Utilities.parseFloat(tokens[z]))); z+=3;
-		/*Sets Current Character*/ 		player1CurrentCharacter = ((int)(Utilities.parseFloat(tokens[z]))); z+=3;
-		/*Sets Current PlayerCount*/ 	GVar.setPlayerSelectCount((int)(Utilities.parseFloat(tokens[z])));
-		
+		/*Sets HighScore*/ 					Game.gameHeader.setHighScore((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current Volume (SFX)*/ 		Game.gameAudio.setCurrentVolume("SFX", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_SFX); z+=3;
+		/*Sets Current Volume (Music)*/ 	Game.gameAudio.setCurrentVolume("MUSIC", Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_VOLUME_MUSIC); z+=3;
+		/*Sets Current Rate (Audio)*/ 		Game.gameAudio.setCurrentRate(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_RATE); z+=3;
+		/*Sets Current Pitch (Audio)*/ 		Game.gameAudio.setCurrentPitch(Utilities.parseFloat(tokens[z])-Game.gameAudio.DEFAULT_CURRENT_PITCH); z+=3;
+		/*Sets Continue Game Boolean*/ 		setContinueGame(Utilities.convertIntToBool((int)(Utilities.parseFloat(tokens[z])))); z+=3;
+		/*Sets Current World*/ 				Game.gameHeader.setCurrentWorld((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current Level*/ 				Game.gameHeader.setCurrentLevel((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current Song*/ 				Game.gameAudio.setCurrentMusic(tokens[z]); z+=3;
+		/*Sets Current Time*/ 				Game.gameHeader.setCurrentTime((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current Score*/ 				Game.gameHeader.setCurrentScore((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current Coins*/ 				Game.gameHeader.setCurrentCoins((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current FPS*/ 				GVar.setFPS((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current Character*/ 			player1CurrentCharacter = ((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current Player Count*/ 		setPlayerSelectCount((int)(Utilities.parseFloat(tokens[z]))); z+=3;
+		/*Sets Current Scroll Position*/	currentScrollPosition = (int)(Utilities.parseFloat(tokens[z])); z+=3;
+		/*Sets Current Scroll Const*/ 		currentScrollConst = (int)(Utilities.parseFloat(tokens[z])); z+=3;
+		/*Sets Current Player Position X*/	currentPlayerPositionX = (Utilities.parseFloat(tokens[z])); z+=3;
+		/*Sets Current Player Position Y*/	currentPlayerPositionY = (Utilities.parseFloat(tokens[z])); z+=3;
+
 		//Do special math to load the actual level now:
 		((GameState)Game.getGameState()).setLevel((Game.gameHeader.getCurrentWorld()-1) * 4 + Game.gameHeader.getCurrentLevel() - 1);
 		
@@ -442,7 +501,19 @@ public class GVar {
 				print(((GameState)Game.getGameState()).getPlayer().getCurrentPlayer());
 			//Print Current Player Count
 				printnb(tokens[z] + tokens[z+1]); z+=3;
-				print(GVar.getPlayerSelectCount());
+				print(getPlayerSelectCount());
+			//Print Current Scroll Position
+				printnb(tokens[z] + tokens[z+1]); z+=3;
+				print(currentScrollPosition);
+			//Print Current Scroll Const
+				printnb(tokens[z] + tokens[z+1]); z+=3;
+				print(currentScrollConst);
+			//Print Current Player Position X
+				printnb(tokens[z] + tokens[z+1]); z+=3;
+				print(currentPlayerPositionX);
+			//Print Current Player Position Y
+				printnb(tokens[z] + tokens[z+1]); z+=3;
+				print(currentPlayerPositionY);
 			print("---------------------");
 		}
 	}
