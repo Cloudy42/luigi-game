@@ -32,7 +32,7 @@ public class MenuState extends State {
 
 		//May be worthwhile to just use the level and players created in GameState? Unsure if would pose issues/be better, just a thought.
 		//Creates new Level
-		level = new Level("res/levels/level 1-1.txt");
+		level = new Level(game, "res/levels/level 1-1.txt");
 		
 		//Creates new Player
 		player1 = new Player(game, level.getSpawnX(), level.getSpawnY());

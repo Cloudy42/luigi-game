@@ -13,10 +13,6 @@ import dev.lepauley.luigi.gfx.Assets;
 
 public class Player extends Creature{
 
-	//imported so we can access things like key manager
-	//not currently used
-	//private Game game;
-	
 	//Keeps Track of Current Player (Animation skin/palette)
 	private int currentPlayer;
 
@@ -31,10 +27,7 @@ public class Player extends Creature{
 	
 	//Constructor that sets up some defaults
 	public Player(Game game, float x, float y) {
-		super(x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT_BIG);
-
-		//Not currently used
-		//this.game = game;
+		super(game, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT_BIG);
 
 		//Sets currentPlayer = index 0 (used for array) if starting new game
 		if(GVar.getContinueGame())
@@ -49,6 +42,10 @@ public class Player extends Creature{
 		
 		//Sets position using movement
 		move();
+		
+		//Temporarily turned off since bounds are not working yet (later video)
+		//Centers camera on player
+		//game.getGameCamera().centerOnEntity(this);
 	}
 	
 	//Takes user input and performs various actions
@@ -102,7 +99,7 @@ public class Player extends Creature{
 		
 			//Need to readjust height too since shorter than Big Luigi
 			this.setHeight(Creature.DEFAULT_CREATURE_HEIGHT_SMALL);
-			g.drawImage(playerImageDead[currentPlayer], (int) x, (int) y, (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
+			g.drawImage(playerImageDead[currentPlayer], (int) (x - game.getGameCamera().getxOffset()), (int) (y - game.getGameCamera().getyOffset()), (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
 
 		//If player = Alive, draw player as alive sprite
 		//We're not reviving player, so don't need to set height back to Big here
@@ -110,7 +107,7 @@ public class Player extends Creature{
 			//Draws player. Utilizes Cropping method via SpriteSheet class to only pull part of image
 			// - Takes in integers, not floats, so need to cast x and y position:
 			// - Image Observer = null. We won't use in tutorial
-			g.drawImage(playerImage[currentPlayer], (int) x, (int) y, (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
+			g.drawImage(playerImage[currentPlayer], (int) (x - game.getGameCamera().getxOffset()), (int) (y - game.getGameCamera().getyOffset()), (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
 		}
 	}
 	

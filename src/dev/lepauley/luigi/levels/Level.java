@@ -14,6 +14,9 @@ import dev.lepauley.luigi.utilities.Utilities;
 
 public class Level {
 
+	//main game object
+	private Game game;
+	
 	//Width and Height of level
 	private int width, height;
 	
@@ -33,7 +36,8 @@ public class Level {
 	private int defaultXSpawnOffset = -Tile.TILEWIDTH;
 	
 	//Constructor
-	public Level(String path) {
+	public Level(Game game, String path) {
+		this.game = game;
 		setScrollLevelDefaults();
 		loadLevel(path);
 	}
@@ -88,8 +92,9 @@ public class Level {
 				//If NOT a BG tile, will get tile and print to screen
 				if(checkTile(x,y)) {
 
-					//scrollLevel used to test scrolling level (moves all of the tiles left or right):
-					getTile(x,y).render(g, defaultXSpawnOffset + x * Tile.TILEWIDTH * GVar.getMultiplier() - scrollPosition, y * Tile.TILEHEIGHT * GVar.getMultiplier());
+					//draws level, offset by GameCamera on the x and y axis
+					getTile(x,y).render(g, (int)(defaultXSpawnOffset + x * Tile.TILEWIDTH * GVar.getMultiplier() - game.getGameCamera().getxOffset() - scrollPosition)
+							             , (int)(y * Tile.TILEHEIGHT * GVar.getMultiplier() - game.getGameCamera().getyOffset()));
 				}
 			}
 		}

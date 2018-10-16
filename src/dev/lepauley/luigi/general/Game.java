@@ -8,6 +8,7 @@ import java.awt.image.BufferStrategy;
 import dev.lepauley.luigi.audio.Audio;
 import dev.lepauley.luigi.display.Display;
 import dev.lepauley.luigi.gfx.Assets;
+import dev.lepauley.luigi.gfx.GameCamera;
 import dev.lepauley.luigi.gfx.Header;
 import dev.lepauley.luigi.input.KeyManager;
 import dev.lepauley.luigi.states.GameState;
@@ -35,7 +36,7 @@ public class Game implements Runnable {
 	//Tracks General variables
 	private Display display;
 	public String title;
-	public int width, height;
+	private int width, height;
 
 	//Current Font Size
 	public int currentFontSize;
@@ -58,6 +59,9 @@ public class Game implements Runnable {
 	//Used to access all fonts
 	public static FontManager fontManager = new FontManager();
 		
+	//Used to access Game Camera	
+	private GameCamera gameCamera;
+	
 	//While Running = true, game will loop
 	private boolean running = false;
 
@@ -107,6 +111,9 @@ public class Game implements Runnable {
 		
 		//Loads all SpriteSheets to objects
 		Assets.init();
+
+		//initializes the gameCamera at 0,0
+		gameCamera = new GameCamera(this, 0,0);
 		
 		//initializes States and puts game in as parameter
 		gameState = new GameState(this);
@@ -567,4 +574,18 @@ public class Game implements Runnable {
 		return menuState;
 	}
 	
+	//Gets Width of window
+	public int getWidth() {
+		return width;
+	}
+	
+	//Gets Height of window
+	public int getHeight() {
+		return height;
+	}
+	
+	//Gets Game Camera
+	public GameCamera getGameCamera() {
+		return gameCamera;
+	}
 }

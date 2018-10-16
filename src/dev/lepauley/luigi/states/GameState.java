@@ -17,12 +17,12 @@ public class GameState extends State {
 
 	//Holds current Player and Level
 	private Player player;
-	private Level[] level = {new Level("res/levels/level 1-1.txt")
-			               , new Level("res/levels/level 1-2.txt")
-    					   , new Level("res/levels/level 1-3.txt")
-    					   , new Level("res/levels/level 1-4.txt")
-    					   , new Level("res/levels/level 2-1.txt")
-			               , new Level("res/levels/level 2-2.txt")};	
+	private Level[] level = {new Level(game, "res/levels/level 1-1.txt")
+			               , new Level(game, "res/levels/level 1-2.txt")
+    					   , new Level(game, "res/levels/level 1-3.txt")
+    					   , new Level(game, "res/levels/level 1-4.txt")
+    					   , new Level(game, "res/levels/level 2-1.txt")
+			               , new Level(game, "res/levels/level 2-2.txt")};	
 
 	//Tracks current Level
 	private int lvl = 0;
@@ -40,7 +40,7 @@ public class GameState extends State {
 		this.game = game;
 		
 		//Creates new Player
-		player = new Player(game, level[lvl].getSpawnX(), level[lvl].getSpawnY());
+		player = new Player(game, level[lvl].getSpawnX(), level[lvl].getSpawnY());		
 	}
 	
 	//Updates Player and Level (if game is NOT paused)
