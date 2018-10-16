@@ -15,7 +15,7 @@ public class Player extends Creature{
 
 	//Keeps Track of Current Player (Animation skin/palette)
 	private int currentPlayer;
-
+	
 	//Various player selection Sprites (Alive and dead since not animating yet)
 	//Once animating, we can consolidate
 	//Note: Using arrays because it makes swapping players much easier, as you can
@@ -43,9 +43,8 @@ public class Player extends Creature{
 		//Sets position using movement
 		move();
 		
-		//Temporarily turned off since bounds are not working yet (later video)
 		//Centers camera on player
-		//game.getGameCamera().centerOnEntity(this);
+		game.getGameCamera().centerOnEntity(this);
 	}
 	
 	//Takes user input and performs various actions

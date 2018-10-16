@@ -94,15 +94,16 @@ public class GameState extends State {
 	//Self-explanatory, resets Player defaults
 	public void resetPlayerDefaults() {
 		
+		//Temporarily disabled since keep hitting the button too fast (plus there is likely a smarter way to do this)
+		//Resets Player's Character selection skin If starting new game
+		//if(!GVar.getContinueGame() && (player.getX() == level[lvl].getSpawnX() || player.getY() == level[lvl].getSpawnY()))
+		//	player.setCurrentPlayer(0);
+		
 		//Resets Player's Position
 		if(!GVar.getContinueGame()) {
 			player.setX((float)level[lvl].getSpawnX());
 			player.setY((float)level[lvl].getSpawnY());
 		}
-		
-		//Resets Player's Character selection skin If starting new game
-		if(!GVar.getContinueGame())
-			player.setCurrentPlayer(0);
 		
 		//Resets Player's Height (since death = small Mario)
 		player.setHeight(Creature.DEFAULT_CREATURE_HEIGHT_BIG);

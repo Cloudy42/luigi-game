@@ -25,7 +25,10 @@ public class GameCamera {
 		
 		//We divide by 2 so centered on screen (and not on edge) and centered on entity
 		xOffset = e.getX() - game.getWidth() / 2 + e.getWidth() / 2;
-		yOffset = e.getY() - game.getHeight() / 2 + e.getHeight() / 2;
+		
+		//Temporarily disabled until we fix this for camera limits
+		//Though MAY be permanent if we are sticking to old school camera for Mario game...
+		//yOffset = e.getY() - game.getHeight() / 2 + e.getHeight() / 2;
 	}
 
 	//Takes inputs and adds them to the associated offset variables respecitvely

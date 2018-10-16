@@ -93,7 +93,7 @@ public class GVar {
 	public static void resetGVarDefaults() {
 		multiplier = 1;
 		debugToggle = true;
-		scrollToggle = true;
+		scrollToggle = false;
 		pauseToggle = false;		
 		stopToggle = false;		
 		keyManualToggle = false;
