@@ -127,6 +127,9 @@ public class Game implements Runnable {
 	//Update everything for game
 	private void tick(){
 
+		//Give key manager current state, temporary until we get handler
+		keyManager.setCurrentState(StateManager.getCurrentStateName());
+		
 		//Update keys
 		keyManager.tick();
 		

@@ -57,6 +57,8 @@ public class KeyManager implements KeyListener {
 			                     ,"[</>] Scale--/++"
 			                     ,"[C] Change Player"
 			                    };
+	//Temp holder for current state name until we get handler?
+	String currentState = null;
 	
 	//Constructor that creates base key array
 	//And other arrays of same length, for controlling key press timing
@@ -99,6 +101,7 @@ public class KeyManager implements KeyListener {
 			if(!cantPress[i] && keys[i]) {			//3
 				justPressed[i] = true;
 			}
+			
 		}
 		
 		//Test code for ensuring above code about key just being pressed
@@ -110,18 +113,32 @@ public class KeyManager implements KeyListener {
 				//System.out.println("Key code " + i + " pressed.");
 		}
 		
+		//This syntax style may be useful somewhere, the up != up, which flips between true and false
+		/*if(keyJustPressed(KeyEvent.VK_W))
+			up = !up;*/
+		
 		//*DIRECTION*/
 		//Navigate menus/ move player
-		up = keys[KeyEvent.VK_W];
-		down = keys[KeyEvent.VK_S];
-		left = keys[KeyEvent.VK_A];
-		right = keys[KeyEvent.VK_D];
+		if(currentState == "GameState") {
+			up = keys[KeyEvent.VK_W];
+			down = keys[KeyEvent.VK_S];
+			left = keys[KeyEvent.VK_A];
+			right = keys[KeyEvent.VK_D];
+
+		}
+		
+		if(currentState =="MenuState") {
+			up = keyJustPressed(KeyEvent.VK_W);
+			down = keyJustPressed(KeyEvent.VK_S);
+			left = keyJustPressed(KeyEvent.VK_A);
+			right = keyJustPressed(KeyEvent.VK_D);
+		}
 
 		//*STATE PROGRESSION*/
 		//Helps Enter/Exit States (Variable depending on what state you're in)
 		//Start also pauses game in GameState
-		start = keys[KeyEvent.VK_ENTER];
-		exit = keys[KeyEvent.VK_ESCAPE];
+		start = keyJustPressed(KeyEvent.VK_ENTER);
+		exit = keyJustPressed(KeyEvent.VK_ESCAPE);
 		
 		//*DECREMENT/INCREMENT*/
 		//Decreases and Increases game FPS
@@ -151,26 +168,26 @@ public class KeyManager implements KeyListener {
 		
 		//*CYCLE SELECTIONS*/
 		//Swap Between available players
-		changePlayer = keys[KeyEvent.VK_C];
+		changePlayer = keyJustPressed(KeyEvent.VK_C);
 		
 		//Plays Next song
-		nextSong = keys[KeyEvent.VK_N];
+		nextSong = keyJustPressed(KeyEvent.VK_N);
 		
 		//*TOGGLE MODES*/
 		//Toggles Debug Display
-		debugToggle = keys[KeyEvent.VK_Z];
+		debugToggle = keyJustPressed(KeyEvent.VK_Z);
 		
 		//Toggles Currrent Level
-		levelToggle = keys[KeyEvent.VK_L];
+		levelToggle = keyJustPressed(KeyEvent.VK_L);
 		
 		//Toggles Level Scrolling (temporary)
-		scrollToggle = keys[KeyEvent.VK_X];
+		scrollToggle = keyJustPressed(KeyEvent.VK_X);
 
 		//Toggles Level Scrolling Direction (temporary)
-		scrollDirection = keys[KeyEvent.VK_V];
+		scrollDirection = keyJustPressed(KeyEvent.VK_V);
 
 		//Toggles Controls  Display
-		controlToggle = keys[KeyEvent.VK_K];
+		controlToggle = keyJustPressed(KeyEvent.VK_K);
 		
 	}
 	
@@ -202,4 +219,8 @@ public class KeyManager implements KeyListener {
 		return keyManual;
 	}
 	
+	//Temp until we get handler, hold current state name for use in keys being one tick per press or not
+	public void setCurrentState(String s) {
+		currentState = s;
+	}
 }
