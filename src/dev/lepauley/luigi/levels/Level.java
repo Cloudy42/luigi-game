@@ -79,7 +79,7 @@ public class Level {
 			//easy enough...
 			//for(int y = 0; y < height; y++) {
 			//	for(int x = 0; x < width; x++) {
-			//		Tile.bg001Sky.render(g, x * Tile.TILEWIDTH * GVar.getMultiplier(), y * Tile.TILEHEIGHT * GVar.getMultiplier());
+			//		Tile.bg001Sky.render(g, x * Tile.TILEWIDTH * GVar.getiplier(), y * Tile.TILEHEIGHT * GVar.getMultiplier());
 			//	}
 			//} 
 			/*************** Temporary Fix: END ***************/

@@ -163,8 +163,8 @@ public class KeyManager implements KeyListener {
 		pitchUp = keys[KeyEvent.VK_0];		
 				
 		//Decreases and Increases game Scale (Entities, Tiles, etc.)
-		scaleDown = keys[KeyEvent.VK_COMMA];
-		scaleUp = keys[KeyEvent.VK_PERIOD];		
+		scaleDown = keyJustPressed(KeyEvent.VK_COMMA);
+		scaleUp = keyJustPressed(KeyEvent.VK_PERIOD);		
 		
 		//*CYCLE SELECTIONS*/
 		//Swap Between available players

@@ -1,6 +1,7 @@
 package dev.lepauley.luigi.gfx;
 
 import dev.lepauley.luigi.entities.Entity;
+import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.general.Game;
 
 /*

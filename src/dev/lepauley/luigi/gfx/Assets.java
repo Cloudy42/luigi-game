@@ -29,7 +29,7 @@ public class Assets {
 								/*ITEMS*/ 		
 									, menu, coin, toad
 	                            /*TILES*/
-									, bg001Sky, bg002Sky
+									, bg001Sky, bg002Sky, bg003PaddedWall
 									, rock001
 									, rock002
 									, brick001, brick001CastleWall, brick001CastleRampartTransparent, brick001CastleRampartBrick
@@ -187,6 +187,7 @@ public class Assets {
 		
 		/*0569*/ bg001Sky = tileSheet.crop(width *  8, heightSmall * 21 + newPlayer * 0, width, heightSmall);
 		/*0570*/ bg002Sky = tileSheet.crop(width *  9, heightSmall * 21 + newPlayer * 0, width, heightSmall);
+		/*0571*/ bg003PaddedWall = tileSheet.crop(width *  10, heightSmall * 21 + newPlayer * 0, width, heightSmall);
 
 		/*0593*/ lava001Waves = tileSheet.crop(width *  3, heightSmall * 24 + newPlayer * 0, width, heightSmall);
 		

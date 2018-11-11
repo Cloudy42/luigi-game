@@ -108,6 +108,7 @@ public class Tile {
 		
 		public static Tile bg001Sky = new BG001Sky(569);
 		public static Tile bg002Sky = new BG002Sky(570);
+		public static Tile bg003PaddedWall = new BG003PaddedWall(571);
 	
 		public static Tile lava001Waves = new Lava001Waves(593);
 

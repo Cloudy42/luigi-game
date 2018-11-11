@@ -17,7 +17,8 @@ public class GameState extends State {
 
 	//Holds current Player and Level
 	private Player player;
-	private Level[] level = {new Level(game, "res/levels/level 1-1.txt")
+	private Level[] level = {new Level(game, "res/levels/level 0-1.txt")
+			               , new Level(game, "res/levels/level 1-1.txt")
 			               , new Level(game, "res/levels/level 1-2.txt")
     					   , new Level(game, "res/levels/level 1-3.txt")
     					   , new Level(game, "res/levels/level 1-4.txt")
