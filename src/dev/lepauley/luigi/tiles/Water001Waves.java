@@ -6,6 +6,7 @@ public class Water001Waves extends Tile {
 
 	public Water001Waves(int id) {
 		super(Assets.water001Waves, id);
+		setIsSolid(false);
 	}
 	
 }

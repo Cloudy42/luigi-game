@@ -164,7 +164,7 @@ public class Tile {
 		}
 		
 		//Sets whether tile is Solid or not
-		public void getIsSolid(boolean tf) {
+		public void setIsSolid(boolean tf) {
 			isSolid = tf;
 		}
 				

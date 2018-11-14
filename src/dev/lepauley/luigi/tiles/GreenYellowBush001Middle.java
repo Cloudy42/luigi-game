@@ -6,5 +6,6 @@ public class GreenYellowBush001Middle extends Tile {
 
 	public GreenYellowBush001Middle(int id) {
 		super(Assets.greenYellowBush001Middle, id);
+		setIsSolid(false);
 	}
 }

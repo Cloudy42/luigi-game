@@ -6,5 +6,6 @@ public class Chain003 extends Tile {
 
 	public Chain003(int id) {
 		super(Assets.chain003, id);
+		setIsSolid(false);
 	}
 }

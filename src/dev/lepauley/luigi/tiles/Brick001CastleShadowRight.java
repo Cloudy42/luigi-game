@@ -6,5 +6,6 @@ public class Brick001CastleShadowRight extends Tile {
 
 	public Brick001CastleShadowRight(int id) {
 		super(Assets.brick001CastleShadowRight, id);
+		setIsSolid(false);
 	}
 }

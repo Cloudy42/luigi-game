@@ -6,6 +6,7 @@ public class Plant001BigBottom extends Tile {
 
 	public Plant001BigBottom(int id) {
 		super(Assets.plant001BigBottom, id);
+		setIsSolid(false);
 	}
 	
 }

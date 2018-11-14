@@ -6,6 +6,7 @@ public class BG001Sky extends Tile {
 
 	public BG001Sky(int id) {
 		super(Assets.bg001Sky, id);
+		setIsSolid(false);
 	}
 	
 }

@@ -6,5 +6,6 @@ public class Cloud001TopLeft extends Tile {
 
 	public Cloud001TopLeft(int id) {
 		super(Assets.cloud001TopLeft, id);
+		setIsSolid(false);
 	}
 }

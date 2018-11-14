@@ -6,5 +6,6 @@ public class Flag001Pole extends Tile {
 
 	public Flag001Pole(int id) {
 		super(Assets.flag001Pole, id);
+		setIsSolid(false);
 	}
 }

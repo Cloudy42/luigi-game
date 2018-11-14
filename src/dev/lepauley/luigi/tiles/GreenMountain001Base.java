@@ -6,5 +6,6 @@ public class GreenMountain001Base extends Tile {
 
 	public GreenMountain001Base(int id) {
 		super(Assets.greenMountain001Base, id);
+		setIsSolid(false);
 	}
 }

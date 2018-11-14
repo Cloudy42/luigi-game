@@ -6,5 +6,6 @@ public class GreenMountain001DotsLeft extends Tile {
 
 	public GreenMountain001DotsLeft(int id) {
 		super(Assets.greenMountain001DotsLeft, id);
+		setIsSolid(false);
 	}
 }
