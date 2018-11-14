@@ -122,7 +122,10 @@ public class Tile {
 		public static Tile missingTile = new MissingTile(998);
 	
 	/*************CLASS*****************/	
-	
+
+		//Tracks whether tile is solid or not
+		private boolean isSolid = true;
+		
 		//Default Tile size
 		public static final int TILEWIDTH = 32, TILEHEIGHT = TILEWIDTH;
 		
@@ -148,11 +151,6 @@ public class Tile {
 			g.drawImage(texture,  x,  y, TILEWIDTH * GVar.getMultiplier(), TILEHEIGHT * GVar.getMultiplier(), null);
 		}
 		
-		//Checks whether player can go through tile or not
-		public boolean isSolid() {
-			return false;
-		}
-		
 		/*************** GETTERS and SETTERS ***************/
 
 		//Gets Tile id
@@ -160,4 +158,15 @@ public class Tile {
 			return id;
 		}
 		
+		//Gets whether tile is Solid or not
+		public boolean getIsSolid() {
+			return isSolid;
+		}
+		
+		//Sets whether tile is Solid or not
+		public void getIsSolid(boolean tf) {
+			isSolid = tf;
+		}
+				
+				
 }

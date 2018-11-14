@@ -7,11 +7,4 @@ public class Brick001CastleRampartTransparent extends Tile {
 	public Brick001CastleRampartTransparent(int id) {
 		super(Assets.brick001CastleRampartTransparent, id);
 	}
-	
-	@Override
-	//Checks whether player can go through tile or not
-	public boolean isSolid() {
-		return true;
-	}
-	
 }

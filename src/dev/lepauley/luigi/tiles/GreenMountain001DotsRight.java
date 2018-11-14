@@ -7,11 +7,4 @@ public class GreenMountain001DotsRight extends Tile {
 	public GreenMountain001DotsRight(int id) {
 		super(Assets.greenMountain001DotsRight, id);
 	}
-	
-	@Override
-	//Checks whether player can go through tile or not
-	public boolean isSolid() {
-		return true;
-	}
-	
 }

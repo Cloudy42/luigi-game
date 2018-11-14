@@ -7,11 +7,4 @@ public class PipeGreen001TopRightSideways extends Tile {
 	public PipeGreen001TopRightSideways(int id) {
 		super(Assets.pipeGreen001TopRightSideways, id);
 	}
-	
-	@Override
-	//Checks whether player can go through tile or not
-	public boolean isSolid() {
-		return true;
-	}
-	
 }

@@ -126,11 +126,18 @@ public class GameState extends State {
 
 	//Sets Current Level
 	public void setLevel(int lvl) {
+		
+		//I put this in because I'm getting lvl = -5 which is an array out of bounds exception error. 
+		//I haven't been able to look into the cause/fix yet, just got tired of deleting settings file
+		//everytime this happened so put this fix in until I can look into it.
+		if(lvl < 0)
+			lvl = 0;
+
 		this.lvl = lvl;
 
 		//Sets Current World and Level based on lvl
-		Game.gameHeader.setCurrentWorld(lvl / 4 + 1);
-		Game.gameHeader.setCurrentLevel(lvl % 4 + 1);
+		Game.gameHeader.setCurrentWorld(lvl / 4);
+		Game.gameHeader.setCurrentLevel(lvl % 4);
 
 		//Updates Player
 		player = new Player(game, level[lvl].getSpawnX(), level[lvl].getSpawnY());
