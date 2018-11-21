@@ -79,7 +79,7 @@ public class Level {
 			//easy enough...
 			//for(int y = 0; y < height; y++) {
 			//	for(int x = 0; x < width; x++) {
-			//		Tile.bg001Sky.render(g, x * Tile.TILEWIDTH * GVar.getiplier(), y * Tile.TILEHEIGHT * GVar.getMultiplier());
+			//		Tile.bg001Sky.render(g, x * Tile.TILEWIDTH * GVar.getMultiplier(), y * Tile.TILEHEIGHT * GVar.getMultiplier());
 			//	}
 			//} 
 			/*************** Temporary Fix: END ***************/
@@ -154,7 +154,7 @@ public class Level {
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
 
-				//Need to do + 4 because we are setting first 4 variables above from level file, so skip those when doing tiles
+				//Need to do + 5 because we are setting first 5 variables above from level file, so skip those when doing tiles
 				tiles[x][y] = Utilities.parseInt(tokens[(x + y * width) + 5]);
 			}
 		}
