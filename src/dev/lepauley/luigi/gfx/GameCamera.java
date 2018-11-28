@@ -32,7 +32,7 @@ public class GameCamera {
 		//yOffset = e.getY() - game.getHeight() / 2 + e.getHeight() / 2;
 	}
 
-	//Takes inputs and adds them to the associated offset variables respecitvely
+	//Takes inputs and adds them to the associated offset variables respectively
 	public void move(float xAmt, float yAmt) {
 		xOffset += xAmt;
 		yOffset += yAmt;
