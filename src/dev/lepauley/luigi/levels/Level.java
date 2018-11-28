@@ -84,10 +84,24 @@ public class Level {
 			//} 
 			/*************** Temporary Fix: END ***************/
 
+		/*
+		 * Below for loops used to go through all tiles, starting with 0, end with height/width
+		 * Now will loop only through VISIBLE tiles, as denoted by these Start/End variables
+		 * 
+		 * Uses max method to ensure we never start with a negative. And offset divided by Tile width/height
+		 *      to convert from pixels to actual tile number
+		 *      
+		 * Uses min for end, whether we reach end of map (width/height) or not there yet (game camera)
+		 */
+		int xStart = (int) Math.max(0, game.getGameCamera().getxOffset() / (Tile.TILEWIDTH*GVar.getMultiplier())) ;
+		int xEnd = (int) Math.min(width, (game.getGameCamera().getxOffset() + game.getWidth()) / (Tile.TILEWIDTH*GVar.getMultiplier()) +2);
+		int yStart = (int) Math.max(0, game.getGameCamera().getyOffset() / (Tile.TILEHEIGHT*GVar.getMultiplier())) ;
+		int yEnd = (int) Math.min(height, (game.getGameCamera().getyOffset() + game.getHeight()) / (Tile.TILEHEIGHT*GVar.getMultiplier()) +2);
+		
 		//Loops through level text file and populates all tiles (inefficient until we are only rendering what is on screen) 
 		//Note: Start with y for loop first because it can prevent issues (he didn't explain why)
-		for(int y = 0; y < height; y++) {
-			for(int x = 0; x < width; x++) {
+		for(int y = yStart; y < yEnd; y++) {
+			for(int x = xStart; x < xEnd; x++) {
 
 				//If NOT a BG tile, will get tile and print to screen
 				if(checkTile(x,y)) {
