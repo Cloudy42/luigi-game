@@ -6,6 +6,7 @@ import dev.lepauley.luigi.entities.creatures.Creature;
 import dev.lepauley.luigi.entities.creatures.Player;
 import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.general.Game;
+import dev.lepauley.luigi.general.Handler;
 import dev.lepauley.luigi.levels.Level;
 import dev.lepauley.luigi.utilities.EnumPause;
 import dev.lepauley.luigi.utilities.Utilities;
@@ -17,14 +18,14 @@ public class GameState extends State {
 
 	//Holds current Player and Level
 	private Player player;
-	private Level[] level = {new Level(game, "res/levels/level 0-1.txt")
-			               , new Level(game, "res/levels/level 1-1.txt")
-			               , new Level(game, "res/levels/level 1-2.txt")
-    					   , new Level(game, "res/levels/level 1-3.txt")
-    					   , new Level(game, "res/levels/level 1-4.txt")
-    					   , new Level(game, "res/levels/level 2-1.txt")
-			               , new Level(game, "res/levels/level 2-2.txt")};	
-
+	private Level[] level = {new Level(handler, "res/levels/level 0-1.txt")
+							, new Level(handler, "res/levels/level 1-1.txt")
+							, new Level(handler, "res/levels/level 1-2.txt")
+							, new Level(handler, "res/levels/level 1-3.txt")
+							, new Level(handler, "res/levels/level 1-4.txt")
+							, new Level(handler, "res/levels/level 2-1.txt")
+							, new Level(handler, "res/levels/level 2-2.txt")};
+	
 	//Tracks current Level
 	private int lvl = 0;
 
@@ -32,16 +33,16 @@ public class GameState extends State {
 	public int currentFontSize;
 	
 	//Game Constructor
-	public GameState(Game game) {
+	public GameState(Handler handler) {
 		
 		//Sets State = "GameState"
-		super(game,"GameState");
+		super(handler,"GameState");
 		
-		//sets game variables (in State) to current game
-		this.game = game;
+		//Sets level object to that of handler's level object
+		handler.setLevel(level);
 		
 		//Creates new Player
-		player = new Player(game, level[lvl].getSpawnX(), level[lvl].getSpawnY());		
+		player = new Player(handler, level[lvl].getSpawnX(), level[lvl].getSpawnY());		
 	}
 	
 	//Updates Player and Level (if game is NOT paused)
@@ -140,7 +141,7 @@ public class GameState extends State {
 		Game.gameHeader.setCurrentLevel(lvl % 4);
 
 		//Updates Player
-		player = new Player(game, level[lvl].getSpawnX(), level[lvl].getSpawnY());
+		player = new Player(handler, level[lvl].getSpawnX(), level[lvl].getSpawnY());
 
 		//Sets current Song for level IF do not select continue
 		if(!GVar.getContinueGame())

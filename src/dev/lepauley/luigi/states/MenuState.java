@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import dev.lepauley.luigi.entities.creatures.Player;
 import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.general.Game;
+import dev.lepauley.luigi.general.Handler;
 import dev.lepauley.luigi.levels.Level;
 import dev.lepauley.luigi.utilities.EnumSFX;
 
@@ -22,21 +23,18 @@ public class MenuState extends State {
 	private int currentSelection;
 	
 	//Menu Constructor
-	public MenuState(Game game) {
+	public MenuState(Handler handler) {
 
 		//Sets State = "GameState"
-		super(game, "MenuState");
-
-		//sets game variables (in State) to current game
-		this.game = game;
+		super(handler, "MenuState");
 
 		//May be worthwhile to just use the level and players created in GameState? Unsure if would pose issues/be better, just a thought.
 		//Creates new Level
-		level = new Level(game, "res/levels/level 1-1.txt");
+		level = new Level(handler, "res/levels/level 1-1.txt");
 		
 		//Creates new Player
-		player1 = new Player(game, level.getSpawnX(), level.getSpawnY());
-		player2 = new Player(game, level.getSpawnX() + Player.DEFAULT_CREATURE_WIDTH * 2, level.getSpawnY());
+		player1 = new Player(handler, level.getSpawnX(), level.getSpawnY());
+		player2 = new Player(handler, level.getSpawnX() + Player.DEFAULT_CREATURE_WIDTH * 2, level.getSpawnY());
 		
 		//Just making Alan & Brian by default for menuScreen for funsies. I mean we DID make the game afterall ;P RESPECT!
 		player1.setCurrentPlayer(1);

@@ -119,8 +119,8 @@ public class Game implements Runnable {
 		handler = new Handler(this);
 		
 		//initializes States and puts game in as parameter
-		gameState = new GameState(this);
-		menuState = new MenuState(this);
+		gameState = new GameState(handler);
+		menuState = new MenuState(handler);
 		
 		//Sets current state = "menuState", where we will start game (for now)
 		StateManager.setCurrentState(menuState);

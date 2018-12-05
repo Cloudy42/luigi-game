@@ -13,7 +13,7 @@ import dev.lepauley.luigi.levels.Level;
 public class Handler {
 
 	private Game game;
-	private Level level;
+	private Level[] level;
 	
 	public Handler(Game game) {
 		this.game = game;
@@ -40,7 +40,7 @@ public class Handler {
 		return game;
 	}
 
-	public Level getLevel() {
+	public Level[] getLevel() {
 		return level;
 	}
 
@@ -48,8 +48,9 @@ public class Handler {
 		this.game = game;
 	}
 
-	public void setLevel(Level level) {
+	public void setLevel(Level[] level) {
 		this.level = level;
 	}
+	
 	
 }

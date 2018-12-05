@@ -1,7 +1,7 @@
 package dev.lepauley.luigi.entities.creatures;
 
 import dev.lepauley.luigi.entities.Entity;
-import dev.lepauley.luigi.general.Game;
+import dev.lepauley.luigi.general.Handler;
 
 /*
  * The base shell for all Creatures in game
@@ -21,8 +21,8 @@ public abstract class Creature extends Entity {
 	protected float xMove, yMove;
 	
 	//Creature Constructor. Establishes some defaults
-	public Creature(Game game, float x, float y, int width, int height) {
-		super(game, x,y, width, height);
+	public Creature(Handler handler, float x, float y, int width, int height) {
+		super(handler, x,y, width, height);
 		health = DEFAULT_HEALTH;
 		speed = DEFAULT_SPEED;
 		xMove = 0;

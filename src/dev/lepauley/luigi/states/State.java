@@ -2,7 +2,7 @@ package dev.lepauley.luigi.states;
 
 import java.awt.Graphics;
 
-import dev.lepauley.luigi.general.Game;
+import dev.lepauley.luigi.general.Handler;
 
 /*
  * Base class to handle all game states
@@ -11,16 +11,17 @@ import dev.lepauley.luigi.general.Game;
 public abstract class State {
 	
 	//We want an instance of our game class in all our state classes
-	protected Game game;
+	//But now going to reference game class via handler
+	protected Handler handler;
 	
 	//Keeps Track of state's name so we can do equalities
 	protected String currentStateName;
 	
 	//Constructor
-	public State(Game game, String currentStateName) {
+	public State(Handler handler, String currentStateName) {
 		
-		//Sets current game
-		this.game = game;
+		//Sets current handler
+		this.handler = handler;
 		
 		//Sets current state name
 		this.currentStateName = currentStateName;

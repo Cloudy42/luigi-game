@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.general.Game;
+import dev.lepauley.luigi.general.Handler;
 import dev.lepauley.luigi.gfx.Assets;
 import dev.lepauley.luigi.tiles.Tile;
 import dev.lepauley.luigi.utilities.Utilities;
@@ -14,8 +15,8 @@ import dev.lepauley.luigi.utilities.Utilities;
 
 public class Level {
 
-	//main game object
-	private Game game;
+	//Main Handler object (which can reference game)
+	private Handler handler;
 	
 	//Width and Height of level
 	private int width, height;
@@ -36,8 +37,8 @@ public class Level {
 	private int defaultXSpawnOffset = -Tile.TILEWIDTH;
 	
 	//Constructor
-	public Level(Game game, String path) {
-		this.game = game;
+	public Level(Handler handler, String path) {
+		this.handler = handler;
 		setScrollLevelDefaults();
 		loadLevel(path);
 	}
@@ -93,10 +94,10 @@ public class Level {
 		 *      
 		 * Uses min for end, whether we reach end of map (width/height) or not there yet (game camera)
 		 */
-		int xStart = (int) Math.max(0, game.getGameCamera().getxOffset() / (Tile.TILEWIDTH*GVar.getMultiplier())) ;
-		int xEnd = (int) Math.min(width, (game.getGameCamera().getxOffset() + game.getWidth()) / (Tile.TILEWIDTH*GVar.getMultiplier()) +2);
-		int yStart = (int) Math.max(0, game.getGameCamera().getyOffset() / (Tile.TILEHEIGHT*GVar.getMultiplier())) ;
-		int yEnd = (int) Math.min(height, (game.getGameCamera().getyOffset() + game.getHeight()) / (Tile.TILEHEIGHT*GVar.getMultiplier()) +2);
+		int xStart = (int) Math.max(0, handler.getGameCamera().getxOffset() / (Tile.TILEWIDTH*GVar.getMultiplier())) ;
+		int xEnd = (int) Math.min(width, (handler.getGameCamera().getxOffset() + handler.getWidth()) / (Tile.TILEWIDTH*GVar.getMultiplier()) +2);
+		int yStart = (int) Math.max(0, handler.getGameCamera().getyOffset() / (Tile.TILEHEIGHT*GVar.getMultiplier())) ;
+		int yEnd = (int) Math.min(height, (handler.getGameCamera().getyOffset() + handler.getHeight()) / (Tile.TILEHEIGHT*GVar.getMultiplier()) +2);
 		
 		//Loops through level text file and populates all tiles (inefficient until we are only rendering what is on screen) 
 		//Note: Start with y for loop first because it can prevent issues (he didn't explain why)
@@ -107,8 +108,8 @@ public class Level {
 				if(checkTile(x,y)) {
 
 					//draws level, offset by GameCamera on the x and y axis
-					getTile(x,y).render(g, (int)(defaultXSpawnOffset + x * Tile.TILEWIDTH * GVar.getMultiplier() - game.getGameCamera().getxOffset() - scrollPosition)
-							             , (int)(y * Tile.TILEHEIGHT * GVar.getMultiplier() - game.getGameCamera().getyOffset()));
+					getTile(x,y).render(g, (int)(defaultXSpawnOffset + x * Tile.TILEWIDTH * GVar.getMultiplier() - handler.getGameCamera().getxOffset() - scrollPosition)
+							             , (int)(y * Tile.TILEHEIGHT * GVar.getMultiplier() - handler.getGameCamera().getyOffset()));
 				}
 			}
 		}
