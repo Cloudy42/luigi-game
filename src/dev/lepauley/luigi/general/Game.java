@@ -115,6 +115,9 @@ public class Game implements Runnable {
 		//initializes the gameCamera at 0,0
 		gameCamera = new GameCamera(this, 0,0);
 		
+		//Handler time
+		handler = new Handler(this);
+		
 		//initializes States and puts game in as parameter
 		gameState = new GameState(this);
 		menuState = new MenuState(this);
@@ -590,5 +593,13 @@ public class Game implements Runnable {
 	//Gets Game Camera
 	public GameCamera getGameCamera() {
 		return gameCamera;
+	}
+	
+	//Handler
+	private Handler handler;
+	
+	//Gets Key Manager
+	public KeyManager getKeyManager() {
+		return keyManager;
 	}
 }
