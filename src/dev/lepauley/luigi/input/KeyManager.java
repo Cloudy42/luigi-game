@@ -31,6 +31,7 @@ public class KeyManager implements KeyListener {
 						, pitchDown, pitchUp
 						, rateDown, rateUp
 						, scaleDown, scaleUp
+						, audioReset
 				   /*CYCLE SELECTIONS*/
 						, changePlayer, nextSong
 				   /*TOGGLE MODES*/
@@ -49,6 +50,7 @@ public class KeyManager implements KeyListener {
 			                     ,"[V] Scroll Direction"
 			                     ,"[K] Control Toggle"
 			                     ,"[N] Next Song"
+			                     ,"[R] Audio Reset"
 			                     ,"[1/2] FPS--/++"
 			                     ,"[3/4] Time--/++"
 			                     ,"[5/6] Volume--/++"
@@ -165,6 +167,9 @@ public class KeyManager implements KeyListener {
 		//Decreases and Increases game Scale (Entities, Tiles, etc.)
 		scaleDown = keyJustPressed(KeyEvent.VK_COMMA);
 		scaleUp = keyJustPressed(KeyEvent.VK_PERIOD);		
+		
+		//Manually reset audio variables
+		audioReset = keyJustPressed(KeyEvent.VK_R);
 		
 		//*CYCLE SELECTIONS*/
 		//Swap Between available players

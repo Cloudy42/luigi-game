@@ -705,4 +705,14 @@ public class Audio {
         secondsToSkip = 0;
 	}
 	
+	public void manuallyResetDefaults() {
+		
+		currentVolumeSFX = DEFAULT_CURRENT_VOLUME_SFX;
+		currentVolumeMusic = DEFAULT_CURRENT_VOLUME_MUSIC;
+	    currentSpeed = DEFAULT_CURRENT_SPEED;
+	    currentPitch = DEFAULT_CURRENT_PITCH;
+	    currentRate = DEFAULT_CURRENT_RATE;
+
+	}
+	
 }	

@@ -255,7 +255,7 @@ public class Game implements Runnable {
 		//Increase Game Audio Rate
 		if(keyManager.rateUp && !GVar.getPause()) {
 
-			//Decrease game audio rate
+			//Increase game audio rate
 			gameAudio.setCurrentRate(0.1f);
 
 			//Displays current Rate if in Debug Mode
@@ -381,6 +381,23 @@ public class Game implements Runnable {
 			if(StateManager.getCurrentState() == gameState)
 				gameAudio.incrementSecondsToSkip();
 		}		
+		
+		//Reset audio variables (could make this into a more generic reset also)
+		if(keyManager.audioReset) {
+			gameAudio.manuallyResetDefaults();
+			
+			//plays new audio due to adjustment above (but only if not dead and IN gameState)
+        	if(!gameHeader.getDead() && StateManager.getCurrentState() == gameState)
+        		gameAudio.playAudioStagingArea("MUSIC",gameAudio.getCurrentMusic());
+        	
+        	//Displays current values if in Debug Mode
+        	if(GVar.getDebug()) {
+        		print("CurrentRate:   " + gameAudio.getCurrentRate());
+        		print("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
+        		print("CurrentPitch:  " + gameAudio.getCurrentPitch());
+        		print("CurrentSpeed:  " + gameAudio.getCurrentSpeed());
+        	}
+		}
 	}
 	
 	//Render everything for game
