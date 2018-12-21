@@ -128,6 +128,11 @@ public class Level {
 	
 	//Takes tile array and indexes at whatever tile is in the tile array at each x and y position
 	public Tile getTile(int x, int y) {
+		/*In case player somehow gets outside of game/level boundaries - i.e. a glitch - 
+			do this check and return a normal tile so game doesn't crash*/
+		if(x < 0 || y < 0 || x >= width || y >= height)
+			return Tile.bg001Sky;
+		
 		Tile t = Tile.tiles[tiles[x][y]];
 		
 		//If cannot find a result, return missingTile to point out that there is an issue

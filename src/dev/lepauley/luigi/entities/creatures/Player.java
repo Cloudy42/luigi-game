@@ -1,5 +1,6 @@
 package dev.lepauley.luigi.entities.creatures;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -33,6 +34,12 @@ public class Player extends Creature{
 		//Sets currentPlayer = index 0 (used for array) if starting new game
 		if(GVar.getContinueGame())
 			currentPlayer = GVar.getPlayer1CurrentCharacter();
+		
+		//Boundary box for player
+		bounds.x = 8;
+		bounds.y = 36;
+		bounds.width = 20;
+		bounds.height = 28;
 	}
 
 	@Override
@@ -109,6 +116,11 @@ public class Player extends Creature{
 			// - Image Observer = null. We won't use in tutorial
 			g.drawImage(playerImage[currentPlayer], (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
 		}
+		
+		g.setColor(Color.red);
+		g.fillRect((int) (x+bounds.x - handler.getGameCamera().getxOffset()), 
+				(int) (y+bounds.y - handler.getGameCamera().getyOffset()), 
+				bounds.width, bounds.height);
 	}
 	
 	/*************** GETTERS and SETTERS ***************/

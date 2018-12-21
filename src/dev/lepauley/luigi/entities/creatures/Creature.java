@@ -2,6 +2,8 @@ package dev.lepauley.luigi.entities.creatures;
 
 import dev.lepauley.luigi.entities.Entity;
 import dev.lepauley.luigi.general.Handler;
+import dev.lepauley.luigi.tiles.Tile;
+
 
 /*
  * The base shell for all Creatures in game
@@ -31,10 +33,89 @@ public abstract class Creature extends Entity {
 
 	//Moves creature using helpers
 	public void move() {
-		x += xMove;
-		y += yMove;
+		moveX();
+		moveY();
+		
 	}
 	
+	//Instead of moving both x and y in same move method, creating separate
+	//move methods for x and y
+	public void moveX() {
+		//Moving right
+		if(xMove > 0) {
+			/*Temp objects to hold what tile position would be if moved.. x, y upper, and y lower
+			 * For example, starts as x coordinate then divide by tile width to determine Tile number/coordinate
+			 * of tile we're trying to move in to
+			 */
+			
+			/*X coordinate of creature, + where you want to move to, + x bound offset, 
+			 * + bounds width since moving right and checking right side
+			 */
+			/*The +1 shouldn't be needed, but similar to Level class xStart/end, 
+			 * around rendering efficiency, need to add a +1 for some reason
+			 */
+			int tx = (int) (x + xMove + bounds.x + bounds.width) / Tile.TILEWIDTH + 1;
+			
+			//Y coordinate of creature, + y bound offset, and that's it since checking upper bound 
+			int tyu = (int) (y + bounds.y)/ Tile.TILEHEIGHT;
+			
+			//Same as above but now add bound height to check lower bound
+			int tyl = (int) (y + bounds.y + bounds.height)/ Tile.TILEHEIGHT;
+			
+			/*Check the tile upper right is moving in to, and lower right is moving in to
+			 * If both tiles are NOT solid (thus ! in front of collision method), then go ahead and move!
+			 */
+			if(!collisionWithTile(tx, tyu) && !collisionWithTile(tx, tyl) ) {
+				x += xMove;
+			}
+		//Moving left
+		}else if(xMove < 0) {
+			//Same as above, except moving left, so don't need to add bounds width
+			int tx = (int) (x + xMove + bounds.x) / Tile.TILEWIDTH + 1;
+			
+			//Same y upper/lower bounds
+			int tyu = (int) (y + bounds.y)/ Tile.TILEHEIGHT;
+			int tyl = (int) (y + bounds.y + bounds.height)/ Tile.TILEHEIGHT;
+			
+			//Same check
+			if(!collisionWithTile(tx, tyu) && !collisionWithTile(tx, tyl) ) {
+				x += xMove;
+			}
+		}
+	}
+	
+	public void moveY() {
+		//Moving up
+		if(yMove < 0) {
+			/*Same logic as xMove, but now for y. Using temp y, x left, and x right variables
+			 * 
+			 * The +1 shouldn't be needed in temp x variables, like above
+			 */
+
+			int ty = (int) (y + yMove + bounds.y) / Tile.TILEHEIGHT;
+			int txl = (int) (x + bounds.x)/ Tile.TILEWIDTH + 1;
+			int txr = (int) (x + bounds.x + bounds.width)/ Tile.TILEWIDTH + 1;
+			
+			if(!collisionWithTile(txl, ty) && !collisionWithTile(txr, ty) ) {
+				y += yMove;
+			}
+		//Moving down
+		}else if(yMove > 0) {
+			int ty = (int) (y + yMove + bounds.y + bounds.height) / Tile.TILEHEIGHT;
+			int txl = (int) (x + bounds.x)/ Tile.TILEWIDTH + 1;
+			int txr = (int) (x + bounds.x + bounds.width)/ Tile.TILEWIDTH + 1;
+			
+			if(!collisionWithTile(txl, ty) && !collisionWithTile(txr, ty) ) {
+				y += yMove;
+			}
+
+		}
+	}
+	
+	//Takes in a tile array coordinate x/y and returns if that tile is solid
+	protected boolean collisionWithTile(int x, int y) {
+		return handler.getSpecificLevel().getTile(x,y).getIsSolid();
+	}
 	/*************** GETTERS and SETTERS ***************/
 
 	//Gets creature hp

@@ -3,6 +3,7 @@ package dev.lepauley.luigi.general;
 import dev.lepauley.luigi.gfx.GameCamera;
 import dev.lepauley.luigi.input.KeyManager;
 import dev.lepauley.luigi.levels.Level;
+import dev.lepauley.luigi.states.GameState;
 
 /*
  * Use to pass around a bunch of different game objects for use in other classes
@@ -13,6 +14,8 @@ import dev.lepauley.luigi.levels.Level;
 public class Handler {
 
 	private Game game;
+	
+	//Level Array, which holds multiple individual levels
 	private Level[] level;
 	
 	public Handler(Game game) {
@@ -42,6 +45,11 @@ public class Handler {
 
 	public Level[] getLevel() {
 		return level;
+	}
+	
+	//Return specifically chosen level
+	public Level getSpecificLevel() {
+		return ((GameState) Game.getGameState()).getLevel();
 	}
 
 	public void setGame(Game game) {
