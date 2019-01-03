@@ -52,15 +52,11 @@ public class Utilities {
 			//Need to update GVar variable as well, so doing that first
 			//but only update this if we're in the gameState
 			if(StateManager.getCurrentState() == Game.getGameState()) {
-				GVar.setScrollPosition(((GameState)Game.getGameState()).getLevel().getScrollPosition());
-				GVar.setScrollConst(((GameState)Game.getGameState()).getLevel().getScrollConst());			
 				GVar.setPlayerPositionX(((GameState)Game.getGameState()).getPlayer().getX());
 				GVar.setPlayerPositionY(((GameState)Game.getGameState()).getPlayer().getY());
 			}
 			
 			//Now update with GVar variables
-			bw = appendBufferedWriter(bw, "CurrentScrollPosition", GVar.getScrollPosition());
-			bw = appendBufferedWriter(bw, "CurrentScrollConst", GVar.getScrollConst());
 			bw = appendBufferedWriter(bw, "CurrentPlayerPositionX", GVar.getPlayerPositionX());
 			bw = appendBufferedWriter(bw, "CurrentPlayerPositionY", GVar.getPlayerPositionY());
 			

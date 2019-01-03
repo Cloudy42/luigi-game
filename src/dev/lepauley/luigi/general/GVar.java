@@ -73,13 +73,6 @@ public class GVar {
 	//Denotes whether debug mode is active or not
 	private static boolean debugToggle;
 	
-	//Denotes whether game is scrolling or not
-	private static boolean scrollToggle;
-	
-	//Tracks ScrollPosition and Const from settings file
-	private static int currentScrollPosition = 0
-	          		 , currentScrollConst = 0; 
-
 	//Denotes whether game is paused or not
 	private static boolean pauseToggle;
 
@@ -93,7 +86,6 @@ public class GVar {
 	public static void resetGVarDefaults() {
 		multiplier = 1;
 		debugToggle = true;
-		scrollToggle = false;
 		pauseToggle = false;		
 		stopToggle = false;		
 		keyManualToggle = false;
@@ -103,8 +95,6 @@ public class GVar {
 
 		if(!continueGame) {
 			FPS = FPS_DEFAULT;
-			currentScrollPosition = 0;
-			currentScrollConst = 4;
 			
 			//If game is loaded, use these values, otherwise use defaults
 			if(Game.getLoaded()) {
@@ -279,43 +269,6 @@ public class GVar {
 			debugToggle = true;
 	}
 
-	//Gets whether scroll mode is currently enabled or not
-	public static boolean getScroll() {
-		return scrollToggle;
-	}
-
-	//Toggles whether debug mode is currently enabled or not
-	public static void toggleScroll() {
-
-		// If currently enabled, disable
-		if(scrollToggle) 
-			scrollToggle = false;
-
-		//If currently disabled, enable
-		else
-			scrollToggle = true;
-	}
-	
-	//Gets currentScrollPosition (for currentLevel Only)
-	public static int getScrollPosition() {
-		return currentScrollPosition;
-	}
-
-	//Sets currentScrollPosition (for currentLevel Only)
-	public static void setScrollPosition(int i) {
-		currentScrollPosition = i;
-	}
-
-	//Gets currentScrollConst (for currentLevel Only)
-	public static int getScrollConst() {
-		return currentScrollConst;
-	}
-
-	//Sets currentScrollConst (for currentLevel Only)
-	public static void setScrollConst(int i) {
-		currentScrollConst = i;
-	}
-
 	//Gets whether game is currently Paused or not
 	//Note: Time "Stopped" also qualifies
 	public static boolean getPause() {
@@ -439,8 +392,6 @@ public class GVar {
 		/*Sets Current FPS*/ 				GVar.setFPS((int)(Utilities.parseFloat(tokens[z]))); z+=3;
 		/*Sets Current Character*/ 			player1CurrentCharacter = ((int)(Utilities.parseFloat(tokens[z]))); z+=3;
 		/*Sets Current Player Count*/ 		setPlayerSelectCount((int)(Utilities.parseFloat(tokens[z]))); z+=3;
-		/*Sets Current Scroll Position*/	currentScrollPosition = (int)(Utilities.parseFloat(tokens[z])); z+=3;
-		/*Sets Current Scroll Const*/ 		currentScrollConst = (int)(Utilities.parseFloat(tokens[z])); z+=3;
 		/*Sets Current Player Position X*/	currentPlayerPositionX = (Utilities.parseFloat(tokens[z])); z+=3;
 		/*Sets Current Player Position Y*/	currentPlayerPositionY = (Utilities.parseFloat(tokens[z])); z+=3;
 
@@ -502,12 +453,6 @@ public class GVar {
 			//Print Current Player Count
 				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(getPlayerSelectCount());
-			//Print Current Scroll Position
-				printnb(tokens[z] + tokens[z+1]); z+=3;
-				print(currentScrollPosition);
-			//Print Current Scroll Const
-				printnb(tokens[z] + tokens[z+1]); z+=3;
-				print(currentScrollConst);
 			//Print Current Player Position X
 				printnb(tokens[z] + tokens[z+1]); z+=3;
 				print(currentPlayerPositionX);

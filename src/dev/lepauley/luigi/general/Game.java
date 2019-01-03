@@ -305,9 +305,8 @@ public class Game implements Runnable {
 
 				}
 				
-				//If continuing game, retain scroll position and const from settings file
+				//If continuing game, retain player position and const from settings file
 				if(GVar.getContinueGame()) {
-					((GameState)gameState).getLevel().setScrollLevelDefaults();
 					((GameState)gameState).getPlayer().setX((float)GVar.getPlayerPositionX());
 					((GameState)gameState).getPlayer().setY((float)GVar.getPlayerPositionY());
 				}
@@ -345,14 +344,6 @@ public class Game implements Runnable {
 		if(keyManager.levelToggle && StateManager.getCurrentState() == gameState)
 			((GameState)gameState).toggleLevel();
 			
-		//If Scroll button is pressed, toggle Scroll Mode on/off
-		if(keyManager.scrollToggle)
-			GVar.toggleScroll();
-
-		//If Scroll Direction button is pressed, Change Scroll Direction (need to cast since gameState is a State object)
-		if(keyManager.scrollDirection)
-			((GameState) gameState).getLevel().toggleScrollConst();
-
 		//If Key Manual button is pressed, toggle Key Manual Mode on/off
 		if(keyManager.controlToggle)
 			GVar.toggleKeyManual();

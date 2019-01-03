@@ -30,35 +30,17 @@ public class Level {
 	//will store tile id's in a x by y multidimensional array
 	private int[][] tiles;
 	
-	//Used to test all tiles are there (Allows Scrolling through level)
-	private int scrollPosition;
-	private int scrollConst;
-	
-	private int defaultXSpawnOffset = -Tile.TILEWIDTH;
+	//Removing but only commenting out for now. if this is found to still be here by 02/01/2018 or later, delete it! Means we forgot! :P
+	//private int defaultXSpawnOffset = -Tile.TILEWIDTH;
 	
 	//Constructor
 	public Level(Handler handler, String path) {
 		this.handler = handler;
-		setScrollLevelDefaults();
 		loadLevel(path);
 	}
 	
 	public void tick() {
 
-		//If player is NOT dead and scroll Toggle is enabled and NOT in "Stop" Mode
-		if(!Game.gameHeader.getDead() && GVar.getScroll() && !GVar.getStop()) {
-
-			//Used to test scrolling level, IF scrolling is toggled
-			scrollPosition+=scrollConst;
-
-			//I added "&& scrollConst < 0 and > 0" because if, for whatever reason, code ever gets behind those thresholds,
-			//it will constantly be flicking from positive to negative and start a looped jitter effect
-			if(scrollPosition <= Tile.TILEWIDTH && scrollConst < 0 || scrollPosition >= (width - 34) * Tile.TILEWIDTH && scrollConst > 0)
-				toggleScrollConst();
-
-			//Or Can set value here and look at specific areas of map 
-			//scrollLevel = 6208;
-		}
 	}
 	
 	public void render(Graphics g) {
@@ -108,7 +90,7 @@ public class Level {
 				if(checkTile(x,y)) {
 
 					//draws level, offset by GameCamera on the x and y axis
-					getTile(x,y).render(g, (int)(defaultXSpawnOffset + x * Tile.TILEWIDTH * GVar.getMultiplier() - handler.getGameCamera().getxOffset() - scrollPosition)
+					getTile(x,y).render(g, (int)(x * Tile.TILEWIDTH * GVar.getMultiplier() - handler.getGameCamera().getxOffset())
 							             , (int)(y * Tile.TILEHEIGHT * GVar.getMultiplier() - handler.getGameCamera().getyOffset()));
 				}
 			}
@@ -199,46 +181,5 @@ public class Level {
 		} else {
 			return levelMusic;
 		}
-	}
-	
-	//Sets Default Scroll Level Values
-	public void setScrollLevelDefaults() {
-		
-		//if not continuing game, reset scroll position and const so starts at beginnging of level
-		if(!GVar.getContinueGame()) {
-			GVar.resetGVarDefaults();
-		}
-		
-		//ScrollLevel is where the level will start at relative to x position
-		scrollPosition = GVar.getScrollPosition();
-		
-		//ScrollConst is how fast level will scroll
-		scrollConst = GVar.getScrollConst();
-	}
-	
-	//Get Scroll Position (how much level has scrolled)
-	public int getScrollPosition() {
-		return scrollPosition;
-	}
-	
-	//Set Scroll Position (how much level has scrolled)
-	public void setScrollPosition(int i) {
-		scrollPosition = i;
-	}
-	
-	//Get Scroll Constant (direction Scrolling is going)
-	public int getScrollConst() {
-		return scrollConst;
-	}
-	
-	//Set Scroll Constant (direction Scrolling is going)
-	public void setScrollConst(int i) {
-		scrollConst = i;
-	}
-	
-	//Toggles Scroll Constant (direction Scrolling is going)
-	public void toggleScrollConst() {
-		scrollConst *= -1;
-	}
-	
+	}		
 }

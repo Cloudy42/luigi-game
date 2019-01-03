@@ -54,7 +54,7 @@ public abstract class Creature extends Entity {
 			/*The +1 shouldn't be needed, but similar to Level class xStart/end, 
 			 * around rendering efficiency, need to add a +1 for some reason
 			 */
-			int tx = (int) (x + xMove + bounds.x + bounds.width) / Tile.TILEWIDTH + 1;
+			int tx = (int) (x + xMove + bounds.x + bounds.width) / Tile.TILEWIDTH;
 			
 			//Y coordinate of creature, + y bound offset, and that's it since checking upper bound 
 			int tyu = (int) (y + bounds.y)/ Tile.TILEHEIGHT;
@@ -71,7 +71,7 @@ public abstract class Creature extends Entity {
 		//Moving left
 		}else if(xMove < 0) {
 			//Same as above, except moving left, so don't need to add bounds width
-			int tx = (int) (x + xMove + bounds.x) / Tile.TILEWIDTH + 1;
+			int tx = (int) (x + xMove + bounds.x) / Tile.TILEWIDTH;
 			
 			//Same y upper/lower bounds
 			int tyu = (int) (y + bounds.y)/ Tile.TILEHEIGHT;
@@ -93,8 +93,8 @@ public abstract class Creature extends Entity {
 			 */
 
 			int ty = (int) (y + yMove + bounds.y) / Tile.TILEHEIGHT;
-			int txl = (int) (x + bounds.x)/ Tile.TILEWIDTH + 1;
-			int txr = (int) (x + bounds.x + bounds.width)/ Tile.TILEWIDTH + 1;
+			int txl = (int) (x + bounds.x)/ Tile.TILEWIDTH;
+			int txr = (int) (x + bounds.x + bounds.width)/ Tile.TILEWIDTH;
 			
 			if(!collisionWithTile(txl, ty) && !collisionWithTile(txr, ty) ) {
 				y += yMove;
@@ -102,8 +102,8 @@ public abstract class Creature extends Entity {
 		//Moving down
 		}else if(yMove > 0) {
 			int ty = (int) (y + yMove + bounds.y + bounds.height) / Tile.TILEHEIGHT;
-			int txl = (int) (x + bounds.x)/ Tile.TILEWIDTH + 1;
-			int txr = (int) (x + bounds.x + bounds.width)/ Tile.TILEWIDTH + 1;
+			int txl = (int) (x + bounds.x)/ Tile.TILEWIDTH;
+			int txr = (int) (x + bounds.x + bounds.width)/ Tile.TILEWIDTH;
 			
 			if(!collisionWithTile(txl, ty) && !collisionWithTile(txr, ty) ) {
 				y += yMove;

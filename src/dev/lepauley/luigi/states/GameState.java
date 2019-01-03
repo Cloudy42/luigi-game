@@ -114,8 +114,6 @@ public class GameState extends State {
 	//Self-explanatory, resets Level defaults
 	public void resetLevelDefaults() {
 		
-		//Sets Default Scroll Level Values
-		level[lvl].setScrollLevelDefaults();
 	}
 
 	/*************** GETTERS and SETTERS ***************/
