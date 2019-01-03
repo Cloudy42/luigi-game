@@ -6,7 +6,7 @@ public class BG003PaddedWall extends Tile {
 
 	public BG003PaddedWall(int id) {
 		super(Assets.bg003PaddedWall, id);
-		setIsSolid(false);
+		setIsSolid(true);
 	}
 	
 }

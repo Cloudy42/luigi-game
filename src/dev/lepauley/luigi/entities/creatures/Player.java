@@ -36,10 +36,12 @@ public class Player extends Creature{
 			currentPlayer = GVar.getPlayer1CurrentCharacter();
 		
 		//Boundary box for player
-		bounds.x = 8;
+		//temporarily made full size for debugging.
+		/*bounds.x = 8;
 		bounds.y = 36;
 		bounds.width = 20;
 		bounds.height = 28;
+		*/
 	}
 
 	@Override
