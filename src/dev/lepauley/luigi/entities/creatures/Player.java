@@ -36,12 +36,13 @@ public class Player extends Creature{
 			currentPlayer = GVar.getPlayer1CurrentCharacter();
 		
 		//Boundary box for player
-		//temporarily made full size for debugging.
-		/*bounds.x = 8;
-		bounds.y = 36;
+		//Note: I subtracted 1 from the height bounds to offset it since we need the play to have their animation on the ground
+		//      but we need the bounding box offset by 1 or else it cannot "slide"
+		bounds.x = 8;
+		bounds.y = 1;
 		bounds.width = 20;
-		bounds.height = 28;
-		*/
+		bounds.height = Creature.DEFAULT_CREATURE_HEIGHT_BIG - 2;
+		
 	}
 
 	@Override
@@ -119,10 +120,13 @@ public class Player extends Creature{
 			g.drawImage(playerImage[currentPlayer], (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
 		}
 		
-		g.setColor(Color.red);
-		g.fillRect((int) (x+bounds.x - handler.getGameCamera().getxOffset()), 
-				(int) (y+bounds.y - handler.getGameCamera().getyOffset()), 
-				bounds.width, bounds.height);
+		//Draw debug box...IF in debug mode
+		if(GVar.getDebug()) {
+			g.setColor(Color.red);
+			g.fillRect((int) (x+bounds.x - handler.getGameCamera().getxOffset()), 
+					(int) (y+bounds.y - handler.getGameCamera().getyOffset()), 
+					bounds.width, bounds.height);
+		}
 	}
 	
 	/*************** GETTERS and SETTERS ***************/
