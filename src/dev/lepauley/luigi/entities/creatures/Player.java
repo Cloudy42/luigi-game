@@ -2,6 +2,7 @@ package dev.lepauley.luigi.entities.creatures;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import dev.lepauley.luigi.general.GVar;
@@ -42,6 +43,11 @@ public class Player extends Creature{
 		bounds.y = 1;
 		bounds.width = 20;
 		bounds.height = Creature.DEFAULT_CREATURE_HEIGHT_BIG - 2;
+		
+		collisionBoundsUp.x = bounds.x; collisionBoundsUp.y = bounds.y; collisionBoundsUp.width = bounds.width; collisionBoundsUp.height = collisionBoundsSize;
+		collisionBoundsDown.x = bounds.x; collisionBoundsDown.y = bounds.y + bounds.height - collisionBoundsSize; collisionBoundsDown.width = bounds.width; collisionBoundsDown.height = collisionBoundsSize;
+		collisionBoundsLeft.x = bounds.x; collisionBoundsLeft.y = bounds.y; collisionBoundsLeft.width = collisionBoundsSize; collisionBoundsLeft.height = bounds.height;
+		collisionBoundsRight.x = bounds.x + bounds.width - collisionBoundsSize; collisionBoundsRight.y = bounds.y; collisionBoundsRight.width = collisionBoundsSize; collisionBoundsRight.height = bounds.height;
 		
 	}
 
@@ -126,6 +132,34 @@ public class Player extends Creature{
 			g.fillRect((int) (x+bounds.x - handler.getGameCamera().getxOffset()), 
 					(int) (y+bounds.y - handler.getGameCamera().getyOffset()), 
 					bounds.width, bounds.height);
+
+			//Draw collision indicator boxes
+			g.setColor(Color.yellow);
+
+			//Up
+			if(collisionUp)
+				g.fillRect((int) (x+collisionBoundsUp.x - handler.getGameCamera().getxOffset()), 
+						   (int) (y+collisionBoundsUp.y - handler.getGameCamera().getyOffset()), 
+						          collisionBoundsUp.width, collisionBoundsUp.height);		
+
+			//Down
+			if(collisionDown)
+				g.fillRect((int) (x+collisionBoundsDown.x - handler.getGameCamera().getxOffset()), 
+						   (int) (y+collisionBoundsDown.y - handler.getGameCamera().getyOffset()), 
+						          collisionBoundsDown.width, collisionBoundsDown.height);		
+
+			//Left
+			if(collisionLeft)
+				g.fillRect((int) (x+collisionBoundsLeft.x - handler.getGameCamera().getxOffset()), 
+						   (int) (y+collisionBoundsLeft.y - handler.getGameCamera().getyOffset()), 
+						          collisionBoundsLeft.width, collisionBoundsLeft.height);		
+
+			//Right
+			if(collisionRight)
+				g.fillRect((int) (x+collisionBoundsRight.x - handler.getGameCamera().getxOffset()), 
+						   (int) (y+collisionBoundsRight.y - handler.getGameCamera().getyOffset()), 
+						          collisionBoundsRight.width, collisionBoundsRight.height);		
+
 		}
 	}
 	

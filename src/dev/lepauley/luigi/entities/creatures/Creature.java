@@ -22,6 +22,9 @@ public abstract class Creature extends Entity {
 	//Helper for moving creatures on x and y plane
 	protected float xMove, yMove;
 	
+	//boolean checks for collisions
+	public boolean collisionUp, collisionDown, collisionLeft, collisionRight; 
+	
 	//Creature Constructor. Establishes some defaults
 	public Creature(Handler handler, float x, float y, int width, int height) {
 		super(handler, x,y, width, height);
@@ -33,6 +36,12 @@ public abstract class Creature extends Entity {
 
 	//Moves creature using helpers
 	public void move() {
+		//reset collision checks:
+		collisionUp 	= false;
+		collisionDown 	= false;
+		collisionLeft 	= false;
+		collisionRight 	= false;
+
 		moveX();
 		moveY();
 		
@@ -69,6 +78,7 @@ public abstract class Creature extends Entity {
 				//move player as close to the tile as possible without being inside of it
 				//Note: We add a 1-pixel gap which allows the player to "slide" and not get stuck along the boundaries
 				x = tx * Tile.TILEWIDTH - bounds.x - bounds.width - 1;
+				collisionRight = true;
 			}
 		//Moving left
 		}else if(xMove < 0) {
@@ -86,6 +96,7 @@ public abstract class Creature extends Entity {
 				//move player as close to the tile as possible without being inside of it
 				//Note: We weirdly don't have to add a 1-pixel gap for "sliding" to not get stuck along the boundaries. Don't ask me why...
 				x = tx * Tile.TILEWIDTH + Tile.TILEWIDTH - bounds.x;
+				collisionLeft = true;
 			}
 		}
 	}
@@ -103,6 +114,7 @@ public abstract class Creature extends Entity {
 			} else {
 				//move player as close to the tile as possible without being inside of it
 				y = ty * Tile.TILEHEIGHT + Tile.TILEHEIGHT - bounds.y;
+				collisionUp = true;
 			}
 		//Moving down
 		}else if(yMove > 0) {
@@ -116,8 +128,8 @@ public abstract class Creature extends Entity {
 				//move player as close to the tile as possible without being inside of it
 				//Note: We add a 1-pixel gap which allows the player to "slide" and not get stuck along the boundaries
 				y = ty * Tile.TILEHEIGHT - bounds.y - bounds.height - 1;
+				collisionDown = true;
 			}
-
 		}
 	}
 	

@@ -21,7 +21,10 @@ public abstract class Entity {
 	protected int width, height;
 	
 	//Boundary box for collision detection
-	protected Rectangle bounds;
+	protected Rectangle bounds, collisionBoundsUp, collisionBoundsDown, collisionBoundsLeft, collisionBoundsRight;
+	
+	//Collision bounds size
+	protected int collisionBoundsSize = 3;
 	
 	//Constructor to set Defaults
 	public Entity(Handler handler, float x, float y, int width, int height) {
@@ -34,6 +37,11 @@ public abstract class Entity {
 		//By default, set boundary box to be exact size of entity
 		//So 0,0 to start top left of entity, then same width/height
 		bounds = new Rectangle(0, 0, width, height);
+		collisionBoundsUp = new Rectangle(0, 0, width, height);
+		collisionBoundsDown = new Rectangle(0, 0, width, height);
+		collisionBoundsLeft = new Rectangle(0, 0, width, height);
+		collisionBoundsRight = new Rectangle(0, 0, width, height);
+		
 	}
 	
 	//Updates Entity
