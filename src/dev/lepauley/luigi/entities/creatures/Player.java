@@ -10,6 +10,8 @@ import dev.lepauley.luigi.general.Game;
 import dev.lepauley.luigi.general.Handler;
 import dev.lepauley.luigi.gfx.Assets;
 
+import static dev.lepauley.luigi.utilities.Utilities.*;
+
 /*
  * The player that our users will control.
  */
@@ -27,7 +29,23 @@ public class Player extends Creature{
 										 , Assets.player4, Assets.player5, Assets.player6};
 	private BufferedImage[] playerImageDead = {Assets.player1Dead, Assets.player2Dead, Assets.player3Dead
 			 								 , Assets.player4Dead, Assets.player5Dead, Assets.player6Dead};
+
+	//Default Player Bounds
+	public static final int DEFAULT_BOUNDS_X = 6, DEFAULT_BOUNDS_Y = 1
+			              , DEFAULT_BOUNDS_WIDTH = 20, DEFAULT_BOUNDS_HEIGHT = Creature.DEFAULT_CREATURE_HEIGHT_BIG - 2;
 	
+	public static final int DEFAULT_COLLISION_BOUNDS_UP_X = DEFAULT_BOUNDS_X, DEFAULT_COLLISION_BOUNDS_UP_Y = DEFAULT_BOUNDS_Y
+			              , DEFAULT_COLLISION_BOUNDS_UP_WIDTH = DEFAULT_BOUNDS_WIDTH, DEFAULT_COLLISION_BOUNDS_UP_HEIGHT = DEFAULT_COLLISION_BOUNDS_SIZE;
+	
+	public static final int DEFAULT_COLLISION_BOUNDS_DOWN_X = DEFAULT_BOUNDS_X, DEFAULT_COLLISION_BOUNDS_DOWN_Y = DEFAULT_BOUNDS_Y + DEFAULT_BOUNDS_HEIGHT - DEFAULT_COLLISION_BOUNDS_SIZE 
+            			  , DEFAULT_COLLISION_BOUNDS_DOWN_WIDTH = DEFAULT_BOUNDS_WIDTH, DEFAULT_COLLISION_BOUNDS_DOWN_HEIGHT = DEFAULT_COLLISION_BOUNDS_SIZE;
+	
+	public static final int DEFAULT_COLLISION_BOUNDS_LEFT_X = DEFAULT_BOUNDS_X, DEFAULT_COLLISION_BOUNDS_LEFT_Y = DEFAULT_BOUNDS_Y
+			  			  , DEFAULT_COLLISION_BOUNDS_LEFT_WIDTH = DEFAULT_COLLISION_BOUNDS_SIZE, DEFAULT_COLLISION_BOUNDS_LEFT_HEIGHT = DEFAULT_BOUNDS_HEIGHT;
+	
+	public static final int DEFAULT_COLLISION_BOUNDS_RIGHT_X = DEFAULT_BOUNDS_X + DEFAULT_BOUNDS_WIDTH - DEFAULT_COLLISION_BOUNDS_SIZE, DEFAULT_COLLISION_BOUNDS_RIGHT_Y = DEFAULT_BOUNDS_Y
+			  			  , DEFAULT_COLLISION_BOUNDS_RIGHT_WIDTH = DEFAULT_COLLISION_BOUNDS_SIZE, DEFAULT_COLLISION_BOUNDS_RIGHT_HEIGHT = DEFAULT_BOUNDS_HEIGHT;
+
 	//Constructor that sets up some defaults
 	public Player(Handler handler, float x, float y) {
 		super(handler, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT_BIG);
@@ -39,16 +57,13 @@ public class Player extends Creature{
 		//Boundary box for player
 		//Note: I subtracted 2 from the height bounds to offset it since y = 1 and we need the play to have their animation on the ground
 		//      So this allows us to move it down an extra pixel. We need the bounding box offset by 1 or else it cannot "slide"
-		bounds.x = 6;
-		bounds.y = 1;
-		bounds.width = 20;
-		bounds.height = Creature.DEFAULT_CREATURE_HEIGHT_BIG - 2;
+		bounds = setBounds(DEFAULT_BOUNDS_X,DEFAULT_BOUNDS_Y,DEFAULT_BOUNDS_WIDTH,DEFAULT_BOUNDS_HEIGHT);
 		
 		//This is used for the collision indicator boxes, and ultimately what I used for the bounding box "display" as well (so can still see player)
-		collisionBoundsUp.x = bounds.x; collisionBoundsUp.y = bounds.y; collisionBoundsUp.width = bounds.width; collisionBoundsUp.height = collisionBoundsSize;
-		collisionBoundsDown.x = bounds.x; collisionBoundsDown.y = bounds.y + bounds.height - collisionBoundsSize; collisionBoundsDown.width = bounds.width; collisionBoundsDown.height = collisionBoundsSize;
-		collisionBoundsLeft.x = bounds.x; collisionBoundsLeft.y = bounds.y; collisionBoundsLeft.width = collisionBoundsSize; collisionBoundsLeft.height = bounds.height;
-		collisionBoundsRight.x = bounds.x + bounds.width - collisionBoundsSize; collisionBoundsRight.y = bounds.y; collisionBoundsRight.width = collisionBoundsSize; collisionBoundsRight.height = bounds.height;
+		collisionBoundsUp = setBounds(DEFAULT_COLLISION_BOUNDS_UP_X, DEFAULT_COLLISION_BOUNDS_UP_Y, DEFAULT_COLLISION_BOUNDS_UP_WIDTH, DEFAULT_COLLISION_BOUNDS_UP_HEIGHT);
+		collisionBoundsDown = setBounds(DEFAULT_COLLISION_BOUNDS_DOWN_X, DEFAULT_COLLISION_BOUNDS_DOWN_Y, DEFAULT_COLLISION_BOUNDS_DOWN_WIDTH, DEFAULT_COLLISION_BOUNDS_DOWN_HEIGHT);
+		collisionBoundsLeft = setBounds(DEFAULT_COLLISION_BOUNDS_LEFT_X, DEFAULT_COLLISION_BOUNDS_LEFT_Y, DEFAULT_COLLISION_BOUNDS_LEFT_WIDTH, DEFAULT_COLLISION_BOUNDS_LEFT_HEIGHT);
+		collisionBoundsRight = setBounds(DEFAULT_COLLISION_BOUNDS_RIGHT_X, DEFAULT_COLLISION_BOUNDS_RIGHT_Y, DEFAULT_COLLISION_BOUNDS_RIGHT_WIDTH, DEFAULT_COLLISION_BOUNDS_RIGHT_HEIGHT);
 		
 	}
 
@@ -92,6 +107,10 @@ public class Player extends Creature{
 
 				//Adjust speed accordingly
 				setSpeed(DEFAULT_SPEED * GVar.getMultiplier());
+				print(speed);
+				
+				//Adjust bounding box & collision indicators accordingly
+				updateAllBounds();
 			}
 
 		//Scale player Up
@@ -101,6 +120,10 @@ public class Player extends Creature{
 				
 				//Adjust speed accordingly
 				setSpeed(DEFAULT_SPEED * GVar.getMultiplier());
+				print(speed);
+				
+				//Adjust bounding box & collision indicators accordingly
+				updateAllBounds();
 			}
 
 		//Swap Current Player for next in lineup
@@ -177,6 +200,28 @@ public class Player extends Creature{
 						   (int) (y+collisionBoundsRight.y - handler.getGameCamera().getyOffset()), 
 						          collisionBoundsRight.width, collisionBoundsRight.height);		
 		}
+	}
+	
+	public void updateAllBounds() {
+		printnb("bounds.x: " + bounds.x);printnb(" bounds.y: " + bounds.y);printnb(" bounds.width: " + bounds.width);print(" bounds.height: " + bounds.height);
+		bounds = setBounds(DEFAULT_BOUNDS_X,DEFAULT_BOUNDS_Y,DEFAULT_BOUNDS_WIDTH,DEFAULT_BOUNDS_HEIGHT);
+		printnb("bounds.x: " + bounds.x);printnb(" bounds.y: " + bounds.y);printnb(" bounds.width: " + bounds.width);print(" bounds.height: " + bounds.height);
+
+		printnb("collisionBoundsUp.x: " + collisionBoundsUp.x);printnb(" collisionBoundsUp.y: " + collisionBoundsUp.y);printnb(" collisionBoundsUp.width: " + collisionBoundsUp.width);print(" collisionBoundsUp.height: " + collisionBoundsUp.height);
+		collisionBoundsUp = setBounds(DEFAULT_COLLISION_BOUNDS_UP_X, DEFAULT_COLLISION_BOUNDS_UP_Y, DEFAULT_COLLISION_BOUNDS_UP_WIDTH, DEFAULT_COLLISION_BOUNDS_UP_HEIGHT);
+		printnb("collisionBoundsUp.x: " + collisionBoundsUp.x);printnb(" collisionBoundsUp.y: " + collisionBoundsUp.y);printnb(" collisionBoundsUp.width: " + collisionBoundsUp.width);print(" collisionBoundsUp.height: " + collisionBoundsUp.height);
+		
+		printnb("collisionBoundsDown.x: " + collisionBoundsDown.x);printnb(" collisionBoundsDown.y: " + collisionBoundsDown.y);printnb(" collisionBoundsDown.width: " + collisionBoundsDown.width);print(" collisionBoundsDown.height: " + collisionBoundsDown.height);
+		collisionBoundsDown = setBounds(DEFAULT_COLLISION_BOUNDS_DOWN_X, DEFAULT_COLLISION_BOUNDS_DOWN_Y, DEFAULT_COLLISION_BOUNDS_DOWN_WIDTH, DEFAULT_COLLISION_BOUNDS_DOWN_HEIGHT);
+		printnb("collisionBoundsDown.x: " + collisionBoundsDown.x);printnb(" collisionBoundsDown.y: " + collisionBoundsDown.y);printnb(" collisionBoundsDown.width: " + collisionBoundsDown.width);print(" collisionBoundsDown.height: " + collisionBoundsDown.height);
+		
+		printnb("collisionBoundsLeft.x: " + collisionBoundsLeft.x);printnb(" collisionBoundsLeft.y: " + collisionBoundsLeft.y);printnb(" collisionBoundsLeft.width: " + collisionBoundsLeft.width);print(" collisionBoundsLeft.height: " + collisionBoundsLeft.height);
+		collisionBoundsLeft = setBounds(DEFAULT_COLLISION_BOUNDS_LEFT_X, DEFAULT_COLLISION_BOUNDS_LEFT_Y, DEFAULT_COLLISION_BOUNDS_LEFT_WIDTH, DEFAULT_COLLISION_BOUNDS_LEFT_HEIGHT);
+		printnb("collisionBoundsLeft.x: " + collisionBoundsLeft.x);printnb(" collisionBoundsLeft.y: " + collisionBoundsLeft.y);printnb(" collisionBoundsLeft.width: " + collisionBoundsLeft.width);print(" collisionBoundsLeft.height: " + collisionBoundsLeft.height);
+		
+		printnb("collisionBoundsRight.x: " + collisionBoundsRight.x);printnb(" collisionBoundsRight.y: " + collisionBoundsRight.y);printnb(" collisionBoundsRight.width: " + collisionBoundsRight.width);print(" collisionBoundsRight.height: " + collisionBoundsRight.height);
+		collisionBoundsRight = setBounds(DEFAULT_COLLISION_BOUNDS_RIGHT_X, DEFAULT_COLLISION_BOUNDS_RIGHT_Y, DEFAULT_COLLISION_BOUNDS_RIGHT_WIDTH, DEFAULT_COLLISION_BOUNDS_RIGHT_HEIGHT);
+		printnb("collisionBoundsRight.x: " + collisionBoundsRight.x);printnb(" collisionBoundsRight.y: " + collisionBoundsRight.y);printnb(" collisionBoundsRight.width: " + collisionBoundsRight.width);print(" collisionBoundsRight.height: " + collisionBoundsRight.height);
 	}
 	
 	/*************** GETTERS and SETTERS ***************/

@@ -3,6 +3,7 @@ package dev.lepauley.luigi.entities;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.general.Handler;
 
 /*
@@ -24,7 +25,7 @@ public abstract class Entity {
 	protected Rectangle bounds, collisionBoundsUp, collisionBoundsDown, collisionBoundsLeft, collisionBoundsRight;
 	
 	//Collision bounds size
-	protected int collisionBoundsSize = 3;
+	protected static final int DEFAULT_COLLISION_BOUNDS_SIZE = 3;
 	
 	//Constructor to set Defaults
 	public Entity(Handler handler, float x, float y, int width, int height) {
@@ -91,5 +92,22 @@ public abstract class Entity {
 	public void setHeight(int height) {
 		this.height = height;
 	}
+	
+	//Gets collision bounds
+	public Rectangle getBounds() {
+		return bounds;
+	}
+
+	//Sets collision bounds
+	public Rectangle setBounds(int x, int y, int width, int height) {
+		return refreshBounds(new Rectangle(x, y, width, height));
+	}
+	
+	//Refresh collision bounds
+	public Rectangle refreshBounds(Rectangle bounds) {
+		return new Rectangle(bounds.x * GVar.getMultiplier(), bounds.y * GVar.getMultiplier(),
+				             bounds.width * GVar.getMultiplier(), bounds.height * GVar.getMultiplier());
+	}
+		
 
 }
