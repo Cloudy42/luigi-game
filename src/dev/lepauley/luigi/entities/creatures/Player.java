@@ -37,13 +37,14 @@ public class Player extends Creature{
 			currentPlayer = GVar.getPlayer1CurrentCharacter();
 		
 		//Boundary box for player
-		//Note: I subtracted 1 from the height bounds to offset it since we need the play to have their animation on the ground
-		//      but we need the bounding box offset by 1 or else it cannot "slide"
-		bounds.x = 8;
+		//Note: I subtracted 2 from the height bounds to offset it since y = 1 and we need the play to have their animation on the ground
+		//      So this allows us to move it down an extra pixel. We need the bounding box offset by 1 or else it cannot "slide"
+		bounds.x = 6;
 		bounds.y = 1;
 		bounds.width = 20;
 		bounds.height = Creature.DEFAULT_CREATURE_HEIGHT_BIG - 2;
 		
+		//This is used for the collision indicator boxes, and ultimately what I used for the bounding box "display" as well (so can still see player)
 		collisionBoundsUp.x = bounds.x; collisionBoundsUp.y = bounds.y; collisionBoundsUp.width = bounds.width; collisionBoundsUp.height = collisionBoundsSize;
 		collisionBoundsDown.x = bounds.x; collisionBoundsDown.y = bounds.y + bounds.height - collisionBoundsSize; collisionBoundsDown.width = bounds.width; collisionBoundsDown.height = collisionBoundsSize;
 		collisionBoundsLeft.x = bounds.x; collisionBoundsLeft.y = bounds.y; collisionBoundsLeft.width = collisionBoundsSize; collisionBoundsLeft.height = bounds.height;
@@ -120,18 +121,37 @@ public class Player extends Creature{
 		//If player = Alive, draw player as alive sprite
 		//We're not reviving player, so don't need to set height back to Big here
 		} else {
+
 			//Draws player. Utilizes Cropping method via SpriteSheet class to only pull part of image
 			// - Takes in integers, not floats, so need to cast x and y position:
 			// - Image Observer = null. We won't use in tutorial
 			g.drawImage(playerImage[currentPlayer], (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
 		}
-		
-		//Draw debug box...IF in debug mode
+
+		//Draw debug box(es)...IF in debug mode
 		if(GVar.getDebug()) {
 			g.setColor(Color.red);
-			g.fillRect((int) (x+bounds.x - handler.getGameCamera().getxOffset()), 
+			
+			//This was the original "filled Rectangle" but I switched to the bars
+			/*g.fillRect((int) (x+bounds.x - handler.getGameCamera().getxOffset()), 
 					(int) (y+bounds.y - handler.getGameCamera().getyOffset()), 
-					bounds.width, bounds.height);
+					bounds.width, bounds.height);*/
+			//Up
+				g.fillRect((int) (x+collisionBoundsUp.x - handler.getGameCamera().getxOffset()), 
+						   (int) (y+collisionBoundsUp.y - handler.getGameCamera().getyOffset()), 
+						          collisionBoundsUp.width, collisionBoundsUp.height);		
+			//Down
+				g.fillRect((int) (x+collisionBoundsDown.x - handler.getGameCamera().getxOffset()), 
+						   (int) (y+collisionBoundsDown.y - handler.getGameCamera().getyOffset()), 
+						          collisionBoundsDown.width, collisionBoundsDown.height);		
+			//Left
+				g.fillRect((int) (x+collisionBoundsLeft.x - handler.getGameCamera().getxOffset()), 
+						   (int) (y+collisionBoundsLeft.y - handler.getGameCamera().getyOffset()), 
+						          collisionBoundsLeft.width, collisionBoundsLeft.height);		
+			//Right
+				g.fillRect((int) (x+collisionBoundsRight.x - handler.getGameCamera().getxOffset()), 
+						   (int) (y+collisionBoundsRight.y - handler.getGameCamera().getyOffset()), 
+						          collisionBoundsRight.width, collisionBoundsRight.height);		
 
 			//Draw collision indicator boxes
 			g.setColor(Color.yellow);
@@ -141,25 +161,21 @@ public class Player extends Creature{
 				g.fillRect((int) (x+collisionBoundsUp.x - handler.getGameCamera().getxOffset()), 
 						   (int) (y+collisionBoundsUp.y - handler.getGameCamera().getyOffset()), 
 						          collisionBoundsUp.width, collisionBoundsUp.height);		
-
 			//Down
 			if(collisionDown)
 				g.fillRect((int) (x+collisionBoundsDown.x - handler.getGameCamera().getxOffset()), 
 						   (int) (y+collisionBoundsDown.y - handler.getGameCamera().getyOffset()), 
 						          collisionBoundsDown.width, collisionBoundsDown.height);		
-
 			//Left
 			if(collisionLeft)
 				g.fillRect((int) (x+collisionBoundsLeft.x - handler.getGameCamera().getxOffset()), 
 						   (int) (y+collisionBoundsLeft.y - handler.getGameCamera().getyOffset()), 
 						          collisionBoundsLeft.width, collisionBoundsLeft.height);		
-
 			//Right
 			if(collisionRight)
 				g.fillRect((int) (x+collisionBoundsRight.x - handler.getGameCamera().getxOffset()), 
 						   (int) (y+collisionBoundsRight.y - handler.getGameCamera().getyOffset()), 
 						          collisionBoundsRight.width, collisionBoundsRight.height);		
-
 		}
 	}
 	
