@@ -57,6 +57,9 @@ public class GVar {
 	//Tracks whether player is allowed to continue game or died and needs to start over
 	private static boolean continueGame = false;
 	
+	//Tracks whether player is starting new level, which is needed as a check since we need "continue" still active, but need to reset SOME defaults, but not all
+	private static boolean newLevel = false;
+	
 	//# of Players Selected
 	private static int playerSelectCount;
 	
@@ -358,6 +361,16 @@ public class GVar {
 	//Sets whether player can continue game or not
 	public static void setContinueGame(boolean tf) {
 		continueGame = tf;
+	}
+	
+	//Gets whether player is progressing to next level or not
+	public static boolean getNewLevel() {
+		return newLevel ;
+	}
+
+	//Sets whether player is progressing to next level or not
+	public static void setNewLevel(boolean tf) {
+		newLevel = tf;
 	}
 	
 	//Checks whether settings File Exists or not

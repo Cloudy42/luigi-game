@@ -102,7 +102,7 @@ public class GameState extends State {
 		//	player.setCurrentPlayer(0);
 		
 		//Resets Player's Position
-		if(!GVar.getContinueGame()) {
+		if(!GVar.getContinueGame() || GVar.getNewLevel()) {
 			player.setX((float)level[lvl].getSpawnX());
 			player.setY((float)level[lvl].getSpawnY());
 		}
@@ -142,7 +142,7 @@ public class GameState extends State {
 		player = new Player(handler, level[lvl].getSpawnX(), level[lvl].getSpawnY());
 
 		//Sets current Song for level IF do not select continue
-		if(!GVar.getContinueGame())
+		if(!GVar.getContinueGame() || GVar.getNewLevel())
 			Game.gameAudio.setCurrentMusic(level[lvl].getLevelMusic());
 			
 	}
@@ -150,9 +150,9 @@ public class GameState extends State {
 	//Toggles level (increases to next level. If hits cap, resets to first level)
 	public void toggleLevel() {
 
-		//Set to false so we can reset values
-		GVar.setContinueGame(false);
-
+		//Toggles that we are setting a new level, which is used to bypass continueGame and reset some defaults
+		GVar.setNewLevel(true);
+		
 		lvl++;
 		if(lvl == level.length)
 			lvl = 0;		
@@ -168,6 +168,10 @@ public class GameState extends State {
 		
 		//plays Level song
 		Game.gameAudio.playAudioStagingArea("MUSIC", Game.gameAudio.getCurrentMusic());
+
+		//Toggles that we are done setting a new level
+		GVar.setNewLevel(false);		
+
 	}
 	
 	//Gets Current Player

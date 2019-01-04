@@ -196,6 +196,7 @@ public class Player extends Creature{
 		currentPlayer++;
 		if(currentPlayer > playerImage.length-1)
 			currentPlayer = 0;
+		GVar.setPlayer1CurrentCharacter(currentPlayer);
 	}
 	
 }
