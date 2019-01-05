@@ -203,25 +203,27 @@ public class Player extends Creature{
 	}
 	
 	public void updateAllBounds() {
-		printnb("bounds.x: " + bounds.x);printnb(" bounds.y: " + bounds.y);printnb(" bounds.width: " + bounds.width);print(" bounds.height: " + bounds.height);
+		
+		//All of the printing is for debugging obviously. can probably get rid of, but keeping until we get all of our camera stuff finalized.
+		//printnb("bounds.x: " + bounds.x);printnb(" bounds.y: " + bounds.y);printnb(" bounds.width: " + bounds.width);print(" bounds.height: " + bounds.height);
 		bounds = setBounds(DEFAULT_BOUNDS_X,DEFAULT_BOUNDS_Y,DEFAULT_BOUNDS_WIDTH,DEFAULT_BOUNDS_HEIGHT);
-		printnb("bounds.x: " + bounds.x);printnb(" bounds.y: " + bounds.y);printnb(" bounds.width: " + bounds.width);print(" bounds.height: " + bounds.height);
+		//printnb("bounds.x: " + bounds.x);printnb(" bounds.y: " + bounds.y);printnb(" bounds.width: " + bounds.width);print(" bounds.height: " + bounds.height);
 
-		printnb("collisionBoundsUp.x: " + collisionBoundsUp.x);printnb(" collisionBoundsUp.y: " + collisionBoundsUp.y);printnb(" collisionBoundsUp.width: " + collisionBoundsUp.width);print(" collisionBoundsUp.height: " + collisionBoundsUp.height);
+		//printnb("collisionBoundsUp.x: " + collisionBoundsUp.x);printnb(" collisionBoundsUp.y: " + collisionBoundsUp.y);printnb(" collisionBoundsUp.width: " + collisionBoundsUp.width);print(" collisionBoundsUp.height: " + collisionBoundsUp.height);
 		collisionBoundsUp = setBounds(DEFAULT_COLLISION_BOUNDS_UP_X, DEFAULT_COLLISION_BOUNDS_UP_Y, DEFAULT_COLLISION_BOUNDS_UP_WIDTH, DEFAULT_COLLISION_BOUNDS_UP_HEIGHT);
-		printnb("collisionBoundsUp.x: " + collisionBoundsUp.x);printnb(" collisionBoundsUp.y: " + collisionBoundsUp.y);printnb(" collisionBoundsUp.width: " + collisionBoundsUp.width);print(" collisionBoundsUp.height: " + collisionBoundsUp.height);
+		//printnb("collisionBoundsUp.x: " + collisionBoundsUp.x);printnb(" collisionBoundsUp.y: " + collisionBoundsUp.y);printnb(" collisionBoundsUp.width: " + collisionBoundsUp.width);print(" collisionBoundsUp.height: " + collisionBoundsUp.height);
 		
-		printnb("collisionBoundsDown.x: " + collisionBoundsDown.x);printnb(" collisionBoundsDown.y: " + collisionBoundsDown.y);printnb(" collisionBoundsDown.width: " + collisionBoundsDown.width);print(" collisionBoundsDown.height: " + collisionBoundsDown.height);
+		//printnb("collisionBoundsDown.x: " + collisionBoundsDown.x);printnb(" collisionBoundsDown.y: " + collisionBoundsDown.y);printnb(" collisionBoundsDown.width: " + collisionBoundsDown.width);print(" collisionBoundsDown.height: " + collisionBoundsDown.height);
 		collisionBoundsDown = setBounds(DEFAULT_COLLISION_BOUNDS_DOWN_X, DEFAULT_COLLISION_BOUNDS_DOWN_Y, DEFAULT_COLLISION_BOUNDS_DOWN_WIDTH, DEFAULT_COLLISION_BOUNDS_DOWN_HEIGHT);
-		printnb("collisionBoundsDown.x: " + collisionBoundsDown.x);printnb(" collisionBoundsDown.y: " + collisionBoundsDown.y);printnb(" collisionBoundsDown.width: " + collisionBoundsDown.width);print(" collisionBoundsDown.height: " + collisionBoundsDown.height);
+		//printnb("collisionBoundsDown.x: " + collisionBoundsDown.x);printnb(" collisionBoundsDown.y: " + collisionBoundsDown.y);printnb(" collisionBoundsDown.width: " + collisionBoundsDown.width);print(" collisionBoundsDown.height: " + collisionBoundsDown.height);
 		
-		printnb("collisionBoundsLeft.x: " + collisionBoundsLeft.x);printnb(" collisionBoundsLeft.y: " + collisionBoundsLeft.y);printnb(" collisionBoundsLeft.width: " + collisionBoundsLeft.width);print(" collisionBoundsLeft.height: " + collisionBoundsLeft.height);
+		//printnb("collisionBoundsLeft.x: " + collisionBoundsLeft.x);printnb(" collisionBoundsLeft.y: " + collisionBoundsLeft.y);printnb(" collisionBoundsLeft.width: " + collisionBoundsLeft.width);print(" collisionBoundsLeft.height: " + collisionBoundsLeft.height);
 		collisionBoundsLeft = setBounds(DEFAULT_COLLISION_BOUNDS_LEFT_X, DEFAULT_COLLISION_BOUNDS_LEFT_Y, DEFAULT_COLLISION_BOUNDS_LEFT_WIDTH, DEFAULT_COLLISION_BOUNDS_LEFT_HEIGHT);
-		printnb("collisionBoundsLeft.x: " + collisionBoundsLeft.x);printnb(" collisionBoundsLeft.y: " + collisionBoundsLeft.y);printnb(" collisionBoundsLeft.width: " + collisionBoundsLeft.width);print(" collisionBoundsLeft.height: " + collisionBoundsLeft.height);
+		//printnb("collisionBoundsLeft.x: " + collisionBoundsLeft.x);printnb(" collisionBoundsLeft.y: " + collisionBoundsLeft.y);printnb(" collisionBoundsLeft.width: " + collisionBoundsLeft.width);print(" collisionBoundsLeft.height: " + collisionBoundsLeft.height);
 		
-		printnb("collisionBoundsRight.x: " + collisionBoundsRight.x);printnb(" collisionBoundsRight.y: " + collisionBoundsRight.y);printnb(" collisionBoundsRight.width: " + collisionBoundsRight.width);print(" collisionBoundsRight.height: " + collisionBoundsRight.height);
+		//printnb("collisionBoundsRight.x: " + collisionBoundsRight.x);printnb(" collisionBoundsRight.y: " + collisionBoundsRight.y);printnb(" collisionBoundsRight.width: " + collisionBoundsRight.width);print(" collisionBoundsRight.height: " + collisionBoundsRight.height);
 		collisionBoundsRight = setBounds(DEFAULT_COLLISION_BOUNDS_RIGHT_X, DEFAULT_COLLISION_BOUNDS_RIGHT_Y, DEFAULT_COLLISION_BOUNDS_RIGHT_WIDTH, DEFAULT_COLLISION_BOUNDS_RIGHT_HEIGHT);
-		printnb("collisionBoundsRight.x: " + collisionBoundsRight.x);printnb(" collisionBoundsRight.y: " + collisionBoundsRight.y);printnb(" collisionBoundsRight.width: " + collisionBoundsRight.width);print(" collisionBoundsRight.height: " + collisionBoundsRight.height);
+		//printnb("collisionBoundsRight.x: " + collisionBoundsRight.x);printnb(" collisionBoundsRight.y: " + collisionBoundsRight.y);printnb(" collisionBoundsRight.width: " + collisionBoundsRight.width);print(" collisionBoundsRight.height: " + collisionBoundsRight.height);
 	}
 	
 	/*************** GETTERS and SETTERS ***************/
