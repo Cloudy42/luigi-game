@@ -66,13 +66,16 @@ public abstract class Creature extends Entity {
 			//Y coordinate of creature, + y bound offset, and that's it since checking upper bound 
 			int tyu = (int) (y + bounds.y)/ Tile.TILEHEIGHT;
 			
+			//same as above but now add half height to check middle bound 
+			int tym = (int) (y + bounds.y + bounds.height/2)/ Tile.TILEHEIGHT;
+			
 			//Same as above but now add bound height to check lower bound
 			int tyl = (int) (y + bounds.y + bounds.height)/ Tile.TILEHEIGHT;
 			
 			/*Check the tile upper right is moving in to, and lower right is moving in to
 			 * If both tiles are NOT solid (thus ! in front of collision method), then go ahead and move!
 			 */
-			if(!collisionWithTile(tx, tyu) && !collisionWithTile(tx, tyl) ) {
+			if(!collisionWithTile(tx, tyu) && !collisionWithTile(tx, tym) && !collisionWithTile(tx, tyl) ) {
 				x += xMove;
 			} else {
 				//move player as close to the tile as possible without being inside of it
@@ -85,12 +88,13 @@ public abstract class Creature extends Entity {
 			//Same as above, except moving left, so don't need to add bounds width
 			int tx = (int) (x + xMove + bounds.x) / Tile.TILEWIDTH;
 			
-			//Same y upper/lower bounds
+			//Same y upper/middle/lower bounds
 			int tyu = (int) (y + bounds.y)/ Tile.TILEHEIGHT;
+			int tym = (int) (y + bounds.y + bounds.height/2)/ Tile.TILEHEIGHT;
 			int tyl = (int) (y + bounds.y + bounds.height)/ Tile.TILEHEIGHT;
 			
 			//Same check
-			if(!collisionWithTile(tx, tyu) && !collisionWithTile(tx, tyl) ) {
+			if(!collisionWithTile(tx, tyu) && !collisionWithTile(tx, tym) && !collisionWithTile(tx, tyl) ) {
 				x += xMove;
 			} else {
 				//move player as close to the tile as possible without being inside of it
