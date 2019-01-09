@@ -107,6 +107,9 @@ public class MenuState extends State {
 		//Note: Must render level before player do to proper layer positioning
 		level.render(g);
 
+		//Need to add to offset the menu level, otherwise it shows the left rock wall
+		handler.getGameCamera().checkBlankSpace();
+
 		//Displays Header info
 		Game.gameHeader.render(g);
 
