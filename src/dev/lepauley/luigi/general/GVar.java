@@ -25,7 +25,7 @@ public class GVar {
 	
 	//Manages game screen size
 	public static final int GAME_WIDTH = 1050; //525
-	public static final int GAME_HEIGHT = 470; //235
+	public static final int GAME_HEIGHT = 480; //235
 	
 	//Manages keyManual positioning for displaying controls to screen:
 	public static final int KEY_MANUAL_POSITION_X = 200;

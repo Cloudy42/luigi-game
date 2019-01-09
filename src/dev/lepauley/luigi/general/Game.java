@@ -112,11 +112,11 @@ public class Game implements Runnable {
 		//Loads all SpriteSheets to objects
 		Assets.init();
 
-		//initializes the gameCamera at 0,0
-		gameCamera = new GameCamera(this, 0,0);
-		
 		//Handler time
 		handler = new Handler(this);
+		
+		//initializes the gameCamera at 0,0
+		gameCamera = new GameCamera(handler, 0,0);
 		
 		//initializes States and puts game in as parameter
 		gameState = new GameState(handler);

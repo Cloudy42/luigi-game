@@ -164,6 +164,16 @@ public class Level {
 
 	/*************** GETTERS and SETTERS ***************/
 	
+	//Gets Level Width
+	public int getWidth() {
+		return width;
+	}
+	
+	//Gets Level Height
+	public int getHeight() {
+		return height;
+	}
+	
 	//Gets Player Spawn Position - X
 	public int getSpawnX() {
 		return spawnX;
