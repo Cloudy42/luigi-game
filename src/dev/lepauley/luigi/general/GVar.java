@@ -409,7 +409,7 @@ public class GVar {
 		/*Sets Current Player Position Y*/	currentPlayerPositionY = (Utilities.parseFloat(tokens[z])); z+=3;
 
 		//Do special math to load the actual level now:
-		((GameState)Game.getGameState()).setLevel((Game.gameHeader.getCurrentWorld()-1) * 4 + Game.gameHeader.getCurrentLevel() - 1);
+		((GameState)Game.getGameState()).setLevel((Game.gameHeader.getCurrentWorld()-1) * 4 + Game.gameHeader.getCurrentLevel());
 		
 		//If currentTime < HURRY_TIME, set hurry = true
 		if(Game.gameHeader.getCurrentTime() < Game.gameHeader.HURRY_TIME)

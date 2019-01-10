@@ -18,6 +18,9 @@ public class Level {
 	//Main Handler object (which can reference game)
 	private Handler handler;
 	
+	//World & Level
+	private int world, level;
+	
 	//Width and Height of level
 	private int width, height;
 	
@@ -134,20 +137,26 @@ public class Level {
 		//Split all characters from input file using spaces ("\\s+")
 		String[] tokens = file.split("\\s+");
 		
+		//World
+		world = Utilities.parseInt(tokens[0]);
+
+		//Level
+		level = Utilities.parseInt(tokens[1]);
+
 		//Width of Level
-		width = Utilities.parseInt(tokens[0]);
+		width = Utilities.parseInt(tokens[2]);
 
 		//Height of Level
-		height = Utilities.parseInt(tokens[1]);
+		height = Utilities.parseInt(tokens[3]);
 		
 		//Player Spawn X Position
-		spawnX = Utilities.parseInt(tokens[2]);
+		spawnX = Utilities.parseInt(tokens[4]);
 
 		//Player Spawn X Position
-		spawnY = Utilities.parseInt(tokens[3]);
+		spawnY = Utilities.parseInt(tokens[5]);
 		
 		//Set Level Song
-		levelMusic = (tokens[4]);
+		levelMusic = (tokens[6]);
 
 		//Creates tiles multidimensional array based on width and height
 		tiles = new int[width][height];
@@ -156,13 +165,23 @@ public class Level {
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
 
-				//Need to do + 5 because we are setting first 5 variables above from level file, so skip those when doing tiles
-				tiles[x][y] = Utilities.parseInt(tokens[(x + y * width) + 5]);
+				//Need to do + 7 because we are setting first 7 variables above from level file, so skip those when doing tiles
+				tiles[x][y] = Utilities.parseInt(tokens[(x + y * width) + 7]);
 			}
 		}
 	}
 
 	/*************** GETTERS and SETTERS ***************/
+	
+	//Gets Level World
+	public int getWorld() {
+		return world;
+	}
+	
+	//Gets Level Level
+	public int getLevel() {
+		return level;
+	}
 	
 	//Gets Level Width
 	public int getWidth() {

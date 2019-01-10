@@ -135,8 +135,8 @@ public class GameState extends State {
 		this.lvl = lvl;
 
 		//Sets Current World and Level based on lvl
-		Game.gameHeader.setCurrentWorld(lvl / 4);
-		Game.gameHeader.setCurrentLevel(lvl % 4);
+		Game.gameHeader.setCurrentWorld(level[lvl].getWorld());
+		Game.gameHeader.setCurrentLevel(level[lvl].getLevel());
 
 		//Updates Player
 		player = new Player(handler, level[lvl].getSpawnX(), level[lvl].getSpawnY());
