@@ -251,9 +251,12 @@ public class Header {
 		}
 		timeSpacing = 0;
 
+		//If not settings file exists, set highscore back to default
+		if(!GVar.settingsExists()) 
+			highScore = 0;
+		
 		//If no settings file exists or game is not loaded OR starting a new game (not continuing), use this default
 		if((!GVar.settingsExists() || !Game.getLoaded()) || !GVar.getContinueGame()) {
-			highScore = 0;
 			currentTime = 80;
 			currentScore = 0;
 			currentCoins = 0;
