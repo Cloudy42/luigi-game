@@ -32,6 +32,8 @@ public class Tile {
 	
 		public static Tile stone001 = new Stone001(28);
 		
+		public static Tile stableBridge002 = new StableBridge002(31);
+		
 		public static Tile tree001Bark = new Tree001Bark(33);
 
 		public static Tile plant001Trunk = new Plant001Trunk(35);
@@ -44,12 +46,16 @@ public class Tile {
 		public static Tile brick002 = new Brick002(63);
 		public static Tile stone002 = new Stone002(89);
 		
+		public static Tile brick003 = new Brick003(124);		
+		
 		public static Tile puzzleBlock003 = new PuzzleBlock003(146);	
 		public static Tile puzzleBlock003Used = new PuzzleBlock003Used(149);	
 
 		public static Tile brick003Glisten = new Brick003Glisten(152);	
-		public static Tile brick003GlistenPartial = new Brick003GlistenPartial(153);	
-
+		public static Tile brick003GlistenPartial = new Brick003GlistenPartial(153);
+		
+		public static Tile conveyerBelt003Vertical = new ConveyerBelt003Vertical(156);
+		
 		public static Tile axeLever003 = new AxeLever003(177);	
 
 		public static Tile underwater001Rock = new Underwater001Rock(212);	
@@ -93,6 +99,8 @@ public class Tile {
 		public static Tile flag001Pole = new Flag001Pole(286);	
 		public static Tile flag001Flag = new Flag001Flag(288);	
 		
+		public static Tile stableBridge002Rope = new StableBridge002Rope(310);	
+
 		public static Tile chain003 = new Chain003(460);	
 
 		public static Tile underwater001Coral = new Underwater001Coral(510);
