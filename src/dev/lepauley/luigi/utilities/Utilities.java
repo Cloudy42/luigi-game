@@ -37,7 +37,7 @@ public class Utilities {
 			//Set ContinueGame to yes ONLY if player is still alive at this point
 			//This check is important because we save the settings file when a player dies.
 			if(!Game.gameHeader.getDead() && StateManager.getCurrentStateName() == "GameState")
-				GVar.setContinueGame(true);
+				GVar.setContinueGame(true); 
 
 			bw = appendBufferedWriter(bw, "SavedGame", convertBoolToInt(GVar.getContinueGame()));
 						
