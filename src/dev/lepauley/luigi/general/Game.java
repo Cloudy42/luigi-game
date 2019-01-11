@@ -380,6 +380,8 @@ public class Game implements Runnable {
 		
 		//Reset audio variables (could make this into a more generic reset also)
 		if(keyManager.audioReset) {
+			
+			//False because not resetting speed (since tied to FPS)
 			gameAudio.manuallyResetDefaults();
 			
 			//plays new audio due to adjustment above (but only if not dead and IN gameState)
@@ -391,7 +393,6 @@ public class Game implements Runnable {
         		print("CurrentRate:   " + gameAudio.getCurrentRate());
         		print("CurrentVolume: " + gameAudio.getCurrentVolume("MUSIC"));
         		print("CurrentPitch:  " + gameAudio.getCurrentPitch());
-        		print("CurrentSpeed:  " + gameAudio.getCurrentSpeed());
         	}
 		}
 	}

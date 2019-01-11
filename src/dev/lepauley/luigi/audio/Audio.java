@@ -705,14 +705,22 @@ public class Audio {
         secondsToSkip = 0;
 	}
 	
+	//Resets the audio. 
+	//Note this doesn't include speed, because it is tied to FPS. 
+	//If you don't do this, can run into issues with audio not matching FPS and "feel" is off.
 	public void manuallyResetDefaults() {
 		
 		currentVolumeSFX = DEFAULT_CURRENT_VOLUME_SFX;
 		currentVolumeMusic = DEFAULT_CURRENT_VOLUME_MUSIC;
-	    currentSpeed = DEFAULT_CURRENT_SPEED;
 	    currentPitch = DEFAULT_CURRENT_PITCH;
 	    currentRate = DEFAULT_CURRENT_RATE;
-
+	}
+	
+	//Manually resets speed 
+	//Note this isn't included in manuallyResetDefaults, because speed is tied to FPS. 
+	//If you don't do this, can run into issues with audio not matching FPS and "feel" is off.
+	public void manuallyResetSpeedDefault() {
+    	currentSpeed = DEFAULT_CURRENT_SPEED;
 	}
 	
 }	

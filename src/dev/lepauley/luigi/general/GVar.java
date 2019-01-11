@@ -98,6 +98,7 @@ public class GVar {
 
 		if(!continueGame) {
 			FPS = FPS_DEFAULT;
+			Game.gameAudio.manuallyResetSpeedDefault();			
 			
 			//If game is loaded, use these values, otherwise use defaults
 			if(Game.getLoaded()) {
