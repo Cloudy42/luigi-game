@@ -138,7 +138,8 @@ public class Header {
 			Utilities.drawShadowString(g, "1 PLAYER GAME",	400, (int)(275 + currentFontSize * menuSpacing), GVar.getShadowFont(currentFontSize)); menuSpacing += menuSpacingConstant; 
 			Utilities.drawShadowString(g, "2 PLAYER GAME",	400, (int)(275 + currentFontSize * menuSpacing), GVar.getShadowFont(currentFontSize)); menuSpacing += menuSpacingConstant;
 			if(GVar.getContinueGame()) {
-				Utilities.drawShadowString(g, "CONTINUE (" + currentWorld + "-" + currentLevel + ")",	400, (int)(275 + currentFontSize * menuSpacing), GVar.getShadowFont(currentFontSize)); menuSpacing += menuSpacingConstant;
+				Utilities.drawShadowString(g, "CONTINUE (" + currentWorld + "-" + currentLevel + ")",	400, (int)(275 + currentFontSize * menuSpacing), GVar.getShadowFont(currentFontSize)); 
+				menuSpacing += menuSpacingConstant;
 			}
 			Utilities.drawShadowString(g, "OPTIONS",	400, (int)(275 + currentFontSize * menuSpacing), GVar.getShadowFont(currentFontSize)); menuSpacing += menuSpacingConstant;
 	

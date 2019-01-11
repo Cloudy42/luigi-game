@@ -34,8 +34,11 @@ public class Utilities {
 			bw = appendBufferedWriter(bw, "CurrentRate", Game.gameAudio.getCurrentRate());
 			bw = appendBufferedWriter(bw, "CurrentPitch", Game.gameAudio.getCurrentPitch());
 			
-			//Set ContinueGame to yes ALWAYS at this point if not already (cause duh)
-			GVar.setContinueGame(true);
+			//Set ContinueGame to yes ONLY if player is still alive at this point
+			//This check is important because we save the settings file when a player dies.
+			if(!Game.gameHeader.getDead() && StateManager.getCurrentStateName() == "GameState")
+				GVar.setContinueGame(true);
+
 			bw = appendBufferedWriter(bw, "SavedGame", convertBoolToInt(GVar.getContinueGame()));
 						
 			//Add current progress
