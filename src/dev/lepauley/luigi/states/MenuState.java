@@ -7,6 +7,7 @@ import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.general.Game;
 import dev.lepauley.luigi.general.Handler;
 import dev.lepauley.luigi.levels.Level;
+import dev.lepauley.luigi.tiles.Tile;
 import dev.lepauley.luigi.utilities.EnumSFX;
 
 /*
@@ -109,8 +110,8 @@ public class MenuState extends State {
 
 		//Need to add to offset the menu level, otherwise it shows the left rock wall
 		handler.getGameCamera().checkBlankSpace();
-
-		//Displays Header info
+		
+				//Displays Header info
 		Game.gameHeader.render(g);
 
 		//Shows Player1
@@ -139,6 +140,11 @@ public class MenuState extends State {
 	//Sets currentSelection
 	public void setCurrentSelection(int i) {
 		currentSelection = i;
+	}
+	
+	//Sets the level (this is because the level seems to be moving as the player moves. Long term we probably want to stop the "menu" level from moving altogether.
+	public void setLevel(Level level) {
+		this.level = level;
 	}
 
 }

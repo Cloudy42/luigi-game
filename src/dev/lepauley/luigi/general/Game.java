@@ -11,10 +11,12 @@ import dev.lepauley.luigi.gfx.Assets;
 import dev.lepauley.luigi.gfx.GameCamera;
 import dev.lepauley.luigi.gfx.Header;
 import dev.lepauley.luigi.input.KeyManager;
+import dev.lepauley.luigi.levels.Level;
 import dev.lepauley.luigi.states.GameState;
 import dev.lepauley.luigi.states.MenuState;
 import dev.lepauley.luigi.states.State;
 import dev.lepauley.luigi.states.StateManager;
+import dev.lepauley.luigi.tiles.Tile;
 import dev.lepauley.luigi.utilities.ColorManager;
 import dev.lepauley.luigi.utilities.EnumColor;
 import dev.lepauley.luigi.utilities.EnumMenu;
@@ -325,12 +327,15 @@ public class Game implements Runnable {
 			//Set ContinueGame = true (if not dead)
 			if(!Game.gameHeader.getDead())
 				GVar.setContinueGame(true);
-
+			
 			//Write Settings File
 			Utilities.writeSettingsFile();
 			
 			//Resets Defaults across the board
 			resetDefaults();
+			
+			//Resets offSet so MenuState level is back to the default positioning
+			handler.getGameCamera().setxOffset(0 + Tile.TILEWIDTH);
 			
 			//Sets currentState to "Menu State"
 			StateManager.setCurrentState(menuState);
