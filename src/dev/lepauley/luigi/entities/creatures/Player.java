@@ -22,16 +22,22 @@ public class Player extends Creature{
 	private int currentPlayer;
 	
 	//Animations
-	private Animation animRunRight;
+	private Animation animStand, animRun, animJump, animDuck, animDead;
 	
 	//Various player selection Sprites (Alive and dead since not animating yet)
 	//Once animating, we can consolidate
 	//Note: Using arrays because it makes swapping players much easier, as you can
 	//      increment index rather than doing series of if/else checks
-	private BufferedImage[][] playerImage = {Assets.player1_run_right};//, Assets.player2, Assets.player3
-										 //, Assets.player4, Assets.player5, Assets.player6};
-	//private BufferedImage[] playerImageDead = {Assets.player1Dead, Assets.player2Dead, Assets.player3Dead
-		//	 								 , Assets.player4Dead, Assets.player5Dead, Assets.player6Dead};
+	private BufferedImage[][] playerImage_Stand = {Assets.player1_stand, Assets.player2_stand, Assets.player3_stand
+	   							                 , Assets.player4_stand, Assets.player5_stand, Assets.player6_stand};
+	private BufferedImage[][] playerImage_Run = {Assets.player1_run, Assets.player2_run, Assets.player3_run
+										   	   , Assets.player4_run, Assets.player5_run, Assets.player6_run};
+	private BufferedImage[][] playerImage_Jump = {Assets.player1_jump, Assets.player2_jump, Assets.player3_jump
+											   , Assets.player4_jump, Assets.player5_jump, Assets.player6_jump};
+	private BufferedImage[][] playerImage_Duck = {Assets.player1_duck, Assets.player2_duck, Assets.player3_duck
+											   , Assets.player4_duck, Assets.player5_duck, Assets.player6_duck};
+	private BufferedImage[][] playerImage_Dead = {Assets.player1_Dead, Assets.player2_Dead, Assets.player3_Dead
+			 								   , Assets.player4_Dead, Assets.player5_Dead, Assets.player6_Dead};
 
 	//Default Player Bounds
 	public static final int DEFAULT_BOUNDS_X = 6, DEFAULT_BOUNDS_Y = 1
@@ -68,15 +74,19 @@ public class Player extends Creature{
 		collisionBoundsLeft = setBounds(DEFAULT_COLLISION_BOUNDS_LEFT_X, DEFAULT_COLLISION_BOUNDS_LEFT_Y, DEFAULT_COLLISION_BOUNDS_LEFT_WIDTH, DEFAULT_COLLISION_BOUNDS_LEFT_HEIGHT);
 		collisionBoundsRight = setBounds(DEFAULT_COLLISION_BOUNDS_RIGHT_X, DEFAULT_COLLISION_BOUNDS_RIGHT_Y, DEFAULT_COLLISION_BOUNDS_RIGHT_WIDTH, DEFAULT_COLLISION_BOUNDS_RIGHT_HEIGHT);
 		
-		//Animations
-		animRunRight = new Animation(180, playerImage[currentPlayer]);		
+		//Sets current animations based on current Player
+		setCurrentAnimations();
 	}
 
 	@Override
 	public void tick() {
 
 		//Animations
-		animRunRight.tick();
+		animStand.tick();
+		animRun.tick();
+		animJump.tick();
+		animDuck.tick();
+		animDead.tick();
 		
 		//Gets movement using speed
 		getInput();		
@@ -135,29 +145,28 @@ public class Player extends Creature{
 			}
 
 		//Swap Current Player for next in lineup
-		if(Game.keyManager.changePlayer)
+		if(Game.keyManager.changePlayer) {
 			incrementCurrentPlayer();
+			
+			//Sets current animations based on current Player
+			setCurrentAnimations();
+		}
 	}
 
 	@Override
 	public void render(Graphics g) {
 		
-		//If player = Dead, draw player as dead sprite (short term solution):
-		if(Game.gameHeader.getDead()) {
-		
-			//Need to readjust height too since shorter than Big Luigi
+		//If player = Dead, shrink player size
+		if(Game.gameHeader.getDead())
 			this.setHeight(Creature.DEFAULT_CREATURE_HEIGHT_SMALL);
-			g.drawImage(getCurrentAnimationFrame(), (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
 
 		//If player = Alive, draw player as alive sprite
 		//We're not reviving player, so don't need to set height back to Big here
-		} else {
-
+		
 			//Draws player. Utilizes Cropping method via SpriteSheet class to only pull part of image
 			// - Takes in integers, not floats, so need to cast x and y position:
 			// - Image Observer = null. We won't use in tutorial
 			g.drawImage(getCurrentAnimationFrame(), (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
-		}
 
 		//Draw debug box(es)...IF in debug mode
 		if(GVar.getDebug()) {
@@ -235,19 +244,30 @@ public class Player extends Creature{
 	}
 	
 	/*************** GETTERS and SETTERS ***************/
+
+	//Set animations based on currentPlayer
+	public void setCurrentAnimations() {
+		animStand = new Animation(180, playerImage_Stand[currentPlayer]);
+		animRun = 	new Animation(180, playerImage_Run[currentPlayer]);
+		animJump = 	new Animation(180, playerImage_Jump[currentPlayer]);
+		animDuck = 	new Animation(180, playerImage_Duck[currentPlayer]);
+		animDead = 	new Animation(180, playerImage_Dead[currentPlayer]);
+	}
 	
 	//Gets current animation frame depending on movement/other
 	private BufferedImage getCurrentAnimationFrame() {
-		if(xMove < 0) {
-			return animRunRight.getCurrentFrame();
-		} else  if (xMove > 0) {
-			return animRunRight.getCurrentFrame();
+		if(Game.gameHeader.getDead()) {
+			return animDead.getCurrentFrame();
 		} else  if (yMove < 0) {
-			return animRunRight.getCurrentFrame();
+			return animJump.getCurrentFrame();
 		} else  if (yMove > 0) {
-			return animRunRight.getCurrentFrame();
+			return animDuck.getCurrentFrame();
+		} else if(xMove < 0) {
+			return animRun.getCurrentFrame();
+		} else  if (xMove > 0) {
+			return animRun.getCurrentFrame();
 		} else 
-			return animRunRight.getCurrentFrame();
+			return animStand.getCurrentFrame();
 	}
 	
 	//Gets current Player (or sprite skin swapping)
@@ -263,7 +283,7 @@ public class Player extends Creature{
 	//Selects next Player in lineup
 	public void incrementCurrentPlayer() {
 		currentPlayer++;
-		if(currentPlayer > playerImage.length-1)
+		if(currentPlayer > playerImage_Stand.length-1)
 			currentPlayer = 0;
 		GVar.setPlayer1CurrentCharacter(currentPlayer);
 	}

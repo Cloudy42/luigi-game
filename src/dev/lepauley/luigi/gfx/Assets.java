@@ -57,9 +57,23 @@ public class Assets {
 									, lava001Waves, lava001Body
 									, missing;
 
-	//Holds player animation
-	public static BufferedImage[] player1_run_right;
-	
+	//Holds player animations
+		//Standing Idle:
+		public static BufferedImage[] player1_stand, player2_stand, player3_stand
+	   								, player4_stand, player5_stand, player6_stand;
+		//Run:
+		public static BufferedImage[] player1_run, player2_run, player3_run
+		   							, player4_run, player5_run, player6_run;
+		//Jump:
+		public static BufferedImage[] player1_jump, player2_jump, player3_jump
+		   							, player4_jump, player5_jump, player6_jump;
+		//Duck:
+		public static BufferedImage[] player1_duck, player2_duck, player3_duck
+		   							, player4_duck, player5_duck, player6_duck;
+		//Dead:
+		public static BufferedImage[] player1_Dead, player2_Dead, player3_Dead
+								    , player4_Dead, player5_Dead, player6_Dead;
+
 	//Initializes Assets
 	public static void init() {
 		
@@ -70,21 +84,93 @@ public class Assets {
 		//All Playersets:
 		SpriteSheet playerSheet = new SpriteSheet(ImageLoader.loadImage("/textures/Umario_and_Galugi_10x.png"));
 		
-		//Player1 test
-		player1_run_right = new BufferedImage[3];
-		player1_run_right[0] = playerSheet.crop(width *  1 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
-		player1_run_right[1] = playerSheet.crop(width *  2 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
-		player1_run_right[2] = playerSheet.crop(width *  3 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
+		//Player Standing Animations
+		player1_stand = new BufferedImage[1];
+			player1_stand[0] = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
+		player2_stand = new BufferedImage[1];
+			player2_stand[0] = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 1 * scale, width * scale, heightBig * scale);
+		player3_stand = new BufferedImage[1];
+			player3_stand[0] = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 2 * scale, width * scale, heightBig * scale);
+		player4_stand = new BufferedImage[1];
+			player4_stand[0] = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 3 * scale, width * scale, heightBig * scale);
+		player5_stand = new BufferedImage[1];
+			player5_stand[0] = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 4 * scale, width * scale, heightBig * scale);
+		player6_stand = new BufferedImage[1];
+			player6_stand[0] = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 5 * scale, width * scale, heightBig * scale);
+		
+		//Player Run Animations
+		player1_run = new BufferedImage[4];
+			player1_run[0] = playerSheet.crop(width *  1 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
+			player1_run[1] = playerSheet.crop(width *  2 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
+			player1_run[2] = playerSheet.crop(width *  3 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
+			player1_run[3] = playerSheet.crop(width *  2 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
+		player2_run = new BufferedImage[4];
+			player2_run[0] = playerSheet.crop(width *  1 * scale, heightBig * 0 + newPlayer * 1 * scale, width * scale, heightBig * scale);
+			player2_run[1] = playerSheet.crop(width *  2 * scale, heightBig * 0 + newPlayer * 1 * scale, width * scale, heightBig * scale);
+			player2_run[2] = playerSheet.crop(width *  3 * scale, heightBig * 0 + newPlayer * 1 * scale, width * scale, heightBig * scale);
+			player2_run[3] = playerSheet.crop(width *  2 * scale, heightBig * 0 + newPlayer * 1 * scale, width * scale, heightBig * scale);
+		player3_run = new BufferedImage[4];
+			player3_run[0] = playerSheet.crop(width *  1 * scale, heightBig * 0 + newPlayer * 2 * scale, width * scale, heightBig * scale);
+			player3_run[1] = playerSheet.crop(width *  2 * scale, heightBig * 0 + newPlayer * 2 * scale, width * scale, heightBig * scale);
+			player3_run[2] = playerSheet.crop(width *  3 * scale, heightBig * 0 + newPlayer * 2 * scale, width * scale, heightBig * scale);
+			player3_run[3] = playerSheet.crop(width *  2 * scale, heightBig * 0 + newPlayer * 2 * scale, width * scale, heightBig * scale);
+		player4_run = new BufferedImage[4];
+			player4_run[0] = playerSheet.crop(width *  1 * scale, heightBig * 0 + newPlayer * 3 * scale, width * scale, heightBig * scale);
+			player4_run[1] = playerSheet.crop(width *  2 * scale, heightBig * 0 + newPlayer * 3 * scale, width * scale, heightBig * scale);
+			player4_run[2] = playerSheet.crop(width *  3 * scale, heightBig * 0 + newPlayer * 3 * scale, width * scale, heightBig * scale);
+			player4_run[3] = playerSheet.crop(width *  2 * scale, heightBig * 0 + newPlayer * 3 * scale, width * scale, heightBig * scale);
+		player5_run = new BufferedImage[4];
+			player5_run[0] = playerSheet.crop(width *  1 * scale, heightBig * 0 + newPlayer * 4 * scale, width * scale, heightBig * scale);
+			player5_run[1] = playerSheet.crop(width *  2 * scale, heightBig * 0 + newPlayer * 4 * scale, width * scale, heightBig * scale);
+			player5_run[2] = playerSheet.crop(width *  3 * scale, heightBig * 0 + newPlayer * 4 * scale, width * scale, heightBig * scale);
+			player5_run[3] = playerSheet.crop(width *  2 * scale, heightBig * 0 + newPlayer * 4 * scale, width * scale, heightBig * scale);
+		player6_run = new BufferedImage[4];
+			player6_run[0] = playerSheet.crop(width *  1 * scale, heightBig * 0 + newPlayer * 5 * scale, width * scale, heightBig * scale);
+			player6_run[1] = playerSheet.crop(width *  2 * scale, heightBig * 0 + newPlayer * 5 * scale, width * scale, heightBig * scale);
+			player6_run[2] = playerSheet.crop(width *  3 * scale, heightBig * 0 + newPlayer * 5 * scale, width * scale, heightBig * scale);
+			player6_run[3] = playerSheet.crop(width *  2 * scale, heightBig * 0 + newPlayer * 5 * scale, width * scale, heightBig * scale);
+					
+		//Player Jumping Animations
+		player1_jump = new BufferedImage[1];
+			player1_jump[0] = playerSheet.crop(width *  5 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
+		player2_jump = new BufferedImage[1];
+			player2_jump[0] = playerSheet.crop(width *  5 * scale, heightBig * 0 + newPlayer * 1 * scale, width * scale, heightBig * scale);
+		player3_jump = new BufferedImage[1];
+			player3_jump[0] = playerSheet.crop(width *  5 * scale, heightBig * 0 + newPlayer * 2 * scale, width * scale, heightBig * scale);
+		player4_jump = new BufferedImage[1];
+			player4_jump[0] = playerSheet.crop(width *  5 * scale, heightBig * 0 + newPlayer * 3 * scale, width * scale, heightBig * scale);
+		player5_jump = new BufferedImage[1];
+			player5_jump[0] = playerSheet.crop(width *  5 * scale, heightBig * 0 + newPlayer * 4 * scale, width * scale, heightBig * scale);
+		player6_jump = new BufferedImage[1];
+			player6_jump[0] = playerSheet.crop(width *  5 * scale, heightBig * 0 + newPlayer * 5 * scale, width * scale, heightBig * scale);
+			
+		//Player Ducking Animations
+		player1_duck = new BufferedImage[1];
+			player1_duck[0] = playerSheet.crop(width *  6 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
+		player2_duck = new BufferedImage[1];
+			player2_duck[0] = playerSheet.crop(width *  6 * scale, heightBig * 0 + newPlayer * 1 * scale, width * scale, heightBig * scale);
+		player3_duck = new BufferedImage[1];
+			player3_duck[0] = playerSheet.crop(width *  6 * scale, heightBig * 0 + newPlayer * 2 * scale, width * scale, heightBig * scale);
+		player4_duck = new BufferedImage[1];
+			player4_duck[0] = playerSheet.crop(width *  6 * scale, heightBig * 0 + newPlayer * 3 * scale, width * scale, heightBig * scale);
+		player5_duck = new BufferedImage[1];
+			player5_duck[0] = playerSheet.crop(width *  6 * scale, heightBig * 0 + newPlayer * 4 * scale, width * scale, heightBig * scale);
+		player6_duck = new BufferedImage[1];
+			player6_duck[0] = playerSheet.crop(width *  6 * scale, heightBig * 0 + newPlayer * 5 * scale, width * scale, heightBig * scale);
 				
-		/*
-		player1  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
-		player2  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 1 * scale, width * scale, heightBig * scale);
-		player3  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 2 * scale, width * scale, heightBig * scale);
-		player4  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 3 * scale, width * scale, heightBig * scale);
-		player5  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 4 * scale, width * scale, heightBig * scale);
-		player6  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 5 * scale, width * scale, heightBig * scale);
-		 * 
-		 */
+		//Player Dead Animations
+		player1_Dead = new BufferedImage[1];
+			player1_Dead[0] = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 0) * scale, width * scale, heightSmall * scale);
+		player2_Dead = new BufferedImage[1];
+			player2_Dead[0] = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 1) * scale, width * scale, heightSmall * scale);
+		player3_Dead = new BufferedImage[1];
+			player3_Dead[0] = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 2) * scale, width * scale, heightSmall * scale);
+		player4_Dead = new BufferedImage[1];
+			player4_Dead[0] = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 3) * scale, width * scale, heightSmall * scale);
+		player5_Dead = new BufferedImage[1];
+			player5_Dead[0] = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 4) * scale, width * scale, heightSmall * scale);
+		player6_Dead = new BufferedImage[1];
+			player6_Dead[0] = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 5) * scale, width * scale, heightSmall * scale);
 
 		//I made this just to test "flipped". I also wonder how we'll want to handle these. We can:
 		//A.) Write logic to account for it within the code

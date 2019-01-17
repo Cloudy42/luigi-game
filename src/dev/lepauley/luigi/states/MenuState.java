@@ -41,6 +41,10 @@ public class MenuState extends State {
 		player1.setCurrentPlayer(1);
 		player2.setCurrentPlayer(3);
 		
+		//Sets animations based on current Player selected
+		player1.setCurrentAnimations();
+		player2.setCurrentAnimations();
+		
 		//Sets current selection at the top
 		currentSelection = 0;
 		
