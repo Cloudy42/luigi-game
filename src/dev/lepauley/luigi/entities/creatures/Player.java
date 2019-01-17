@@ -1,16 +1,16 @@
 package dev.lepauley.luigi.entities.creatures;
 
+import static dev.lepauley.luigi.utilities.Utilities.print;
+
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.general.Game;
 import dev.lepauley.luigi.general.Handler;
+import dev.lepauley.luigi.gfx.Animation;
 import dev.lepauley.luigi.gfx.Assets;
-
-import static dev.lepauley.luigi.utilities.Utilities.*;
 
 /*
  * The player that our users will control.
@@ -21,14 +21,17 @@ public class Player extends Creature{
 	//Keeps Track of Current Player (Animation skin/palette)
 	private int currentPlayer;
 	
+	//Animations
+	private Animation animRunRight;
+	
 	//Various player selection Sprites (Alive and dead since not animating yet)
 	//Once animating, we can consolidate
 	//Note: Using arrays because it makes swapping players much easier, as you can
 	//      increment index rather than doing series of if/else checks
-	private BufferedImage[] playerImage = {Assets.player1, Assets.player2, Assets.player3
-										 , Assets.player4, Assets.player5, Assets.player6};
-	private BufferedImage[] playerImageDead = {Assets.player1Dead, Assets.player2Dead, Assets.player3Dead
-			 								 , Assets.player4Dead, Assets.player5Dead, Assets.player6Dead};
+	private BufferedImage[][] playerImage = {Assets.player1_run_right};//, Assets.player2, Assets.player3
+										 //, Assets.player4, Assets.player5, Assets.player6};
+	//private BufferedImage[] playerImageDead = {Assets.player1Dead, Assets.player2Dead, Assets.player3Dead
+		//	 								 , Assets.player4Dead, Assets.player5Dead, Assets.player6Dead};
 
 	//Default Player Bounds
 	public static final int DEFAULT_BOUNDS_X = 6, DEFAULT_BOUNDS_Y = 1
@@ -65,11 +68,16 @@ public class Player extends Creature{
 		collisionBoundsLeft = setBounds(DEFAULT_COLLISION_BOUNDS_LEFT_X, DEFAULT_COLLISION_BOUNDS_LEFT_Y, DEFAULT_COLLISION_BOUNDS_LEFT_WIDTH, DEFAULT_COLLISION_BOUNDS_LEFT_HEIGHT);
 		collisionBoundsRight = setBounds(DEFAULT_COLLISION_BOUNDS_RIGHT_X, DEFAULT_COLLISION_BOUNDS_RIGHT_Y, DEFAULT_COLLISION_BOUNDS_RIGHT_WIDTH, DEFAULT_COLLISION_BOUNDS_RIGHT_HEIGHT);
 		
+		//Animations
+		animRunRight = new Animation(180, playerImage[currentPlayer]);		
 	}
 
 	@Override
 	public void tick() {
 
+		//Animations
+		animRunRight.tick();
+		
 		//Gets movement using speed
 		getInput();		
 		
@@ -139,7 +147,7 @@ public class Player extends Creature{
 		
 			//Need to readjust height too since shorter than Big Luigi
 			this.setHeight(Creature.DEFAULT_CREATURE_HEIGHT_SMALL);
-			g.drawImage(playerImageDead[currentPlayer], (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
+			g.drawImage(getCurrentAnimationFrame(), (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
 
 		//If player = Alive, draw player as alive sprite
 		//We're not reviving player, so don't need to set height back to Big here
@@ -148,7 +156,7 @@ public class Player extends Creature{
 			//Draws player. Utilizes Cropping method via SpriteSheet class to only pull part of image
 			// - Takes in integers, not floats, so need to cast x and y position:
 			// - Image Observer = null. We won't use in tutorial
-			g.drawImage(playerImage[currentPlayer], (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
+			g.drawImage(getCurrentAnimationFrame(), (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), (int) (width * GVar.getMultiplier()), (int) (height * GVar.getMultiplier()), null);
 		}
 
 		//Draw debug box(es)...IF in debug mode
@@ -227,6 +235,20 @@ public class Player extends Creature{
 	}
 	
 	/*************** GETTERS and SETTERS ***************/
+	
+	//Gets current animation frame depending on movement/other
+	private BufferedImage getCurrentAnimationFrame() {
+		if(xMove < 0) {
+			return animRunRight.getCurrentFrame();
+		} else  if (xMove > 0) {
+			return animRunRight.getCurrentFrame();
+		} else  if (yMove < 0) {
+			return animRunRight.getCurrentFrame();
+		} else  if (yMove > 0) {
+			return animRunRight.getCurrentFrame();
+		} else 
+			return animRunRight.getCurrentFrame();
+	}
 	
 	//Gets current Player (or sprite skin swapping)
 	public int getCurrentPlayer() {

@@ -19,15 +19,9 @@ public class Assets {
 	//for now.
 	private static final int scale = 10;
 
-	//Holds all tiles/player/items/etc.
-	public static BufferedImage /*PLAYERS*/
-									  player1, player2, player3, player4, player5, player6
-								/*PLAYERS (DEAD)*/
-									, player1Dead, player2Dead, player3Dead, player4Dead, player5Dead, player6Dead
-								/*PLAYERS (REVERSE) - NOT CURRENTLY BEING USED, JUST THEORY*/
-									, rPlayer2
-								/*ITEMS*/ 		
-									, menu, coin, toad
+	//Holds all tiles/items/etc.
+	public static BufferedImage /*ITEMS*/ 		
+									  menu, coin, toad
 	                            /*TILES*/
 									, bg001Sky, bg002Sky, bg003PaddedWall
 									, rock001
@@ -62,10 +56,13 @@ public class Assets {
 									, pipeGreen001BottomLeftSideways, pipeGreen001TopLeftSideways, pipeGreen001TopRightSideways, pipeGreen001BottomRightSideways, pipeGreen001TopRightSidewaysConnector, pipeGreen001BottomRightSidewaysConnector
 									, lava001Waves, lava001Body
 									, missing;
+
+	//Holds player animation
+	public static BufferedImage[] player1_run_right;
 	
 	//Initializes Assets
 	public static void init() {
-
+		
 		//Title Screen sprites, namely the big "Super Mario Brothers" menu
 		SpriteSheet menuSheet = new SpriteSheet(ImageLoader.loadImage("/textures/title_screen.png"));
 		menu = menuSheet.crop(1, 60,176,88);
@@ -73,27 +70,28 @@ public class Assets {
 		//All Playersets:
 		SpriteSheet playerSheet = new SpriteSheet(ImageLoader.loadImage("/textures/Umario_and_Galugi_10x.png"));
 		
+		//Player1 test
+		player1_run_right = new BufferedImage[3];
+		player1_run_right[0] = playerSheet.crop(width *  1 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
+		player1_run_right[1] = playerSheet.crop(width *  2 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
+		player1_run_right[2] = playerSheet.crop(width *  3 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
+				
+		/*
 		player1  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 0 * scale, width * scale, heightBig * scale);
 		player2  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 1 * scale, width * scale, heightBig * scale);
 		player3  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 2 * scale, width * scale, heightBig * scale);
 		player4  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 3 * scale, width * scale, heightBig * scale);
 		player5  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 4 * scale, width * scale, heightBig * scale);
 		player6  = playerSheet.crop(width *  0 * scale, heightBig * 0 + newPlayer * 5 * scale, width * scale, heightBig * scale);
-
-		//Made just for funsies:
-		player1Dead  = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 0) * scale, width * scale, heightSmall * scale);
-		player2Dead  = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 1) * scale, width * scale, heightSmall * scale);
-		player3Dead  = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 2) * scale, width * scale, heightSmall * scale);
-		player4Dead  = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 3) * scale, width * scale, heightSmall * scale);
-		player5Dead  = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 4) * scale, width * scale, heightSmall * scale);
-		player6Dead  = playerSheet.crop(width *  6 * scale, (heightSmall * 2 + newPlayer * 5) * scale, width * scale, heightSmall * scale);
+		 * 
+		 */
 
 		//I made this just to test "flipped". I also wonder how we'll want to handle these. We can:
 		//A.) Write logic to account for it within the code
 		//B.) Make duplicates of all assets with them flipped then call that in the code
 		//C.) Make duplicate spritesheets for all with all assets flipped
 		//D.) Other?
-		rPlayer2 = playerSheet.crop(width * 9, heightBig * 1 + newPlayer * 0, width, heightSmall);
+		//rPlayer2 = playerSheet.crop(width * 9, heightBig * 1 + newPlayer * 0, width, heightSmall);
 
 		//Item sprite sheet
 		//Currently only used for toad (# of characters selection) and Coin icons on title screen
