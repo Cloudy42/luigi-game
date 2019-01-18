@@ -11,6 +11,7 @@ import dev.lepauley.luigi.general.Game;
 import dev.lepauley.luigi.general.Handler;
 import dev.lepauley.luigi.gfx.Animation;
 import dev.lepauley.luigi.gfx.Assets;
+import dev.lepauley.luigi.utilities.ImageFlip;
 
 /*
  * The player that our users will control.
@@ -23,6 +24,7 @@ public class Player extends Creature{
 	
 	//Animations
 	private Animation animStand, animRun, animJump, animDuck, animDead;
+	private int animSpeed = 180;
 	
 	//Various player selection Sprites (Alive and dead since not animating yet)
 	//Once animating, we can consolidate
@@ -75,7 +77,7 @@ public class Player extends Creature{
 		collisionBoundsRight = setBounds(DEFAULT_COLLISION_BOUNDS_RIGHT_X, DEFAULT_COLLISION_BOUNDS_RIGHT_Y, DEFAULT_COLLISION_BOUNDS_RIGHT_WIDTH, DEFAULT_COLLISION_BOUNDS_RIGHT_HEIGHT);
 		
 		//Sets current animations based on current Player
-		setCurrentAnimations();
+		setCurrentAnimations(false);
 	}
 
 	@Override
@@ -106,17 +108,21 @@ public class Player extends Creature{
 		yMove = 0;
 		
 		//Setting x/y move to a certain speed, THEN moving player that much
-		if(Game.keyManager.up) 
+		if(Game.keyManager.up)
 			yMove = -speed;
 		
 		if(Game.keyManager.down)
 			yMove = speed;
 		
-		if(Game.keyManager.left)
+		if(Game.keyManager.left) {
 			xMove = -speed;
+			setRight(false);
+		}
 
-		if(Game.keyManager.right)
+		if(Game.keyManager.right) {
 			xMove = speed;
+			setRight(true);
+		}
 		
 		//Scale player Down
 		if(Game.keyManager.scaleDown)
@@ -147,10 +153,11 @@ public class Player extends Creature{
 		//Swap Current Player for next in lineup
 		if(Game.keyManager.changePlayer) {
 			incrementCurrentPlayer();
-			
+
 			//Sets current animations based on current Player
-			setCurrentAnimations();
+			setCurrentAnimations(false);
 		}
+
 	}
 
 	@Override
@@ -246,12 +253,15 @@ public class Player extends Creature{
 	/*************** GETTERS and SETTERS ***************/
 
 	//Set animations based on currentPlayer
-	public void setCurrentAnimations() {
-		animStand = new Animation(180, playerImage_Stand[currentPlayer]);
-		animRun = 	new Animation(180, playerImage_Run[currentPlayer]);
-		animJump = 	new Animation(180, playerImage_Jump[currentPlayer]);
-		animDuck = 	new Animation(180, playerImage_Duck[currentPlayer]);
-		animDead = 	new Animation(180, playerImage_Dead[currentPlayer]);
+	public void setCurrentAnimations(boolean flip) {
+		boolean xFlip = false, yFlip = false;
+		if(flip) xFlip = true;
+
+		animStand = new Animation(animSpeed, ImageFlip.flip(playerImage_Stand[currentPlayer],xFlip,yFlip));
+		animRun = 	new Animation(animSpeed, ImageFlip.flip(playerImage_Run[currentPlayer],xFlip,yFlip));
+		animJump = 	new Animation(animSpeed, ImageFlip.flip(playerImage_Jump[currentPlayer],xFlip,yFlip));
+		animDuck = 	new Animation(animSpeed, ImageFlip.flip(playerImage_Duck[currentPlayer],xFlip,yFlip));
+		animDead = 	new Animation(animSpeed, ImageFlip.flip(playerImage_Dead[currentPlayer],xFlip,yFlip));
 	}
 	
 	//Gets current animation frame depending on movement/other
@@ -286,6 +296,15 @@ public class Player extends Creature{
 		if(currentPlayer > playerImage_Stand.length-1)
 			currentPlayer = 0;
 		GVar.setPlayer1CurrentCharacter(currentPlayer);
+	}
+	
+	//Sets whether player is facing right or not
+	@Override
+	public void setRight(boolean newRight) {
+		if(right != newRight) {
+			right = newRight;
+			setCurrentAnimations(true);
+		}
 	}
 	
 }

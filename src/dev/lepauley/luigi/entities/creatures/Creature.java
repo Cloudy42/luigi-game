@@ -22,6 +22,9 @@ public abstract class Creature extends Entity {
 	//Helper for moving creatures on x and y plane
 	protected float xMove, yMove;
 	
+	//tracks whether creature is facing right or not
+	protected boolean right = true;
+	
 	//boolean checks for collisions
 	public boolean collisionUp, collisionDown, collisionLeft, collisionRight; 
 	
@@ -52,6 +55,10 @@ public abstract class Creature extends Entity {
 	public void moveX() {
 		//Moving right
 		if(xMove > 0) {
+			
+			//identifies that the player is facing right
+			right = true;
+			
 			/*Temp objects to hold what tile position would be if moved.. x, y upper, and y lower
 			 * For example, starts as x coordinate then divide by tile width to determine Tile number/coordinate
 			 * of tile we're trying to move in to
@@ -85,6 +92,10 @@ public abstract class Creature extends Entity {
 			}
 		//Moving left
 		}else if(xMove < 0) {
+
+			//identifies that the player is facing right
+			right = false;
+			
 			//Same as above, except moving left, so don't need to add bounds width
 			int tx = (int) (x + xMove + bounds.x) / Tile.TILEWIDTH;
 			
@@ -143,6 +154,17 @@ public abstract class Creature extends Entity {
 	}
 	/*************** GETTERS and SETTERS ***************/
 
+	//Gets whether creature is facing right or not
+	public boolean getRight() {
+		return right;
+	}
+	
+	//Toggles whether creature is facing right or not
+	public void setRight(boolean newRight) {
+		if(right != newRight)
+			right = newRight;
+	}
+	
 	//Gets creature hp
 	public int getHealth() {
 		return health;

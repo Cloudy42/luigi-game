@@ -13,6 +13,7 @@ import dev.lepauley.luigi.utilities.ColorManager;
 import dev.lepauley.luigi.utilities.EnumColor;
 import dev.lepauley.luigi.utilities.EnumPause;
 import dev.lepauley.luigi.utilities.EnumSFX;
+import dev.lepauley.luigi.utilities.ImageFlip;
 import dev.lepauley.luigi.utilities.Utilities;
 
 public class Header {
@@ -131,7 +132,7 @@ public class Header {
 		if(StateManager.getCurrentStateName() == "MenuState") {
 
 			//Menu
-			g.drawImage(Assets.menu,215,50,625,185,null);
+			g.drawImage(ImageFlip.flip(Assets.menu,true,false),215,50,625,185,null);
 	
 			//Menu Select (with toad icon as selector)
 			g.drawImage(Assets.toad,380,(int)(260 + (((MenuState)StateManager.getCurrentState()).getCurrentSelection()) * currentFontSize * 1.5),null);
