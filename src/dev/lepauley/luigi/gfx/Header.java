@@ -132,7 +132,7 @@ public class Header {
 		if(StateManager.getCurrentStateName() == "MenuState") {
 
 			//Menu
-			g.drawImage(ImageFlip.flip(Assets.menu,true,false),215,50,625,185,null);
+			g.drawImage(ImageFlip.flip(Assets.menu,false,false),215,50,625,185,null);
 	
 			//Menu Select (with toad icon as selector)
 			g.drawImage(Assets.toad,380,(int)(260 + (((MenuState)StateManager.getCurrentState()).getCurrentSelection()) * currentFontSize * 1.5),null);
