@@ -41,6 +41,9 @@ public class Player extends Creature{
 	private BufferedImage[][] playerImage_Dead = {Assets.player1_Dead, Assets.player2_Dead, Assets.player3_Dead
 			 								   , Assets.player4_Dead, Assets.player5_Dead, Assets.player6_Dead};
 
+	//Keeps track of all "players" facing right
+	private boolean[] rightArray = new boolean[playerImage_Stand.length];
+	
 	//Default Player Bounds
 	public static final int DEFAULT_BOUNDS_X = 6, DEFAULT_BOUNDS_Y = 1
 			              , DEFAULT_BOUNDS_WIDTH = 20, DEFAULT_BOUNDS_HEIGHT = Creature.DEFAULT_CREATURE_HEIGHT_BIG - 2;
@@ -255,13 +258,28 @@ public class Player extends Creature{
 	//Set animations based on currentPlayer
 	public void setCurrentAnimations(boolean flip) {
 		boolean xFlip = false, yFlip = false;
-		if(flip) xFlip = true;
 
+		for(int i = 0; i < rightArray.length; i++) {
+			rightArray[i] = right;
+		}
+		
+		//If changing directions, change it for ALL characters
+		if(flip) {
+			for(int i = 0; i < rightArray.length; i++) {
+				animStand = new Animation(animSpeed, ImageFlip.flip(playerImage_Stand[i],true,yFlip));
+				animRun = 	new Animation(animSpeed, ImageFlip.flip(playerImage_Run[i],true,yFlip));
+				animJump = 	new Animation(animSpeed, ImageFlip.flip(playerImage_Jump[i],true,yFlip));
+				animDuck = 	new Animation(animSpeed, ImageFlip.flip(playerImage_Duck[i],true,yFlip));
+				animDead = 	new Animation(animSpeed, ImageFlip.flip(playerImage_Dead[i],true,yFlip));
+			}
+		}
+		//Then display character
 		animStand = new Animation(animSpeed, ImageFlip.flip(playerImage_Stand[currentPlayer],xFlip,yFlip));
 		animRun = 	new Animation(animSpeed, ImageFlip.flip(playerImage_Run[currentPlayer],xFlip,yFlip));
 		animJump = 	new Animation(animSpeed, ImageFlip.flip(playerImage_Jump[currentPlayer],xFlip,yFlip));
 		animDuck = 	new Animation(animSpeed, ImageFlip.flip(playerImage_Duck[currentPlayer],xFlip,yFlip));
 		animDead = 	new Animation(animSpeed, ImageFlip.flip(playerImage_Dead[currentPlayer],xFlip,yFlip));
+		
 	}
 	
 	//Gets current animation frame depending on movement/other

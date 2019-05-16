@@ -284,7 +284,7 @@ public class Game implements Runnable {
 		   || (!GVar.getContinueGame() && MenuManager.mapMenus.get(((MenuState)menuState).getCurrentSelection()) == EnumMenu.Continue)) {
 				print("Menu: Option Menu Selected");
 
-			//Other do normal menuState things (namely, starting the game :P )
+			//Otherwise do normal menuState things (namely, starting the game :P )
 			} else {
 
 				//Sets the current Level back to start if One or Two Player is selected

@@ -7,11 +7,11 @@ SavedGame : 1
 CurrentWorld : 0 
 CurrentLevel : 1 
 CurrentMusic : RunningAbout 
-CurrentTime : 150 
-CurrentScore : 55 
-CurrentCoins : 55 
+CurrentTime : 75 
+CurrentScore : 5 
+CurrentCoins : 5 
 CurrentFPS : 60 
 CurrentCharacter : 0 
 CurrentPlayerCount : 2 
-CurrentPlayerPositionX : 557.0 
-CurrentPlayerPositionY : 264.0 
+CurrentPlayerPositionX : 220.0 
+CurrentPlayerPositionY : 384.0 

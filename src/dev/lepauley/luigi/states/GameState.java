@@ -91,7 +91,6 @@ public class GameState extends State {
 			
 			//Draws pause Message to screen with a shadow
 			Utilities.drawShadowString(g, GVar.getPauseMsg(), GVar.GAME_WIDTH/2 - GVar.getPauseMsgLen() * (GVar.getPauseMsgLen()/2 -1)/GVar.getPauseMsgLen() * currentFontSize, GVar.GAME_HEIGHT/2 - currentFontSize/2+currentFontSize, GVar.getShadowFont(currentFontSize));
-
 		}
 	}
 
@@ -111,6 +110,12 @@ public class GameState extends State {
 		
 		//Resets Player's Height (since death = small Mario)
 		player.setHeight(Creature.DEFAULT_CREATURE_HEIGHT_BIG);
+		
+		System.out.println("right: " + player.getRight());
+		if(!player.getRight()) {
+			player.setRight(true);
+		}
+
 	}
 	
 	//Self-explanatory, resets Level defaults
