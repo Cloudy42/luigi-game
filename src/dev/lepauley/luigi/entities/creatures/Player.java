@@ -96,6 +96,14 @@ public class Player extends Creature{
 		//Gets movement using speed
 		getInput();		
 		
+		//Checks whether player is falling and applies gravity if needed:
+		
+		//applies gravity
+		airborne();
+		/*if(!collisionDown) {
+			airborne();
+		}*/
+		
 		//Sets position using movement
 		move();
 		
@@ -111,8 +119,17 @@ public class Player extends Creature{
 		yMove = 0;
 		
 		//Setting x/y move to a certain speed, THEN moving player that much
-		if(Game.keyManager.up)
-			yMove = -speed;
+
+		//Handles player Jump
+		if(Game.keyManager.jump && !airborne) {
+			airborne = true;
+			gravity = -speed*5;
+			yMove = gravity;
+		}
+		
+		//Handles player Movement
+		//if(Game.keyManager.up)
+			//yMove = -speed;
 		
 		if(Game.keyManager.down)
 			yMove = speed;
@@ -286,7 +303,7 @@ public class Player extends Creature{
 	private BufferedImage getCurrentAnimationFrame() {
 		if(Game.gameHeader.getDead()) {
 			return animDead.getCurrentFrame();
-		} else  if (yMove < 0) {
+		} else  if (yMove < 0 || airborne) {
 			return animJump.getCurrentFrame();
 		} else  if (yMove > 0) {
 			return animDuck.getCurrentFrame();

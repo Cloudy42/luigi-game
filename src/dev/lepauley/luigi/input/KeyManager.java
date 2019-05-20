@@ -22,6 +22,8 @@ public class KeyManager implements KeyListener {
 	//Specific keys we're using
 	public boolean /*DIRECTIONS*/ 
 						up, down, left, right
+				   /*ACTIONS*/
+						, jump
 				   /*STATE PROGRESSION*/
 						, start, exit
 				   /*DECREMENT/INCREMENT*/
@@ -42,6 +44,7 @@ public class KeyManager implements KeyListener {
 			                     ,"[D] Right"
 			                     ,"[W] Up"
 			                     ,"[S] Down"
+			                     ,"[Space] Jump"
 			                     ,"[Enter] Start/Pause"
 			                     ,"[Esc] Exit"
 			                     ,"[Z] Debug Toggle"
@@ -169,7 +172,7 @@ public class KeyManager implements KeyListener {
 			down = keys[KeyEvent.VK_S];
 			left = keys[KeyEvent.VK_A];
 			right = keys[KeyEvent.VK_D];
-
+			jump = keys[KeyEvent.VK_SPACE];
 		}
 		
 		if(currentState =="MenuState") {

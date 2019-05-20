@@ -20,8 +20,12 @@ public abstract class Creature extends Entity {
 	protected float speed;
 
 	//Helper for moving creatures on x and y plane
-	protected float xMove, yMove;
+	protected float xMove, yMove, gravity;
+	protected final float gConst = 0.9f;
 	
+	//tracks whether creature is touching ground or not
+	protected boolean airborne = true;
+
 	//tracks whether creature is facing right or not
 	protected boolean right = true;
 	
@@ -35,8 +39,47 @@ public abstract class Creature extends Entity {
 		speed = DEFAULT_SPEED;
 		xMove = 0;
 		yMove = 0;
+		gravity = 0;
 	}
 
+	//Checks whether player is falling or not
+	public void airborne() {
+		//check if creature is touching ground
+
+		//Moving up (taken from moveY()
+		int ty = (int) (y + yMove + bounds.y) / Tile.TILEHEIGHT;
+		int txl = (int) (x + bounds.x)/ Tile.TILEWIDTH;
+		int txr = (int) (x + bounds.x + bounds.width)/ Tile.TILEWIDTH;
+		
+		//If hit ceiling, start going down
+		if(collisionWithTile(txl, ty) || collisionWithTile(txr, ty) )
+			gravity = gConst;
+		
+		//Moving down (taken from moveY()
+		System.out.println("speed: " + speed + " | gravity: " + gravity);
+		ty = (int) (y + speed + bounds.y + bounds.height) / Tile.TILEHEIGHT;
+		txl = (int) (x + bounds.x)/ Tile.TILEWIDTH;
+		txr = (int) (x + bounds.x + bounds.width)/ Tile.TILEWIDTH;
+		int tyGravity = (int) (y + gravity + bounds.y + bounds.height) / Tile.TILEHEIGHT;
+		
+		//Checks whether colliding with ground going down with gravity, then speed
+		if((!collisionWithTile(txl, tyGravity) && !collisionWithTile(txr, tyGravity)) && (!collisionWithTile(txl, ty) && !collisionWithTile(txr, ty))) {
+			airborne = true;
+			y += gravity;
+			gravity += gConst;
+		} else if(!collisionWithTile(txl, ty) && !collisionWithTile(txr, ty)) {
+			airborne = true;
+			y += speed;
+		} else {
+			//move player as close to the tile as possible without being inside of it
+			//Note: We add a 1-pixel gap which allows the player to "slide" and not get stuck along the boundaries
+			airborne = false;
+			gravity = 0;
+			y = ty * Tile.TILEHEIGHT - bounds.y - bounds.height - 1;
+			collisionDown = true;
+		}
+	}
+	
 	//Moves creature using helpers
 	public void move() {
 		//reset collision checks:
@@ -147,7 +190,7 @@ public abstract class Creature extends Entity {
 			}
 		}
 	}
-	
+
 	//Takes in a tile array coordinate x/y and returns if that tile is solid
 	protected boolean collisionWithTile(int x, int y) {
 		return handler.getSpecificLevel().getTile(x,y).getIsSolid();
