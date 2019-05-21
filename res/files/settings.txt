@@ -1,4 +1,4 @@
-HighScore : 0 
+HighScore : 80 
 CurrentVolume(SFX) : 1.0 
 CurrentVolume(MUSIC) : 1.0 
 CurrentRate : 1.4000001 
@@ -6,12 +6,12 @@ CurrentPitch : 1.2
 SavedGame : 1 
 CurrentWorld : 0 
 CurrentLevel : 1 
-CurrentMusic : RunningAbout(Hurry!) 
-CurrentTime : 40 
-CurrentScore : 40 
-CurrentCoins : 40 
+CurrentMusic : RunningAbout 
+CurrentTime : 77 
+CurrentScore : 3 
+CurrentCoins : 3 
 CurrentFPS : 60 
 CurrentCharacter : 0 
 CurrentPlayerCount : 1 
-CurrentPlayerPositionX : 397.0 
+CurrentPlayerPositionX : 292.0 
 CurrentPlayerPositionY : 384.0 

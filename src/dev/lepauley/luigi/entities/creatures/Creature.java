@@ -20,10 +20,15 @@ public abstract class Creature extends Entity {
 	protected float speed;
 
 	//Helper for moving creatures on x and y plane
-	protected float xMove, yMove, gravity;
-	protected final float gConst = 0.9f;
+	protected float xMove, yMove;
 	
-	//tracks whether creature is touching ground or not
+	//Helped for keeping player on the ground. 
+	// - gravity is what pushes player "up" towards ceiling
+	// - gConst is what pushes player back down whenever they are "airborne"
+	protected float gravity;
+	protected final float gConst = 0.7f;
+	
+	//tracks whether creature is touching ground or not and prevents them from being able to jump again
 	protected boolean airborne = false;
 
 	//tracks whether creature is facing right or not
@@ -42,42 +47,50 @@ public abstract class Creature extends Entity {
 		gravity = 0;
 	}
 
-	//Checks whether player is falling or not
+	//Applies gravity with varies checks in place
 	public void airborne() {
 
-		//Moving up (taken from moveY()
+		//Moving up (taken from moveY() with some tweaks as you approach with speed and gravity since not doing yMove (gravity controlled, not player))
 		int ty = (int) (y + speed + bounds.y) / Tile.TILEHEIGHT;
 		int tyGravity = (int) (y + gravity + bounds.y) / Tile.TILEHEIGHT;
 		int txl = (int) (x + bounds.x)/ Tile.TILEWIDTH;
 		int txr = (int) (x + bounds.x + bounds.width)/ Tile.TILEWIDTH;
 		
-		//If hit ceiling, start going down
+		//If hit ceiling, start going down and offset player
 		if((collisionWithTile(txl, ty) || collisionWithTile(txr, ty) ) || (collisionWithTile(txl, tyGravity) || collisionWithTile(txr, tyGravity) )) {
 			gravity = gConst;
 			y = ty * Tile.TILEHEIGHT - bounds.y - gravity;
-			//y = ty * Tile.TILEHEIGHT - bounds.y - bounds.height - 1;
-			System.out.println("gravity: " + gravity);
+			collisionUp = true;
+		} else {
+			collisionUp = false;
 		}
 		
-		//Moving down (taken from moveY()
+		//Moving down (taken from moveY() with some tweaks as you approach with speed and gravity since not doing yMove (gravity controlled, not player))
 		ty = (int) (y + speed + bounds.y + bounds.height) / Tile.TILEHEIGHT;
 		txl = (int) (x + bounds.x)/ Tile.TILEWIDTH;
 		txr = (int) (x + bounds.x + bounds.width)/ Tile.TILEWIDTH;
 		tyGravity = (int) (y + gravity + bounds.y + bounds.height) / Tile.TILEHEIGHT;
+		
+		//This variable is used as you "approach" the ground to slow ascent otherwise I found player falls through the ground and it appeared buggy.
+		// I know this isn't the best way to do it. We should be able to crash into the ground at full speed like gravity would do, just not sure how to achieve this successfully.
 		int tyGravityHalf = (int) (y + gravity/2 + bounds.y + bounds.height) / Tile.TILEHEIGHT;
 		
-		//Checks whether colliding with ground going down with gravity, then speed
+		//Checks whether colliding with ground going down with gravity, then half gravity (slower), then speed (slowest)
 		if((!collisionWithTile(txl, tyGravity) && !collisionWithTile(txr, tyGravity)) && (!collisionWithTile(txl, ty) && !collisionWithTile(txr, ty))) {
 			airborne = true;
 			y += gravity;
 			gravity += gConst;
+			collisionDown = false;
 		} else if((!collisionWithTile(txl, tyGravityHalf) && !collisionWithTile(txr, tyGravityHalf)) && (!collisionWithTile(txl, ty) && !collisionWithTile(txr, ty))) {
 			airborne = true;
 			y += gravity/2;
 			gravity += gConst;
+			collisionDown = false;
 		} else if(!collisionWithTile(txl, ty) && !collisionWithTile(txr, ty)) {
 			airborne = true;
 			y += speed;
+			collisionDown = false;
+		//Otherwise, you've hit the ground and are no longer "airborne"
 		} else {
 			//move player as close to the tile as possible without being inside of it
 			//Note: We add a 1-pixel gap which allows the player to "slide" and not get stuck along the boundaries
@@ -91,8 +104,12 @@ public abstract class Creature extends Entity {
 	//Moves creature using helpers
 	public void move() {
 		//reset collision checks:
-		collisionUp 	= false;
-		collisionDown 	= false;
+		
+		//Only resetting these if not airborne, otherwise the debug collision check is always false if jumping for top/bottom
+		if(!airborne) {
+			collisionUp 	= false;
+			collisionDown 	= false;
+		}
 		collisionLeft 	= false;
 		collisionRight 	= false;
 

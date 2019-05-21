@@ -7,7 +7,6 @@ import dev.lepauley.luigi.general.GVar;
 import dev.lepauley.luigi.general.Game;
 import dev.lepauley.luigi.general.Handler;
 import dev.lepauley.luigi.levels.Level;
-import dev.lepauley.luigi.tiles.Tile;
 import dev.lepauley.luigi.utilities.EnumSFX;
 
 /*

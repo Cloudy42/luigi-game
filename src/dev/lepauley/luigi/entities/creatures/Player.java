@@ -100,9 +100,6 @@ public class Player extends Creature{
 		
 		//applies gravity
 		airborne();
-		/*if(!collisionDown) {
-			airborne();
-		}*/
 		
 		//Sets position using movement
 		move();
@@ -122,8 +119,14 @@ public class Player extends Creature{
 
 		//Handles player Jump
 		if(Game.keyManager.jump && !airborne) {
+			
+			//Sets airborne = true so game knows player is "falling" and prevents them from being able to jump again
 			airborne = true;
-			gravity = -speed*5.5f;
+			
+			//sets gravity equal to - speed * 5 to send player "falling" towards top of screen, which the gravity constant will counteract
+			gravity = -speed*5.0f;
+			
+			//Move player "up" whatever gravity is at the moment
 			yMove = gravity;
 		}
 		

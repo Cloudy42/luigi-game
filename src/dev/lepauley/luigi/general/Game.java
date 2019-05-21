@@ -11,7 +11,6 @@ import dev.lepauley.luigi.gfx.Assets;
 import dev.lepauley.luigi.gfx.GameCamera;
 import dev.lepauley.luigi.gfx.Header;
 import dev.lepauley.luigi.input.KeyManager;
-import dev.lepauley.luigi.levels.Level;
 import dev.lepauley.luigi.states.GameState;
 import dev.lepauley.luigi.states.MenuState;
 import dev.lepauley.luigi.states.State;
