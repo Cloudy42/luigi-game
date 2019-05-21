@@ -40,7 +40,7 @@ public class GVar {
 	//public static final int KEY_MANUAL_RECT_HEIGHT = 0;  
 
 	//Min/Max/and Default FPS
-	public static final int FPS_MIN = 10;
+	public static final int FPS_MIN = 1;
 	public static final int FPS_MAX = 150;
 	public static final int FPS_DEFAULT = 60;
 	

@@ -123,7 +123,7 @@ public class Player extends Creature{
 		//Handles player Jump
 		if(Game.keyManager.jump && !airborne) {
 			airborne = true;
-			gravity = -speed*5;
+			gravity = -speed*5.5f;
 			yMove = gravity;
 		}
 		

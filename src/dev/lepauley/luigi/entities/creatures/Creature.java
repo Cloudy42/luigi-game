@@ -24,7 +24,7 @@ public abstract class Creature extends Entity {
 	protected final float gConst = 0.9f;
 	
 	//tracks whether creature is touching ground or not
-	protected boolean airborne = true;
+	protected boolean airborne = false;
 
 	//tracks whether creature is facing right or not
 	protected boolean right = true;
@@ -44,28 +44,36 @@ public abstract class Creature extends Entity {
 
 	//Checks whether player is falling or not
 	public void airborne() {
-		//check if creature is touching ground
 
 		//Moving up (taken from moveY()
-		int ty = (int) (y + yMove + bounds.y) / Tile.TILEHEIGHT;
+		int ty = (int) (y + speed + bounds.y) / Tile.TILEHEIGHT;
+		int tyGravity = (int) (y + gravity + bounds.y) / Tile.TILEHEIGHT;
 		int txl = (int) (x + bounds.x)/ Tile.TILEWIDTH;
 		int txr = (int) (x + bounds.x + bounds.width)/ Tile.TILEWIDTH;
 		
 		//If hit ceiling, start going down
-		if(collisionWithTile(txl, ty) || collisionWithTile(txr, ty) )
+		if((collisionWithTile(txl, ty) || collisionWithTile(txr, ty) ) || (collisionWithTile(txl, tyGravity) || collisionWithTile(txr, tyGravity) )) {
 			gravity = gConst;
+			y = ty * Tile.TILEHEIGHT - bounds.y - gravity;
+			//y = ty * Tile.TILEHEIGHT - bounds.y - bounds.height - 1;
+			System.out.println("gravity: " + gravity);
+		}
 		
 		//Moving down (taken from moveY()
-		System.out.println("speed: " + speed + " | gravity: " + gravity);
 		ty = (int) (y + speed + bounds.y + bounds.height) / Tile.TILEHEIGHT;
 		txl = (int) (x + bounds.x)/ Tile.TILEWIDTH;
 		txr = (int) (x + bounds.x + bounds.width)/ Tile.TILEWIDTH;
-		int tyGravity = (int) (y + gravity + bounds.y + bounds.height) / Tile.TILEHEIGHT;
+		tyGravity = (int) (y + gravity + bounds.y + bounds.height) / Tile.TILEHEIGHT;
+		int tyGravityHalf = (int) (y + gravity/2 + bounds.y + bounds.height) / Tile.TILEHEIGHT;
 		
 		//Checks whether colliding with ground going down with gravity, then speed
 		if((!collisionWithTile(txl, tyGravity) && !collisionWithTile(txr, tyGravity)) && (!collisionWithTile(txl, ty) && !collisionWithTile(txr, ty))) {
 			airborne = true;
 			y += gravity;
+			gravity += gConst;
+		} else if((!collisionWithTile(txl, tyGravityHalf) && !collisionWithTile(txr, tyGravityHalf)) && (!collisionWithTile(txl, ty) && !collisionWithTile(txr, ty))) {
+			airborne = true;
+			y += gravity/2;
 			gravity += gConst;
 		} else if(!collisionWithTile(txl, ty) && !collisionWithTile(txr, ty)) {
 			airborne = true;
